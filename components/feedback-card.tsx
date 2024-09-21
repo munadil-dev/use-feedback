@@ -24,15 +24,15 @@ export default function FeedbackCard({ feedback }: FeedbackProps) {
         {feedback.message}
       </p>
 
-      <div className="flex w-full items-center justify-between md:w-[80%]">
-        <div>
+      <div className="flex w-full items-center">
+        <div className="w-1/2">
           <p className="font-medium">Name</p>
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
             {feedback.customerName}
           </p>
         </div>
 
-        <div>
+        <div className="w-1/2">
           <p className="font-medium">Email</p>
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
             {feedback.customerEmail}
