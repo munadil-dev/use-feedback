@@ -1,12 +1,12 @@
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { newProductSchema, NewProductType } from "@/schemas/new-product";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
 
-  if (!session || !session.user) {
+  if (!session?.user) {
     return NextResponse.json(
       { message: "Unauthorized", success: false },
       { status: 401 }
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
         name,
         title,
         message,
-        User: {
+        user: {
           connect: {
             id: session.user.id,
           },

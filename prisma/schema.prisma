@@ -22,7 +22,7 @@ model Product {
   title     String
   message   String
   userId    String
-  User      User       @relation(fields: [userId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
   feedbacks Feedback[]
 }
 

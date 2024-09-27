@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { newFeedbackSchema, FeedbackType } from "@/schemas/new-feedback";
 
 export async function POST(req: NextRequest) {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -10,11 +11,13 @@ import { productCreatedAtom } from "@/store/atoms/product-created";
 
 export default function NewProduct() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  if (!session || !session.user) {
-    router.push("/signin");
-  }
+  useEffect(() => {
+    if (!session?.user && status === "unauthenticated") {
+      router.push("/auth/signin");
+    }
+  }, [session?.user, status, router]);
 
   const isProductCreated = useRecoilValue(productCreatedAtom);
 

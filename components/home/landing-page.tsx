@@ -22,7 +22,7 @@ export default async function LandingPage() {
 
       <div className="flex items-center gap-8 sm:gap-12">
         <Button className="p-6 text-base" asChild>
-          <Link href={session?.user ? "/dashboard" : "/signin"}>
+          <Link href={session?.user ? "/dashboard" : "/auth/signin"}>
             Get started
             <ArrowRight className="ml-1 w-5" />
           </Link>

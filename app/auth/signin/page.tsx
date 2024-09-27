@@ -5,7 +5,7 @@ import SignInComponent from "@/components/sign-in";
 export default async function SignIn() {
   const session = await auth();
 
-  if (session && session.user) {
+  if (session?.user) {
     redirect("/");
   }
 

@@ -20,7 +20,7 @@ export default function ProductForm() {
     const toastId = toast.loading("Loading...");
 
     try {
-      const res = await axios.post("/api/create-product", newProduct);
+      const res = await axios.post("/api/product/create-product", newProduct);
 
       if (res.data.success) {
         toast.dismiss(toastId);

@@ -15,8 +15,8 @@ export default async function Product({
   const code = `<div id="embed-feedbacks"></div>
 <script src="${process.env.NEXT_PUBLIC_BASE_URL}api/embed-feedbacks?productId=${productId}"></script>`;
 
-  if (!session || !session.user) {
-    redirect("/signin");
+  if (!session?.user) {
+    redirect("/auth/signin");
   }
 
   const productDetails = await prisma.product.findFirst({
@@ -44,7 +44,7 @@ export default async function Product({
           <p className="text-[0.84rem] text-neutral-500 dark:text-neutral-400 sm:text-sm">
             Feedback URL:{" "}
             <Link
-              className="break-all underline hover:text-neutral-200"
+              className="break-all underline hover:text-neutral-800 dark:hover:text-neutral-200"
               href={productFeedbackURL}
               target="_blank"
             >

@@ -8,8 +8,8 @@ import ProductCard from "@/components/product-card";
 export default async function Dashboard() {
   const session = await auth();
 
-  if (!session || !session.user) {
-    redirect("/signin");
+  if (!session?.user) {
+    redirect("/auth/signin");
   }
 
   const products = await prisma.product.findMany({

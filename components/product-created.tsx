@@ -30,7 +30,7 @@ export default function ProductCreated() {
   useEffect(() => {
     const fetchProductId = async () => {
       try {
-        const res = await axios.post("/api/get-product", {
+        const res = await axios.post("/api/product/get-product", {
           name: newProduct.name,
         });
 

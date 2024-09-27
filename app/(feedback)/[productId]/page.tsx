@@ -1,15 +1,17 @@
 import prisma from "@/lib/db";
-import FeedbackForm from "@/components/feedback-form";
 import { notFound } from "next/navigation";
+import FeedbackForm from "@/components/feedback-form";
 
-export default async function FeedbackPage({
-  params: { productId },
-}: {
-  params: { productId: string };
-}) {
+interface FeedbackPageProps {
+  params: {
+    productId: string;
+  };
+}
+
+export default async function FeedbackPage({ params }: FeedbackPageProps) {
   const productDetails = await prisma.product.findUnique({
     where: {
-      id: productId,
+      id: params.productId,
     },
   });
 

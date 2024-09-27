@@ -19,7 +19,7 @@ export default function ProductCard({
   return (
     <div
       className="flex cursor-pointer items-center justify-between rounded-md bg-zinc-200 p-3 hover:bg-zinc-300 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-      onClick={() => router.push(`/product/${id}`)}
+      onClick={() => router.push(`/dashboard/product/${id}`)}
     >
       <div className="flex flex-col gap-1">
         <p className="text-lg font-medium">{name}</p>

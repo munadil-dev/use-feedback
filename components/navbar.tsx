@@ -27,7 +27,7 @@ export default async function Navbar() {
             <ProfileDropdown user={session.user} />
           </>
         ) : (
-          <Link className="hover:text-neutral-400" href="/signin">
+          <Link className="hover:text-neutral-400" href="/auth/signin">
             Sign in
           </Link>
         )}
