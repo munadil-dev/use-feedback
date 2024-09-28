@@ -2,21 +2,17 @@ import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { type NextRequest, NextResponse } from "next/server";
 
-interface ProductProp {
-  name: string;
-}
-
 export async function POST(req: NextRequest) {
   const session = await auth();
 
   if (!session?.user) {
     return NextResponse.json(
-      { message: "Unauthorized", success: false },
+      { message: "Unauthenticated", success: false },
       { status: 401 }
     );
   }
 
-  const body: ProductProp = await req.json();
+  const body: { name: string } = await req.json();
 
   try {
     const product = await prisma.product.findFirst({
