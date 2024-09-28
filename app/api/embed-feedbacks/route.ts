@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
   const feedbacks = await prisma.feedback.findMany({
     where: {
       productId,
+      isFavorite: true,
     },
     select: {
       message: true,

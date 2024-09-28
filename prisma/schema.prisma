@@ -33,6 +33,7 @@ model Feedback {
   customerEmail String
   customerImage String
   rating        Int
+  isFavorite    Boolean  @default(false)
   createdAt     DateTime @default(now())
   productId     String
   product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)

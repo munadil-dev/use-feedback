@@ -1,7 +1,9 @@
 import Link from "next/link";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { ArrowLeft } from "lucide-react";
 import * as motion from "framer-motion/client";
+import { Button } from "@/components/ui/button";
 import { notFound, redirect } from "next/navigation";
 import FeedbackCard from "@/components/feedback-card";
 import CodeComponent from "@/components/code";
@@ -38,6 +40,13 @@ export default async function Product({
   return (
     <main className="flex justify-center p-8">
       <section className="flex w-[90vw] flex-col gap-8 sm:w-[70vw] md:w-[60vw]">
+        <Link href="/dashboard">
+          <Button className="flex items-center gap-1">
+            <ArrowLeft className="w-4" />
+            Back
+          </Button>
+        </Link>
+
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-semibold">{productDetails.name}</h1>
 
