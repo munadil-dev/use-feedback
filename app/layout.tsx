@@ -1,8 +1,10 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import Providers from "@/components/providers";
+
+import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import Providers from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -25,6 +27,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Toaster position="top-right" richColors={true} />
+          <Footer />
           <Analytics />
         </Providers>
       </body>

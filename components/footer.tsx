@@ -4,7 +4,7 @@ import { GithubIconSVG } from "@/icons/Github";
 
 export default function Footer() {
   return (
-    <footer className="sticky bottom-0 left-0 z-50 flex items-center justify-between px-8 py-4">
+    <footer className="flex items-center justify-between bg-inherit px-8 py-4">
       <p className="font-medium text-neutral-500 dark:text-neutral-400">
         UseFeedback
       </p>

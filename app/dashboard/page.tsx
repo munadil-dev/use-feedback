@@ -28,7 +28,7 @@ export default async function Dashboard() {
   });
 
   return (
-    <main className="flex justify-center">
+    <main className="flex min-h-[80svh] justify-center">
       <section className="flex w-[90vw] flex-col gap-8 sm:w-[70vw]">
         <article className="mt-10 flex items-center justify-between">
           <h1 className="text-3xl font-medium">Products</h1>

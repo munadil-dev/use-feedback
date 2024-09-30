@@ -21,11 +21,7 @@ export default function ToggleTheme() {
   }
 
   return (
-    <button
-      className="rounded-full border p-2"
-      type="button"
-      onClick={handleToggle}
-    >
+    <button className="p-2" type="button" onClick={handleToggle}>
       {theme === "dark" ? <Sun /> : <Moon />}
     </button>
   );

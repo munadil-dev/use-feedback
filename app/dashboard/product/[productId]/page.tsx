@@ -38,7 +38,7 @@ export default async function Product({
   const productFeedbackURL = `${process.env.NEXT_PUBLIC_BASE_URL}${productId}`;
 
   return (
-    <main className="flex justify-center p-8">
+    <main className="flex min-h-[80svh] justify-center p-8">
       <section className="flex w-[90vw] flex-col gap-8 sm:w-[70vw] md:w-[60vw]">
         <Link href="/dashboard">
           <Button className="flex items-center gap-1">
