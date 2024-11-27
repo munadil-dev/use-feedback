@@ -10,7 +10,7 @@ export default function Footer() {
       </p>
 
       <div className="flex items-center gap-8">
-        <Link href="https://x.com/munadil_dev" target="_blank">
+        <Link href="https://x.com/munadil_xd" target="_blank">
           <XIconSVG />
         </Link>
 
