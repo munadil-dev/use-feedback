@@ -26,7 +26,7 @@ export default function SignInComponent() {
         </Button>
       </form>
 
-      <section className="mr-10 hidden rounded-3xl p-2 dark:bg-white/10 lg:block">
+      <section className="mr-10 hidden rounded-3xl bg-neutral-100 p-2 dark:bg-white/10 lg:block">
         <img
           className="aspect-video rounded-3xl object-cover lg:h-[50vh] lg:w-[40rem] xl:h-[60vh] xl:w-[45rem]"
           alt="UseFeedback dashboard on Sign in page"
