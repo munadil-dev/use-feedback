@@ -1,11 +1,12 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { auth } from "@/lib/auth";
-import { Tweet } from "react-tweet";
 import SampleCode from "./sample-code";
 import Testimonials from "./testimonials";
 import { ArrowRight } from "lucide-react";
 import * as motion from "framer-motion/client";
 import { Button } from "@/components/ui/button";
+import { Tweet, TweetSkeleton } from "react-tweet";
 
 const parentVariants = {
   hidden: {
@@ -74,7 +75,7 @@ export default async function LandingPage() {
       </motion.div>
 
       <motion.div
-        className="bg-hero flex w-full flex-col items-center justify-between gap-2 rounded-s-[2.5rem] rounded-t-[2.5rem] p-6 lg:flex-row xl:p-12"
+        className="flex w-full flex-col items-center justify-between gap-2 rounded-s-[2.5rem] rounded-t-[2.5rem] bg-hero p-6 lg:flex-row xl:p-12"
         variants={childVariants}
       >
         <div className="flex w-[90%] flex-col gap-6 lg:w-[45%]">
@@ -88,7 +89,9 @@ export default async function LandingPage() {
           </p>
         </div>
 
-        <Tweet id="1836311569610772578" />
+        <Suspense fallback={<TweetSkeleton />}>
+          <Tweet id="1836311569610772578" />
+        </Suspense>
       </motion.div>
 
       <motion.div

@@ -2,11 +2,11 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { ArrowLeft } from "lucide-react";
+import CodeComponent from "@/components/code";
 import * as motion from "framer-motion/client";
 import { Button } from "@/components/ui/button";
 import { notFound, redirect } from "next/navigation";
 import FeedbackCard from "@/components/feedback-card";
-import CodeComponent from "@/components/code";
 
 export default async function Product({
   params: { productId },
@@ -26,6 +26,7 @@ export default async function Product({
       id: productId,
     },
     select: {
+      userId: true,
       name: true,
       feedbacks: true,
     },
@@ -33,6 +34,10 @@ export default async function Product({
 
   if (!productDetails) {
     notFound();
+  }
+
+  if (session.user.id != productDetails.userId) {
+    redirect("/");
   }
 
   const productFeedbackURL = `${process.env.NEXT_PUBLIC_BASE_URL}${productId}`;
