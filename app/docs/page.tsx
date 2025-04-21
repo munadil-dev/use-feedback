@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Docs() {
   return (
     <main className="flex justify-center p-8">
-      <section className="flex w-[90vw] flex-col gap-6 sm:w-[80vw] md:w-[70vw] lg:w-[60vw]">
+      <section className="container mx-auto flex w-[90vw] flex-col gap-6 sm:w-[80vw] md:w-[70vw] lg:w-[60vw]">
         <h1 className="mb-4 text-4xl font-semibold">Documentation</h1>
 
         <p className="text-2xl font-medium">Step 1. Create a product</p>

@@ -44,7 +44,7 @@ export default async function Product({
 
   return (
     <main className="flex min-h-[80svh] justify-center p-8">
-      <section className="flex w-[90vw] flex-col gap-8 sm:w-[70vw] md:w-[60vw]">
+      <section className="container mx-auto flex w-[90vw] flex-col gap-8 sm:w-[70vw] md:w-[60vw]">
         <Link href="/dashboard">
           <Button className="flex items-center gap-1">
             <ArrowLeft className="w-4" />
