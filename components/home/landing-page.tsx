@@ -43,7 +43,7 @@ export default async function LandingPage() {
 
   return (
     <motion.section
-      className="flex w-[90vw] flex-col items-center gap-12 sm:w-[85vw] md:w-[80vw] lg:w-[90vw]"
+      className="container mx-auto flex w-[90vw] flex-col items-center gap-12 sm:w-[85vw] md:w-[80vw] lg:w-[90vw]"
       variants={parentVariants}
       initial="hidden"
       animate="visible"

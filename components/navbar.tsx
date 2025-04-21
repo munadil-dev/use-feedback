@@ -9,7 +9,7 @@ export default async function Navbar() {
 
   return (
     <motion.nav
-      className="sticky left-0 top-0 z-50 flex items-center justify-between bg-inherit px-6 py-3"
+      className="sticky left-0 top-0 z-50 bg-inherit px-5 py-4"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
@@ -20,29 +20,31 @@ export default async function Navbar() {
         delay: 0.45,
       }}
     >
-      <Link className="text-lg font-medium sm:text-xl" href="/">
-        UseFeedback
-      </Link>
+      <div className="container mx-auto flex items-center justify-between">
+        <Link className="text-lg font-medium sm:text-xl" href="/">
+          UseFeedback
+        </Link>
 
-      <div className="flex items-center gap-6">
-        <ToggleTheme />
+        <div className="flex items-center gap-6">
+          <ToggleTheme />
 
-        {session?.user ? (
-          <>
-            <Link
-              className="hidden hover:text-neutral-400 sm:block"
-              href="/dashboard"
-            >
-              Dashboard
+          {session?.user ? (
+            <>
+              <Link
+                className="hidden hover:text-neutral-400 sm:block"
+                href="/dashboard"
+              >
+                Dashboard
+              </Link>
+
+              <ProfileDropdown user={session.user} />
+            </>
+          ) : (
+            <Link className="hover:text-neutral-400" href="/auth/signin">
+              Sign in
             </Link>
-
-            <ProfileDropdown user={session.user} />
-          </>
-        ) : (
-          <Link className="hover:text-neutral-400" href="/auth/signin">
-            Sign in
-          </Link>
-        )}
+          )}
+        </div>
       </div>
     </motion.nav>
   );

@@ -11,8 +11,8 @@ import {
 
 export default function Code({ code }: { code: string }) {
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [mounted, setMounted] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean>(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
@@ -34,7 +34,7 @@ export default function Code({ code }: { code: string }) {
   }
 
   return (
-    <article className="relative rounded-full">
+    <article className="container relative mx-auto rounded-full">
       <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
         Embed this code into your website
       </p>

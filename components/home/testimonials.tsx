@@ -43,7 +43,7 @@ export default function Testimonials({ variants }: TestimonialProps) {
       className="relative flex h-fit w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background"
       variants={variants}
     >
-      <Marquee pauseOnHover className="[--duration:30s]">
+      <Marquee pauseOnHover className="[--duration:40s]">
         {testimonials.map((testimonial) => (
           <TestimonialCard key={testimonial.username} {...testimonial} />
         ))}
