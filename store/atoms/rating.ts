@@ -1,6 +1,3 @@
-import { atom } from "recoil";
+import { atom } from "jotai";
 
-export const ratingAtom = atom({
-  key: "ratingAtom",
-  default: 3,
-});
+export const ratingAtom = atom(3);

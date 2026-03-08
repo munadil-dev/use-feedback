@@ -1,10 +1,7 @@
-import { atom } from "recoil";
+import { atom } from "jotai";
 
 export const newProductAtom = atom({
-  key: "newProductAtom",
-  default: {
-    name: "",
-    title: "Title goes here",
-    message: "Your custom message goes here",
-  },
+  name: "",
+  title: "Title goes here",
+  message: "Your custom message goes here",
 });

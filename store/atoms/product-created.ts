@@ -1,6 +1,3 @@
-import { atom } from "recoil";
+import { atom } from "jotai";
 
-export const productCreatedAtom = atom({
-  key: "productCreatedAtom",
-  default: false,
-});
+export const productCreatedAtom = atom(false);

@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "./theme-provider";
-import { RecoilRoot } from "recoil";
+import { Provider } from "jotai";
 
 export default function Providers({ children }: { children: ReactNode }) {
   return (
@@ -14,7 +14,7 @@ export default function Providers({ children }: { children: ReactNode }) {
         enableSystem
         disableTransitionOnChange
       >
-        <RecoilRoot>{children}</RecoilRoot>
+        <Provider>{children}</Provider>
       </ThemeProvider>
     </SessionProvider>
   );

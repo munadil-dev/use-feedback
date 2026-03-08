@@ -7,13 +7,13 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useAtom, useSetAtom } from "jotai";
 import { newProductAtom } from "@/store/atoms/new-product";
 import { productCreatedAtom } from "@/store/atoms/product-created";
 
 export default function ProductForm() {
-  const [newProduct, setNewProduct] = useRecoilState(newProductAtom);
-  const setIsProductCreated = useSetRecoilState(productCreatedAtom);
+  const [newProduct, setNewProduct] = useAtom(newProductAtom);
+  const setIsProductCreated = useSetAtom(productCreatedAtom);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

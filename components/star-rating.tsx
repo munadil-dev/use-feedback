@@ -3,10 +3,10 @@
 import { StarFilledSVG } from "@/icons/StarFilled";
 import { StarNotFilledSVG } from "@/icons/StarNotFilled";
 import { ratingAtom } from "@/store/atoms/rating";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 
 export default function StarRating() {
-  const rating = useRecoilValue(ratingAtom);
+  const rating = useAtomValue(ratingAtom);
 
   return (
     <div className="flex gap-1">

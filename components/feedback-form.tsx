@@ -3,7 +3,7 @@
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -34,7 +34,7 @@ export default function FeedbackForm({
   productDetails: ProductProps;
 }) {
   const router = useRouter();
-  const rating = useRecoilValue(ratingAtom);
+  const rating = useAtomValue(ratingAtom);
   const [message, setMessage] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");

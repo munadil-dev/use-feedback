@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
+
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import ProductForm from "@/components/product-form";
@@ -19,7 +20,7 @@ export default function NewProduct() {
     }
   }, [session?.user, status, router]);
 
-  const isProductCreated = useRecoilValue(productCreatedAtom);
+  const isProductCreated = useAtomValue(productCreatedAtom);
 
   if (isProductCreated) {
     return <ProductCreated />;
