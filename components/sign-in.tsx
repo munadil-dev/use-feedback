@@ -6,7 +6,7 @@ export default function SignInComponent() {
   return (
     <main className="flex min-h-[80svh] items-center">
       <form
-        className="flex flex-[5] flex-col items-center gap-2 p-8 text-center"
+        className="flex flex-5 flex-col items-center gap-2 p-8 text-center"
         action={async () => {
           "use server";
           await signIn("google", {
@@ -28,7 +28,7 @@ export default function SignInComponent() {
 
       <section className="mr-10 hidden rounded-3xl bg-neutral-100 p-2 dark:bg-white/10 lg:block">
         <img
-          className="aspect-video rounded-3xl object-cover lg:h-[50vh] lg:w-[40rem] xl:h-[60vh] xl:w-[45rem]"
+          className="aspect-video rounded-3xl object-cover lg:h-[50vh] lg:w-160 xl:h-[60vh] xl:w-180"
           alt="UseFeedback dashboard on Sign in page"
           src={"/images/sign-in.png"}
         />
