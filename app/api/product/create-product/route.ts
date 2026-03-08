@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   if (!success) {
     return NextResponse.json(
-      { message: error.errors[0].message, success: false },
+      { message: error.issues[0].message, success: false },
       { status: 400 }
     );
   }
