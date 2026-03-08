@@ -1,10 +1,10 @@
 "use client";
 
-import { useSetRecoilState } from "recoil";
+import { useSetAtom } from "jotai";
 import { ratingAtom } from "@/store/atoms/rating";
 
 export const StarNotFilledSVG = ({ index }: { index: number }) => {
-  const setRating = useSetRecoilState(ratingAtom);
+  const setRating = useSetAtom(ratingAtom);
 
   return (
     <svg

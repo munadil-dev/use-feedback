@@ -9,10 +9,11 @@ import { notFound, redirect } from "next/navigation";
 import FeedbackCard from "@/components/feedback-card";
 
 export default async function Product({
-  params: { productId },
+  params,
 }: {
-  params: { productId: string };
+  params: Promise<{ productId: string }>;
 }) {
+  const { productId } = await params;
   const session = await auth();
   const code = `<div id="embed-feedbacks"></div>
 <script src="${process.env.NEXT_PUBLIC_BASE_URL}api/embed-feedbacks?productId=${productId}"></script>`;

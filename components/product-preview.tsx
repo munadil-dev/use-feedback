@@ -1,13 +1,13 @@
 "use client";
 
 import { newProductAtom } from "@/store/atoms/new-product";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 
 export default function ProductPreview() {
-  const newProduct = useRecoilValue(newProductAtom);
+  const newProduct = useAtomValue(newProductAtom);
 
   return (
     <article className="relative flex w-full flex-col gap-3 rounded-md border p-6 shadow-md dark:shadow-neutral-900 lg:w-[90%] xl:w-[70%]">

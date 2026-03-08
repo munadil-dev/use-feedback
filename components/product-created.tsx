@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { MouseEvent, useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useAtomValue, useSetAtom } from "jotai";
 import { newProductAtom } from "@/store/atoms/new-product";
 import { productCreatedAtom } from "@/store/atoms/product-created";
 
@@ -12,8 +12,8 @@ export default function ProductCreated() {
   const router = useRouter();
   const [link, setLink] = useState("");
   const [copy, setCopy] = useState("Copy to clipboard");
-  const newProduct = useRecoilValue(newProductAtom);
-  const setIsProductCreated = useSetRecoilState(productCreatedAtom);
+  const newProduct = useAtomValue(newProductAtom);
+  const setIsProductCreated = useSetAtom(productCreatedAtom);
 
   const handleCopyToClipboard = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
