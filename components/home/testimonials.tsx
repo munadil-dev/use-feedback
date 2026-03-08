@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
-import { Variants } from "framer-motion";
+import type { Variants } from "motion/react";
 import Marquee from "@/components/ui/marquee";
-import * as motion from "framer-motion/client";
+import * as motion from "motion/react-client";
 import { testimonials } from "@/lib/constant/testimonials.constant";
 
 interface TestimonialCardProps {

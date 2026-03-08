@@ -2,7 +2,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import ToggleTheme from "./toggle-theme";
 import ProfileDropdown from "./profile-dropdown";
-import * as motion from "framer-motion/client";
+import * as motion from "motion/react-client";
 
 export default async function Navbar() {
   const session = await auth();
