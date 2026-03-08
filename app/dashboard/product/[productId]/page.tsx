@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { ArrowLeft } from "lucide-react";
 import CodeComponent from "@/components/code";
-import * as motion from "framer-motion/client";
+import * as motion from "motion/react-client";
 import { Button } from "@/components/ui/button";
 import { notFound, redirect } from "next/navigation";
 import FeedbackCard from "@/components/feedback-card";

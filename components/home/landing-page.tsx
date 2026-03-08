@@ -4,7 +4,8 @@ import { auth } from "@/lib/auth";
 import SampleCode from "./sample-code";
 import Testimonials from "./testimonials";
 import { ArrowRight } from "lucide-react";
-import * as motion from "framer-motion/client";
+import type { Variants } from "motion/react";
+import * as motion from "motion/react-client";
 import { Button } from "@/components/ui/button";
 import { Tweet, TweetSkeleton } from "react-tweet";
 
@@ -21,7 +22,7 @@ const parentVariants = {
   },
 };
 
-const childVariants = {
+const childVariants: Variants = {
   hidden: {
     y: -20,
     opacity: 0,

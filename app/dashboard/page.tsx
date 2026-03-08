@@ -2,7 +2,7 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import * as motion from "framer-motion/client";
+import * as motion from "motion/react-client";
 import ProductCard from "@/components/product-card";
 
 export default async function Dashboard() {
