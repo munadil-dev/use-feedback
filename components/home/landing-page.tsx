@@ -44,25 +44,25 @@ export default async function LandingPage() {
 
   return (
     <motion.section
-      className="container mx-auto flex w-[90vw] flex-col items-center gap-12 sm:w-[85vw] md:w-[80vw] lg:w-[90vw]"
+      className="container mx-auto mt-10 flex w-[90vw] flex-col items-center gap-12 sm:w-[85vw] md:w-[80vw] lg:w-[90vw]"
       variants={parentVariants}
       initial="hidden"
       animate="visible"
     >
       <div>
         <motion.h1
-          className="mb-6 text-center text-4xl sm:text-6xl"
+          className="font-instrument-serif mb-6 max-w-4xl text-center text-4xl sm:text-8xl"
           variants={childVariants}
         >
-          Getting feedback made easy.
+          Turn Customer Feedback Into Social Proof
         </motion.h1>
 
         <motion.p
-          className="text-center font-medium text-black/70 dark:text-white/65"
+          className="text-center text-black/70 dark:text-white/40"
           variants={childVariants}
         >
           Easily collect customer feedback with no technical skills or hosting
-          required.
+          required
         </motion.p>
       </div>
 
@@ -76,15 +76,15 @@ export default async function LandingPage() {
       </motion.div>
 
       <motion.div
-        className="flex w-full flex-col items-center justify-between gap-2 rounded-s-[2.5rem] rounded-t-[2.5rem] bg-hero p-6 lg:flex-row xl:p-12"
+        className="bg-\ lg:flex- flex w-full flex-col items-center justify-between gap-2 rounded-s-[2.5rem] rounded-t-[2.5rem] p-6 xl:p-12"
         variants={childVariants}
       >
-        <div className="flex w-[90%] flex-col gap-6 lg:w-[45%]">
-          <p className="text-center text-4xl sm:text-5xl lg:text-start xl:text-6xl">
+        <div className="flex flex-col gap-6">
+          <p className="max-w-4xl text-center text-4xl font-medium text-balance sm:text-5xl">
             Experience an Optimized Feedback Process
           </p>
 
-          <p className="text-center text-black dark:text-white/90 lg:text-start">
+          <p className="text-center text-black dark:text-white/90">
             Explore a quick demonstration of how it simplifies the feedback
             collection process for your business.
           </p>

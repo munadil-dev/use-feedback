@@ -27,8 +27,8 @@ export default function NewProduct() {
   }
 
   return (
-    <main className="mb-6 flex items-center justify-center pt-4 sm:mb-2">
-      <section className="grid w-[90svw] grid-cols-1 gap-12 rounded-md border p-6 shadow-md dark:shadow-neutral-900 sm:w-[70svw] lg:grid-cols-2 lg:gap-6 xl:gap-0">
+    <main className="mb-6 flex min-h-[85dvh] items-start justify-center pt-4 sm:mb-2">
+      <section className="mt-10 grid w-[90svw] grid-cols-1 gap-12 rounded-md border bg-white/50 p-6 shadow-md sm:w-[70svw] lg:grid-cols-2 lg:gap-6 xl:gap-0">
         <ProductPreview />
         <ProductForm />
       </section>

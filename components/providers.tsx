@@ -8,14 +8,14 @@ import { Provider } from "jotai";
 export default function Providers({ children }: { children: ReactNode }) {
   return (
     <SessionProvider>
-      <ThemeProvider
+      {/* <ThemeProvider
         attribute="class"
         defaultTheme="light"
         enableSystem
         disableTransitionOnChange
-      >
-        <Provider>{children}</Provider>
-      </ThemeProvider>
+      > */}
+      <Provider>{children}</Provider>
+      {/* </ThemeProvider> */}
     </SessionProvider>
   );
 }

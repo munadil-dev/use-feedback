@@ -23,7 +23,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Image
-          className="cursor-pointer rounded-full border"
+          className="cursor-pointer rounded-full select-none"
           src={user.image ?? "/user-icon.png"}
           width={33}
           height={33}

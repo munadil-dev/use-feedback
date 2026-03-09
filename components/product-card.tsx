@@ -36,13 +36,13 @@ export default function ProductCard({
 
   return (
     <div
-      className="flex cursor-pointer items-center justify-between rounded-md bg-zinc-200 p-3 hover:bg-zinc-300 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+      className="flex cursor-pointer items-center justify-between rounded-md bg-white p-5 hover:bg-white/70 dark:bg-zinc-900 dark:hover:bg-zinc-800"
       onClick={() => router.push(`/dashboard/product/${id}`)}
     >
       <div className="flex flex-col gap-1">
-        <p className="text-lg font-medium">{name}</p>
+        <p className="text-xl font-medium">{name}</p>
 
-        <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
+        <p className="text-sm text-neutral-500">
           Total feedbacks: {feedbacks.length}
         </p>
       </div>
