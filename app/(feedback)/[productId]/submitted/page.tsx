@@ -8,15 +8,15 @@ export default function FeedbackSubmitted() {
           Feedback submitted successfully &#x1F973;
         </p>
 
-        <p className="text-sm text-neutral-400">Thanks for your feedback!</p>
+        <p className="text-sm text-neutral-500">Thanks for your feedback!</p>
 
-        <p className="mt-5 text-sm font-medium text-neutral-400">
+        <p className="mt-5 text-sm text-black">
           Made by{" "}
           <Link
             href={process.env.NEXT_PUBLIC_BASE_URL!}
-            className="text-base text-blue-500 hover:underline"
+            className="font-instrument-serif text-base hover:underline"
           >
-            UseFeedback
+            useFeedback
           </Link>
         </p>
       </section>

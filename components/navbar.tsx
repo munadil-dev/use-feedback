@@ -9,7 +9,7 @@ export default async function Navbar() {
 
   return (
     <motion.nav
-      className="sticky left-0 top-0 z-50 bg-inherit px-5 py-4"
+      className="sticky top-0 left-0 z-50 px-5 py-4"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
@@ -21,17 +21,20 @@ export default async function Navbar() {
       }}
     >
       <div className="container mx-auto flex items-center justify-between">
-        <Link className="text-lg font-medium sm:text-xl" href="/">
-          UseFeedback
+        <Link
+          className="font-instrument-serif text-lg font-medium sm:text-xl"
+          href="/"
+        >
+          useFeedback
         </Link>
 
         <div className="flex items-center gap-6">
-          <ToggleTheme />
+          {/* <ToggleTheme /> */}
 
           {session?.user ? (
             <>
               <Link
-                className="hidden hover:text-neutral-400 sm:block"
+                className="hidden hover:underline sm:block"
                 href="/dashboard"
               >
                 Dashboard

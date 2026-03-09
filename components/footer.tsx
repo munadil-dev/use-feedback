@@ -16,7 +16,7 @@ export default function Footer() {
           </Link>
 
           <Link
-            href="https://github.com/Munadil16/use-feedback"
+            href="https://github.com/munadil-dev/use-feedback"
             target="_blank"
           >
             <GithubIconSVG />

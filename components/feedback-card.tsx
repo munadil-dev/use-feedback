@@ -59,7 +59,7 @@ export default function FeedbackCard({ feedback }: FeedbackProps) {
   };
 
   return (
-    <div className="flex flex-col gap-2 rounded-lg bg-neutral-100 px-6 py-6 dark:bg-zinc-900">
+    <div className="flex flex-col gap-2 rounded-lg bg-neutral-50 px-6 py-6">
       <div className="flex justify-between">
         <div className="flex items-center gap-1">
           {Array.from({ length: feedback.rating }, (_, index) => {

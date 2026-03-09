@@ -39,7 +39,7 @@ export default function ProductForm() {
   };
 
   return (
-    <article className="flex flex-col gap-8">
+    <article className="flex flex-col gap-8 rounded-md border bg-white p-4 shadow-md">
       <h1 className="text-center text-xl font-semibold">
         Create a new Feedback page
       </h1>

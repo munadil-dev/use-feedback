@@ -30,7 +30,7 @@ model Feedback {
   message       String
   customerName  String
   customerEmail String
-  customerImage String
+  customerImage String?
   rating        Int
   isFavorite    Boolean  @default(false)
   createdAt     DateTime @default(now())
