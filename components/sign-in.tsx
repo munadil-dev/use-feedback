@@ -16,23 +16,26 @@ export default function SignInComponent() {
       >
         <h1 className="text-4xl font-semibold">Welcome back!</h1>
 
-        <p className="font-medium text-black/80 dark:text-white/80">
+        <p className="font-medium text-black/70 dark:text-white/80">
           Sign in to continue
         </p>
 
-        <Button type="submit" className="mt-8 flex gap-6 text-base font-medium">
+        <Button
+          type="submit"
+          className="mt-8 flex gap-6 bg-black/80 p-6 text-base font-medium"
+        >
           <GoogleSVG />
           Sign in with Google
         </Button>
       </form>
 
-      <section className="mr-10 hidden rounded-3xl bg-neutral-100 p-2 dark:bg-white/10 lg:block">
+      {/*<section className="mr-10 hidden rounded-3xl bg-neutral-100 p-2 dark:bg-white/10 lg:block">
         <img
           className="aspect-video rounded-3xl object-cover lg:h-[50vh] lg:w-160 xl:h-[60vh] xl:w-180"
           alt="UseFeedback dashboard on Sign in page"
           src={"/images/sign-in.png"}
         />
-      </section>
+      </section>*/}
     </main>
   );
 }
