@@ -7,7 +7,9 @@ import { ArrowRight } from "lucide-react";
 import type { Variants } from "motion/react";
 import * as motion from "motion/react-client";
 import { Button } from "@/components/ui/button";
-import { Tweet, TweetSkeleton } from "react-tweet";
+import { EmbeddedTweet } from "react-tweet";
+import { getTweet } from "react-tweet/api";
+import { normalizeTweet } from "./normalize-tweet";
 
 const parentVariants = {
   hidden: {
@@ -41,6 +43,9 @@ const childVariants: Variants = {
 
 export default async function LandingPage() {
   const session = await auth();
+
+  const rawTweet = await getTweet("1836311569610772578");
+  const tweet = rawTweet ? normalizeTweet(rawTweet) : null;
 
   return (
     <motion.section
@@ -90,9 +95,7 @@ export default async function LandingPage() {
           </p>
         </div>
 
-        <Suspense fallback={<TweetSkeleton />}>
-          <Tweet id="1836311569610772578" />
-        </Suspense>
+        {tweet && <EmbeddedTweet tweet={tweet} />}
       </motion.div>
 
       <motion.div
