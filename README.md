@@ -17,7 +17,7 @@ customer feedback with no technical skills or hosting required.
 1. **Clone the repository:**
 
 ```bash
-  git clone https://github.com/Munadil16/use-feedback.git
+  git clone https://github.com/munadil-dev/use-feedback.git
   cd use-feedback
 ```
 
