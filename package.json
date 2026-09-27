@@ -13,7 +13,6 @@
     "dev": "next dev",
     "build": "dotenv -e .env.local -- prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest"
   },

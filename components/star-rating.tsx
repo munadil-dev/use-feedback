@@ -5,11 +5,16 @@ import { StarNotFilledSVG } from "@/icons/StarNotFilled";
 import { ratingAtom } from "@/store/atoms/rating";
 import { useAtom } from "jotai";
 
-export default function StarRating() {
+export default function StarRating({ labelledBy }: { labelledBy?: string }) {
   const [rating, setRating] = useAtom(ratingAtom);
 
   return (
-    <div className="flex gap-1" role="group" aria-label="Rating">
+    <div
+      className="flex gap-1"
+      role="group"
+      aria-label={labelledBy ? undefined : "Rating"}
+      aria-labelledby={labelledBy}
+    >
       {Array.from({ length: 5 }, (_, index) => {
         const starIndex = index + 1;
 

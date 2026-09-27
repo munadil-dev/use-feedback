@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     if (!product) {
       return NextResponse.json(
         { message: "Product not found", success: false },
-        { status: 400 }
+        { status: 404 }
       );
     }
 
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { message: "Product deleted successfully", success: true },
-      { status: 201 }
+      { status: 200 }
     );
   } catch (err) {
     console.log("Error while deleting a product: ", err);

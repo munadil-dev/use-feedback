@@ -48,7 +48,7 @@ describe("POST /api/feedback/favorite", () => {
     });
   });
 
-  it("returns 400 when the feedback belongs to another user", async () => {
+  it("returns 404 when the feedback belongs to another user", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-2" } });
     mockUpdateMany.mockResolvedValue({ count: 0 });
 
@@ -56,7 +56,7 @@ describe("POST /api/feedback/favorite", () => {
       favoriteRequest({ feedbackId: "feedback-1", isFavorite: true })
     );
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(404);
     expect(await res.json()).toEqual({
       message: "Feedback not found",
       success: false,
@@ -66,7 +66,7 @@ describe("POST /api/feedback/favorite", () => {
   it.each([
     [true, "Added to favorite"],
     [false, "Removed from favorite"],
-  ])("returns 201 when isFavorite is %s", async (isFavorite, message) => {
+  ])("returns 200 when isFavorite is %s", async (isFavorite, message) => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
     mockUpdateMany.mockResolvedValue({ count: 1 });
 
@@ -74,7 +74,7 @@ describe("POST /api/feedback/favorite", () => {
       favoriteRequest({ feedbackId: "feedback-1", isFavorite })
     );
 
-    expect(res.status).toBe(201);
+    expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ message, success: true });
   });
 

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     if (count === 0) {
       return NextResponse.json(
         { message: "Feedback not found", success: false },
-        { status: 400 }
+        { status: 404 }
       );
     }
 
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         message: `${body.isFavorite ? MESSAGE.ADD : MESSAGE.REMOVE}`,
         success: true,
       },
-      { status: 201 }
+      { status: 200 }
     );
   } catch (err) {
     console.error("Error while adding feedback as favorite: ", err);
