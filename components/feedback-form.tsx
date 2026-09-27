@@ -5,13 +5,14 @@ import { toast } from "sonner";
 import dynamic from "next/dynamic";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { SubmitEvent, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import StarRating from "@/components/star-rating";
 import { ratingAtom } from "@/store/atoms/rating";
+import { newFeedbackSchema } from "@/schemas/new-feedback";
 
 import "@uploadcare/react-uploader/core.css";
 const FileUploaderRegular = dynamic(
@@ -19,6 +20,33 @@ const FileUploaderRegular = dynamic(
     import("@uploadcare/react-uploader").then((mod) => mod.FileUploaderRegular),
   { ssr: false }
 );
+
+type Field = "message" | "customerName" | "customerEmail";
+type FieldErrors = Partial<Record<Field, string>>;
+
+const fieldIds: Record<Field, string> = {
+  message: "message",
+  customerName: "name",
+  customerEmail: "email",
+};
+
+function FieldError({ field, error }: { field: Field; error?: string }) {
+  if (!error) return null;
+
+  return (
+    <p
+      id={`${fieldIds[field]}-error`}
+      className="-mt-2 mb-3 text-sm text-red-500"
+    >
+      {error}
+    </p>
+  );
+}
+
+const invalidProps = (field: Field, error?: string) => ({
+  "aria-invalid": error ? true : undefined,
+  "aria-describedby": error ? `${fieldIds[field]}-error` : undefined,
+});
 
 interface ProductProps {
   id: string;
@@ -40,20 +68,48 @@ export default function FeedbackForm({
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerImage, setCustomerImage] = useState("");
   const [imageName, setImageName] = useState("");
+  const [errors, setErrors] = useState<FieldErrors>({});
 
-  const handleFeedbackSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const clearError = (field: Field) =>
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
+
+  const handleFeedbackSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const feedback = {
+      id: productDetails.id,
+      message,
+      customerName,
+      customerEmail,
+      customerImage,
+      rating,
+    };
+    const result = newFeedbackSchema.safeParse(feedback);
+
+    if (!result.success) {
+      const fieldErrors: FieldErrors = {};
+
+      for (const issue of result.error.issues) {
+        const field = issue.path[0] as Field;
+        fieldErrors[field] ??= issue.message;
+      }
+
+      setErrors(fieldErrors);
+
+      const firstInvalid = (Object.keys(fieldIds) as Field[]).find(
+        (field) => fieldErrors[field]
+      );
+      if (firstInvalid) {
+        document.getElementById(fieldIds[firstInvalid])?.focus();
+      }
+      return;
+    }
+
+    setErrors({});
     const toastId = toast.loading("Loading...");
 
     try {
-      const res = await axios.post("/api/feedback/create", {
-        id: productDetails.id,
-        message,
-        customerName,
-        customerEmail,
-        customerImage,
-        rating,
-      });
+      const res = await axios.post("/api/feedback/create", feedback);
 
       if (res.data.success) {
         toast.dismiss(toastId);
@@ -82,30 +138,46 @@ export default function FeedbackForm({
           {productDetails.message}
         </p>
 
-        <form onSubmit={handleFeedbackSubmit}>
+        <form onSubmit={handleFeedbackSubmit} noValidate>
           <Label htmlFor="message">Message</Label>
           <Textarea
-            className="mb-3 resize-none"
+            className="mb-3 resize-none aria-invalid:border-red-500"
             id="message"
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => {
+              setMessage(e.target.value);
+              clearError("message");
+            }}
+            {...invalidProps("message", errors.message)}
           />
+          <FieldError field="message" error={errors.message} />
 
           <Label htmlFor="name">Your name</Label>
           <Input
-            className="mb-3"
+            className="mb-3 aria-invalid:border-red-500"
             id="name"
             value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
+            onChange={(e) => {
+              setCustomerName(e.target.value);
+              clearError("customerName");
+            }}
+            {...invalidProps("customerName", errors.customerName)}
           />
+          <FieldError field="customerName" error={errors.customerName} />
 
           <Label htmlFor="email">Your email</Label>
           <Input
-            className="mb-3"
+            className="mb-3 aria-invalid:border-red-500"
             id="email"
+            type="email"
             value={customerEmail}
-            onChange={(e) => setCustomerEmail(e.target.value)}
+            onChange={(e) => {
+              setCustomerEmail(e.target.value);
+              clearError("customerEmail");
+            }}
+            {...invalidProps("customerEmail", errors.customerEmail)}
           />
+          <FieldError field="customerEmail" error={errors.customerEmail} />
 
           <Label className="block" htmlFor="photo">
             Upload your photo

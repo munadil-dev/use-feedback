@@ -59,4 +59,16 @@ describe("newFeedbackSchema", () => {
 
     expect(newFeedbackSchema.safeParse(withoutRating).success).toBe(false);
   });
+
+  it.each([0, 6, 2.5])("rejects a rating of %s", (rating) => {
+    const result = newFeedbackSchema.safeParse({ ...validFeedback, rating });
+
+    expect(result.success).toBe(false);
+  });
+
+  it.each([1, 5])("accepts a rating of %s", (rating) => {
+    expect(
+      newFeedbackSchema.safeParse({ ...validFeedback, rating }).success
+    ).toBe(true);
+  });
 });

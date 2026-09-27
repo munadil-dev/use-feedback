@@ -2,7 +2,7 @@
 
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
-import { FormEvent } from "react";
+import { SubmitEvent } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
@@ -15,7 +15,7 @@ export default function ProductForm() {
   const [newProduct, setNewProduct] = useAtom(newProductAtom);
   const setIsProductCreated = useSetAtom(productCreatedAtom);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const toastId = toast.loading("Loading...");
 
