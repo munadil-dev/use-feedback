@@ -40,7 +40,7 @@ const TestimonialCard = ({ name, username, body }: TestimonialCardProps) => {
 export default function Testimonials({ variants }: TestimonialProps) {
   return (
     <motion.div
-      className="relative flex h-fit w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background"
+      className="bg-background relative flex h-fit w-full flex-col items-center justify-center overflow-hidden rounded-lg"
       variants={variants}
     >
       <Marquee pauseOnHover className="[--duration:40s]">
@@ -49,8 +49,8 @@ export default function Testimonials({ variants }: TestimonialProps) {
         ))}
       </Marquee>
 
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-white dark:from-background"></div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-linear-to-l from-white dark:from-background"></div>
+      <div className="dark:from-background pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-white"></div>
+      <div className="dark:from-background pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-linear-to-l from-white"></div>
     </motion.div>
   );
 }

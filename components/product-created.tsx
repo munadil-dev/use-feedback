@@ -60,7 +60,7 @@ export default function ProductCreated() {
           Below is the link to get feedbacks from customers:
         </p>
 
-        <p className="break-all text-xs sm:text-sm">{link}</p>
+        <p className="text-xs break-all sm:text-sm">{link}</p>
 
         <Button
           className="w-full text-base text-neutral-400"
