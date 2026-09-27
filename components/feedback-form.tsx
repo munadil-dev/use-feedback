@@ -128,20 +128,20 @@ export default function FeedbackForm({
   };
 
   return (
-    <main className="flex min-h-[90svh] items-center justify-center">
-      <section className="flex w-[80vw] flex-col gap-4 py-4 sm:w-[65vw] md:w-[50vw] lg:w-[45vw] xl:w-[40vw]">
-        <h1 className="text-center text-4xl font-semibold">
+    <main className="flex min-h-[calc(100svh-3.5rem)] items-center justify-center px-5 py-12">
+      <section className="shadow-card-raised w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8">
+        <h1 className="text-center text-2xl font-semibold tracking-tight break-words text-zinc-950 sm:text-3xl">
           {productDetails.title}
         </h1>
 
-        <p className="text-center text-sm text-neutral-400">
+        <p className="mt-2 mb-6 text-center text-[15px] break-words text-zinc-600">
           {productDetails.message}
         </p>
 
         <form onSubmit={handleFeedbackSubmit} noValidate>
           <Label htmlFor="message">Message</Label>
           <Textarea
-            className="mb-3 resize-none aria-invalid:border-red-500"
+            className="mt-1.5 mb-3 resize-none aria-invalid:border-red-500"
             id="message"
             value={message}
             onChange={(e) => {
@@ -154,7 +154,7 @@ export default function FeedbackForm({
 
           <Label htmlFor="name">Your name</Label>
           <Input
-            className="mb-3 aria-invalid:border-red-500"
+            className="mt-1.5 mb-3 aria-invalid:border-red-500"
             id="name"
             value={customerName}
             onChange={(e) => {
@@ -167,7 +167,7 @@ export default function FeedbackForm({
 
           <Label htmlFor="email">Your email</Label>
           <Input
-            className="mb-3 aria-invalid:border-red-500"
+            className="mt-1.5 mb-3 aria-invalid:border-red-500"
             id="email"
             type="email"
             value={customerEmail}
@@ -196,14 +196,14 @@ export default function FeedbackForm({
               setImageName(e.name);
             }}
           />
-          <span>{imageName}</span>
+          <span className="text-sm text-zinc-600">{imageName}</span>
 
           <Label className="mt-2 block" id="rating-label">
             Rate
           </Label>
           <StarRating labelledBy="rating-label" />
 
-          <Button className="mt-5 w-full" type="submit">
+          <Button className="mt-6 h-11 w-full" type="submit">
             Submit feedback
           </Button>
         </form>
