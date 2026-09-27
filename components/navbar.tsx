@@ -1,44 +1,55 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
-import ToggleTheme from "./toggle-theme";
+import { cn } from "@/lib/utils";
+import { GithubIconSVG } from "@/icons/Github";
+import { siteLinks } from "@/lib/constant/site.constant";
+import { buttonVariants } from "./ui/button";
 import ProfileDropdown from "./profile-dropdown";
-import * as motion from "motion/react-client";
+
+const navLink = "text-zinc-600 transition-colors hover:text-zinc-950";
 
 export default async function Navbar() {
   const session = await auth();
 
   return (
-    <motion.nav
-      className="sticky top-0 left-0 z-50 px-5 py-4"
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        type: "spring",
-        damping: 10,
-        stiffness: 100,
-        duration: 0.2,
-        delay: 0.45,
-      }}
-    >
-      <div className="container mx-auto flex items-center justify-between">
-        <Link
-          className="font-instrument-serif text-lg font-medium sm:text-xl"
-          href="/"
-        >
-          useFeedback
-        </Link>
+    <header className="sticky top-0 left-0 z-50 border-b border-zinc-200/70 bg-white/80 backdrop-blur-md">
+      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5">
+        <div className="flex items-center gap-8">
+          <Link
+            className="font-instrument-serif text-xl font-medium text-zinc-950"
+            href="/"
+          >
+            useFeedback
+          </Link>
 
-        <div className="flex items-center gap-6">
-          {/* <ToggleTheme /> */}
+          <div className="hidden items-center gap-6 text-sm sm:flex">
+            <Link className={navLink} href="/docs">
+              Docs
+            </Link>
+            <Link className={navLink} href="/docs/quickstart">
+              Quickstart
+            </Link>
+          </div>
+        </div>
 
-          <Link className="hover:underline" href="/docs">
+        <div className="flex items-center gap-4 text-sm">
+          <Link
+            href={siteLinks.github}
+            target="_blank"
+            aria-label="GitHub repository"
+            className="opacity-70 transition-opacity hover:opacity-100 [&_svg]:size-5"
+          >
+            <GithubIconSVG />
+          </Link>
+
+          <Link className={cn(navLink, "sm:hidden")} href="/docs">
             Docs
           </Link>
 
           {session?.user ? (
             <>
               <Link
-                className="hidden hover:underline sm:block"
+                className={cn(navLink, "hidden sm:block")}
                 href="/dashboard"
               >
                 Dashboard
@@ -47,12 +58,23 @@ export default async function Navbar() {
               <ProfileDropdown user={session.user} />
             </>
           ) : (
-            <Link className="hover:text-neutral-800" href="/auth/signin">
-              Sign in
-            </Link>
+            <>
+              <Link
+                className={cn(navLink, "hidden sm:block")}
+                href="/auth/signin"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/auth/signin"
+                className={cn(buttonVariants({ size: "sm" }), "h-8")}
+              >
+                Start collecting
+              </Link>
+            </>
           )}
         </div>
-      </div>
-    </motion.nav>
+      </nav>
+    </header>
   );
 }
