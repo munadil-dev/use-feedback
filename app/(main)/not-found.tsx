@@ -1,20 +1,20 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-[80svh] flex-col items-center justify-center gap-6">
-      <h1 className="text-center text-4xl font-semibold sm:text-6xl">
-        Page not found (404)
+    <main className="flex min-h-[calc(100svh-3.5rem)] flex-col items-center justify-center px-5 py-12 text-center">
+      <p className="text-primary text-sm font-medium">404</p>
+      <h1 className="mt-2 text-4xl font-semibold tracking-[-0.03em] text-balance text-zinc-950 sm:text-5xl">
+        Page not found
       </h1>
-
-      <p className="text-sm font-medium text-neutral-500 sm:text-base">
-        Sorry, we couldn&apos;t find the page you&apos;re looking for.
+      <p className="mt-3 text-[15px] text-zinc-600">
+        The link may be wrong, or the page was removed.
       </p>
-
-      <Button className="p-6 text-base font-medium" asChild>
-        <Link href="/">Go back home</Link>
-      </Button>
+      <Link className={cn(buttonVariants({ size: "lg" }), "mt-8")} href="/">
+        Go back home
+      </Link>
     </main>
   );
 }
