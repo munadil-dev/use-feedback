@@ -121,6 +121,52 @@ describe("FeedbackForm", () => {
     expect(push).not.toHaveBeenCalled();
   });
 
+  it("shows inline errors and skips the request when fields are empty", async () => {
+    renderForm();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Submit feedback" })
+    );
+
+    expect(screen.getByText("Message is required")).toBeInTheDocument();
+    expect(screen.getByText("Name is required")).toBeInTheDocument();
+    expect(screen.getByText("Invalid email address")).toBeInTheDocument();
+    expect(screen.getByLabelText("Message")).toHaveFocus();
+    expect(axios.post).not.toHaveBeenCalled();
+  });
+
+  it("links each error to its field", async () => {
+    const user = userEvent.setup();
+    renderForm();
+
+    await user.type(screen.getByLabelText("Message"), "Loved it");
+    await user.type(screen.getByLabelText("Your name"), "Jane");
+    await user.type(screen.getByLabelText("Your email"), "not-an-email");
+    await user.click(screen.getByRole("button", { name: "Submit feedback" }));
+
+    const email = screen.getByLabelText("Your email");
+
+    expect(email).toHaveAttribute("aria-invalid", "true");
+    expect(email).toHaveAccessibleDescription("Invalid email address");
+    expect(email).toHaveFocus();
+    expect(screen.getByLabelText("Message")).not.toHaveAttribute(
+      "aria-invalid"
+    );
+    expect(screen.queryByText("Message is required")).not.toBeInTheDocument();
+    expect(axios.post).not.toHaveBeenCalled();
+  });
+
+  it("clears a field's error once the user edits it", async () => {
+    const user = userEvent.setup();
+    renderForm();
+
+    await user.click(screen.getByRole("button", { name: "Submit feedback" }));
+    await user.type(screen.getByLabelText("Your name"), "J");
+
+    expect(screen.queryByText("Name is required")).not.toBeInTheDocument();
+    expect(screen.getByText("Message is required")).toBeInTheDocument();
+  });
+
   it("shows a generic error for non-HTTP failures", async () => {
     vi.mocked(axios.post).mockRejectedValue(new Error("boom"));
     renderForm();

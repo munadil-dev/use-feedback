@@ -6,7 +6,10 @@ export const newFeedbackSchema = z.object({
   customerName: z.string().trim().min(1, "Name is required"),
   customerEmail: z.email("Invalid email address"),
   customerImage: z.string().optional(),
-  rating: z.number(),
+  rating: z
+    .int("Rating must be a whole number")
+    .min(1, "Rating must be between 1 and 5")
+    .max(5, "Rating must be between 1 and 5"),
 });
 
 export type FeedbackType = z.infer<typeof newFeedbackSchema>;
