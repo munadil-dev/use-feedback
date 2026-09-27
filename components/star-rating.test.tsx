@@ -5,8 +5,6 @@ import { describe, expect, it } from "vitest";
 import StarRating from "./star-rating";
 import { ratingAtom } from "@/store/atoms/rating";
 
-// The stars are plain SVGs with no accessible name, so they are queried
-// from the DOM. Filled stars are the ones painted yellow.
 const FILLED_STAR = 'path[fill="#ffce31"]';
 
 function renderWithStore(initialRating?: number) {
