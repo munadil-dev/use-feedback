@@ -45,26 +45,26 @@ describe("POST /api/feedback/remove", () => {
     });
   });
 
-  it("returns 400 when the feedback belongs to another user", async () => {
+  it("returns 404 when the feedback belongs to another user", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-2" } });
     mockDeleteMany.mockResolvedValue({ count: 0 });
 
     const res = await POST(removeRequest("feedback-1"));
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(404);
     expect(await res.json()).toEqual({
       message: "Feedback not found",
       success: false,
     });
   });
 
-  it("returns 201 when the owner deletes their feedback", async () => {
+  it("returns 200 when the owner deletes their feedback", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
     mockDeleteMany.mockResolvedValue({ count: 1 });
 
     const res = await POST(removeRequest("feedback-1"));
 
-    expect(res.status).toBe(201);
+    expect(res.status).toBe(200);
     expect(await res.json()).toEqual({
       message: "Feedback deleted successfully",
       success: true,

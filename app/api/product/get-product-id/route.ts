@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { id: product?.id, message: "Product id retrieved", success: true },
-      { status: 201 }
+      { status: 200 }
     );
   } catch (err) {
     console.log("Error while retrieving product id: ", err);

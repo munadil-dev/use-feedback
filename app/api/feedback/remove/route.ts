@@ -25,13 +25,13 @@ export async function POST(request: NextRequest) {
     if (count === 0) {
       return NextResponse.json(
         { message: "Feedback not found", success: false },
-        { status: 400 }
+        { status: 404 }
       );
     }
 
     return NextResponse.json(
       { message: "Feedback deleted successfully", success: true },
-      { status: 201 }
+      { status: 200 }
     );
   } catch (err) {
     console.error("Error while deleting feedback: ", err);
