@@ -1,0 +1,50 @@
+---
+title: Introduction
+description: Collect customer feedback with a shareable link and show your best reviews on any website.
+---
+
+import { Code, LayoutDashboard, MessageSquare, Server } from "lucide-react";
+
+UseFeedback turns what your customers say into social proof. Every product you create gets a public feedback form and an embeddable widget, so you can collect reviews and show the best ones on your site. You don't need hosting, a form builder or any code beyond two lines of HTML.
+
+## Who it's for
+
+- **Indie makers and small teams** who want testimonials on their landing page without building a backend.
+- **Freelancers and agencies** collecting client reviews for a portfolio.
+- **Anyone with a website** who can paste HTML, whether it runs on WordPress, Webflow, Framer or a custom React app.
+
+## How it works
+
+1. **Create a product** in your dashboard. You get a public feedback link.
+2. **Share the link** with your customers. They leave a message, a 1–5 star rating and an optional photo. They don't need an account.
+3. **Review feedback** in the dashboard. Favorite the reviews you like and delete spam.
+4. **Embed the widget** on your website. It shows only the feedback you favorited.
+
+```html title="Your website"
+<div id="embed-feedbacks"></div>
+<script src="https://usefeedback.munadil.com/api/embed-feedbacks?productId=YOUR_PRODUCT_ID"></script>
+```
+
+## Features
+
+<Cards>
+  <Card icon={<MessageSquare />} title="Shareable feedback form">
+    A public page per product with a message, a star rating and an optional
+    photo, with clear errors if something is missing.
+  </Card>
+  <Card icon={<LayoutDashboard />} title="Dashboard">
+    See every submission per product, favorite the best ones and delete the
+    rest.
+  </Card>
+  <Card icon={<Code />} title="Lightweight widget">
+    Plain JavaScript with no framework and no iframe, served from a CDN cache.
+  </Card>
+  <Card icon={<Server />} title="Open source">
+    MIT licensed. Use the hosted version or run your own instance with your own
+    database.
+  </Card>
+</Cards>
+
+## You control what's public
+
+Nothing a customer submits appears on your site until you favorite it. Unfavorite a review to hide it again, or delete it to remove it for good. Only you can favorite or delete feedback for your products.

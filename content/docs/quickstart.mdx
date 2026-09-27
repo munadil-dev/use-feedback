@@ -1,0 +1,86 @@
+---
+title: Quickstart
+description: From sign-in to a live feedback widget in a few minutes.
+---
+
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+By the end of this guide, your website shows real customer feedback that you picked.
+
+## Before you start
+
+You need:
+
+- A Google account to sign in.
+- A website where you can add HTML. Any site builder or framework works.
+
+## Set it up
+
+<Steps>
+<Step>
+
+### Sign in
+
+Open the [dashboard](/dashboard) and sign in with your Google account.
+
+</Step>
+<Step>
+
+### Create a product
+
+Click **+ Create a new product** and fill in the name, title and custom message. The title and message are what customers see on the feedback form, so write them as a question or a short thank-you. See [Create a product](/docs/create-a-product) for what each field does.
+
+</Step>
+<Step>
+
+### Share the feedback link
+
+When the product is created, click **Copy to clipboard** to copy its feedback link. It looks like this:
+
+```txt
+https://usefeedback.munadil.com/YOUR_PRODUCT_ID
+```
+
+Send it to your customers by email, on social media or on a thank-you page. You can find it again later under **Feedback URL** on the product's page. See [Collect feedback](/docs/collect-feedback).
+
+<Callout title="Try it yourself first">
+  Open the link in a private window and submit a test review. You'll see the
+  whole flow your customers go through, and you'll have something to embed right
+  away. Delete it later from the dashboard.
+</Callout>
+
+</Step>
+<Step>
+
+### Favorite the best feedback
+
+Open the product in your dashboard and click the heart on the feedback you want to show publicly. Only favorited feedback appears on your website. See [Manage feedback](/docs/manage-feedback).
+
+</Step>
+<Step>
+
+### Embed the widget
+
+Copy the embed code from the product's page and paste it into your website's HTML where the feedback should appear:
+
+```html
+<div id="embed-feedbacks"></div>
+<script src="https://usefeedback.munadil.com/api/embed-feedbacks?productId=YOUR_PRODUCT_ID"></script>
+```
+
+See [Embed the widget](/docs/embed-widget) for platform tips.
+
+</Step>
+</Steps>
+
+## Check that it works
+
+Reload your website. You should see a card for each favorited review.
+
+If the widget is empty:
+
+- Make sure at least one review is favorited.
+- Wait up to 2 minutes. The widget is cached, so new favorites take a moment to appear.
+- Check that the `productId` in the script matches your product.
+
+See [troubleshooting](/docs/embed-widget#troubleshooting) for more.

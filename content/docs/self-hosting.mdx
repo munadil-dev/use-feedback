@@ -1,0 +1,47 @@
+---
+title: Self-hosting
+description: Run your own instance of UseFeedback.
+---
+
+UseFeedback is open source under the [MIT license](https://github.com/munadil-dev/use-feedback/blob/main/LICENSE). It's a Next.js app with a PostgreSQL database.
+
+## Requirements
+
+- [Node.js](https://nodejs.org/) 24+ and [pnpm](https://pnpm.io/)
+- A PostgreSQL database (local, [Neon](https://neon.tech/), [Supabase](https://supabase.com/), etc.)
+- A [Google OAuth client](https://console.cloud.google.com/apis/credentials) with the redirect URI `https://YOUR_DOMAIN/api/auth/callback/google` (`http://localhost:3000/api/auth/callback/google` for local development)
+
+## Setup
+
+```bash
+git clone https://github.com/munadil-dev/use-feedback.git
+cd use-feedback
+cp .env.example .env.local
+pnpm install
+pnpm migrate:dev
+pnpm dev
+```
+
+## Environment variables
+
+| Variable               | Description                                                                         |
+| ---------------------- | ----------------------------------------------------------------------------------- |
+| `AUTH_SECRET`          | Random secret for Auth.js. Generate one with `openssl rand -base64 32`.             |
+| `AUTH_GOOGLE_ID`       | Google OAuth client ID.                                                             |
+| `AUTH_GOOGLE_SECRET`   | Google OAuth client secret.                                                         |
+| `DATABASE_URL`         | Postgres connection string used by the app (a pooled URL works).                    |
+| `DIRECT_URL`           | Direct (non-pooled) Postgres connection string, used by Prisma for migrations.      |
+| `NEXT_PUBLIC_BASE_URL` | Public URL of the app, with a trailing slash, e.g. `https://feedback.example.com/`. |
+
+## Deploy
+
+The app deploys to any platform that runs Next.js, such as [Vercel](https://vercel.com/). Set the environment variables above, then:
+
+```bash
+pnpm build
+pnpm start
+```
+
+`pnpm build` generates the Prisma client before building, so no extra step is needed. Apply database migrations with `pnpm dlx prisma migrate deploy` before the first start.
+
+When self-hosting, the feedback links and embed code use your `NEXT_PUBLIC_BASE_URL` instead of `usefeedback.munadil.com`.
