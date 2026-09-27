@@ -126,8 +126,10 @@ export default function FeedbackForm({
           />
           <span>{imageName}</span>
 
-          <Label className="mt-2 block">Rate</Label>
-          <StarRating />
+          <Label className="mt-2 block" id="rating-label">
+            Rate
+          </Label>
+          <StarRating labelledBy="rating-label" />
 
           <Button className="mt-5 w-full" type="submit">
             Submit feedback

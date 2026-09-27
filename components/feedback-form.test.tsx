@@ -77,6 +77,12 @@ describe("FeedbackForm", () => {
     expect(screen.getByText(productDetails.message)).toBeInTheDocument();
   });
 
+  it("labels the star rating with the visible Rate label", () => {
+    renderForm();
+
+    expect(screen.getByRole("group", { name: "Rate" })).toBeInTheDocument();
+  });
+
   it("submits the entered values with the selected rating", async () => {
     vi.mocked(axios.post).mockResolvedValue({
       data: { success: true, message: "Feedback submitted" },
