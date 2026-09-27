@@ -1,3 +1,4 @@
+import { screen, within } from "@testing-library/react";
 import { NextRequest } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GET } from "./route";
@@ -56,11 +57,16 @@ describe("GET /api/embed-feedbacks", () => {
     expect(mockFindMany).not.toHaveBeenCalled();
   });
 
-  it("serves JavaScript that any site can load", async () => {
+  it("serves cacheable JavaScript that any site can load", async () => {
     const res = await GET(embedRequest());
 
-    expect(res.headers.get("Content-Type")).toBe("application/javascript");
+    expect(res.headers.get("Content-Type")).toBe(
+      "application/javascript; charset=utf-8"
+    );
     expect(res.headers.get("Access-Control-Allow-Origin")).toBe("*");
+    expect(res.headers.get("Cache-Control")).toBe(
+      "public, s-maxage=120, stale-while-revalidate=86400"
+    );
   });
 
   it("only fetches favorite feedback for the product", async () => {
@@ -93,6 +99,46 @@ describe("GET /api/embed-feedbacks", () => {
       "src",
       "https://usefeedback.munadil.com/user-icon.png"
     );
+  });
+
+  it("exposes the cards as a labelled list", async () => {
+    await runWidget();
+
+    const list = screen.getByRole("list", { name: "Customer feedback" });
+
+    expect(within(list).getAllByRole("listitem")).toHaveLength(2);
+  });
+
+  it("describes each rating in text for screen readers", async () => {
+    await runWidget();
+
+    expect(
+      screen.getByRole("img", { name: "Rated 5 out of 5" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: "Rated 2 out of 5" })
+    ).toBeInTheDocument();
+  });
+
+  it("lazy-loads decorative avatars with fixed dimensions", async () => {
+    const container = await runWidget();
+
+    container.querySelectorAll("img").forEach((img) => {
+      expect(img).toHaveAttribute("alt", "");
+      expect(img).toHaveAttribute("loading", "lazy");
+      expect(img).toHaveAttribute("width", "35");
+      expect(img).toHaveAttribute("height", "35");
+    });
+  });
+
+  it("leaves the container untouched when there is no feedback", async () => {
+    mockFindMany.mockResolvedValue([]);
+
+    const container = await runWidget();
+
+    expect(container).toBeEmptyDOMElement();
+    expect(container).not.toHaveAttribute("role");
+    expect(container).not.toHaveAttribute("style");
   });
 
   it("renders messages as text, not HTML", async () => {
