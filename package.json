@@ -11,7 +11,7 @@
     "db:push": "dotenv -e .env.local -- pnpm dlx prisma db push",
     "db:seed": "dotenv -e .env.local -- pnpm dlx prisma db seed",
     "dev": "next dev",
-    "build": "next build",
+    "build": "dotenv -e .env.local -- prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky"
