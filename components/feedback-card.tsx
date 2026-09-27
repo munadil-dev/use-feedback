@@ -4,18 +4,11 @@ import { toast } from "sonner";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { Star, Heart, Trash2 } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "./ui/alert-dialog";
+import { Trash2 } from "lucide-react";
+import { Avatar } from "./home/avatar";
+import { Stars } from "./home/stars";
+import { HeartButton } from "./home/interactive";
+import DeleteDialog from "./delete-dialog";
 
 interface FeedbackProps {
   feedback: {
@@ -31,6 +24,7 @@ interface FeedbackProps {
 
 export default function FeedbackCard({ feedback }: FeedbackProps) {
   const [isFavorite, setIsFavorite] = useState<boolean>(feedback.isFavorite);
+  const createdAt = new Date(feedback.createdAt);
 
   const updateFavorite = async () => {
     const newFavorite = !isFavorite;
@@ -59,64 +53,47 @@ export default function FeedbackCard({ feedback }: FeedbackProps) {
   };
 
   return (
-    <div className="flex flex-col gap-2 rounded-lg bg-neutral-50 px-6 py-6">
-      <div className="flex justify-between">
-        <div className="flex items-center gap-1">
-          {Array.from({ length: feedback.rating }, (_, index) => {
-            return (
-              <Star key={index} className="fill-current text-yellow-400" />
-            );
-          })}
-        </div>
+    <article className="shadow-card flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5">
+      <header className="flex items-center gap-3">
+        <Avatar name={feedback.customerName} size="md" />
+        <p className="flex min-w-0 flex-1 flex-col text-sm">
+          <span className="truncate font-medium text-zinc-950">
+            {feedback.customerName}
+          </span>
+          <span className="truncate text-zinc-500">
+            {feedback.customerEmail}
+          </span>
+        </p>
 
-        <div className="flex items-center gap-4">
-          {isFavorite ? (
-            <Heart
-              className="cursor-pointer fill-red-600"
-              onClick={updateFavorite}
-            ></Heart>
-          ) : (
-            <Heart className="cursor-pointer" onClick={updateFavorite} />
-          )}
+        <HeartButton
+          pressed={isFavorite}
+          onToggle={updateFavorite}
+          label={`Show ${feedback.customerName}'s feedback on your site`}
+        />
+      </header>
 
-          <DeleteFeedbackAlert feedbackId={feedback.id} />
-        </div>
-      </div>
+      <Stars count={feedback.rating} size="sm" className="mt-4" />
 
-      <p className="font-medium text-neutral-500 dark:text-neutral-400">
+      <p className="mt-3 flex-1 text-[15px] leading-6 break-words text-zinc-700">
         {feedback.message}
       </p>
 
-      <div className="flex w-full items-center">
-        <div className="w-1/2">
-          <p className="font-medium">Name</p>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            {feedback.customerName}
-          </p>
-        </div>
-
-        <div className="w-1/2">
-          <p className="font-medium">Email</p>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            {feedback.customerEmail}
-          </p>
-        </div>
-      </div>
-
-      <div>
-        <p className="font-medium">Submitted at</p>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          {new Date(feedback.createdAt).toLocaleString("en-us", {
+      <footer className="mt-5 flex items-center justify-between border-t border-zinc-100 pt-3">
+        <time
+          dateTime={createdAt.toISOString()}
+          className="text-xs text-zinc-500"
+        >
+          {createdAt.toLocaleString("en-us", {
             year: "numeric",
-            month: "long",
+            month: "short",
             day: "numeric",
             hour: "numeric",
             minute: "numeric",
-            second: "numeric",
           })}
-        </p>
-      </div>
-    </div>
+        </time>
+        <DeleteFeedbackAlert feedbackId={feedback.id} />
+      </footer>
+    </article>
   );
 }
 
@@ -148,30 +125,13 @@ function DeleteFeedbackAlert({ feedbackId }: { feedbackId: string }) {
   };
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Trash2 className="cursor-pointer" />
-      </AlertDialogTrigger>
-
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the
-            feedback from the product and remove it from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={removeFeedback}
-            className="bg-red-700 text-white hover:bg-red-600"
-          >
-            Delete
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <DeleteDialog
+      description="This action cannot be undone. This will permanently delete the feedback from the product and remove it from our servers."
+      onConfirm={removeFeedback}
+      triggerLabel="Delete feedback"
+      triggerClassName="-mr-1.5 flex size-8 cursor-pointer items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden"
+    >
+      <Trash2 className="size-4" />
+    </DeleteDialog>
   );
 }

@@ -1,9 +1,24 @@
 import Link from "next/link";
 import prisma from "@/lib/db";
+import { Plus } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import * as motion from "motion/react-client";
+import EmptyState from "@/components/empty-state";
 import ProductCard from "@/components/product-card";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+
+function NewProductLink({ className }: { className?: string }) {
+  return (
+    <Link
+      className={cn(buttonVariants(), className)}
+      href="/dashboard/new-product"
+    >
+      <Plus className="size-4" />
+      New product
+    </Link>
+  );
+}
 
 export default async function Dashboard() {
   const session = await auth();
@@ -28,43 +43,37 @@ export default async function Dashboard() {
   });
 
   return (
-    <main className="flex min-h-[80svh] justify-center">
-      <section className="container mx-auto flex w-[90vw] flex-col gap-8 sm:w-[70vw]">
-        <article className="mt-10 flex items-center justify-between">
-          <h1 className="font-instrument-serif text-3xl font-medium">
+    <main className="mx-auto max-w-6xl px-5 py-12">
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-[-0.03em] text-zinc-950">
             Products
           </h1>
+          <p className="mt-1.5 text-[15px] text-zinc-600">
+            Each product has its own feedback link and widget.
+          </p>
+        </div>
 
-          <Link
-            className="rounded-md bg-purple-400 px-4 py-2 text-sm font-medium transition-colors duration-200 hover:bg-purple-300"
-            href="/dashboard/new-product"
-          >
-            &#43; Create a new product
-          </Link>
-        </article>
+        <NewProductLink />
+      </header>
 
-        <motion.article
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.5,
-            type: "spring",
-            damping: 10,
-            stiffness: 100,
-          }}
-          className="flex flex-col gap-5"
+      {products.length === 0 ? (
+        <EmptyState
+          title="No products yet"
+          body="Create a product to get a feedback link you can send to customers."
+          className="mt-8"
         >
-          {products.length === 0 && (
-            <div className="flex min-h-[50svh] items-center justify-center text-neutral-400">
-              <p>No products yet, create a new one.</p>
-            </div>
-          )}
-
-          {products.map((product) => {
-            return <ProductCard key={product.id} details={product} />;
-          })}
-        </motion.article>
-      </section>
+          <NewProductLink className="mt-6" />
+        </EmptyState>
+      ) : (
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((product) => (
+            <li key={product.id}>
+              <ProductCard details={product} />
+            </li>
+          ))}
+        </ul>
+      )}
     </main>
   );
 }

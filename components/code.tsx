@@ -1,61 +1,32 @@
 "use client";
 
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-import { Copy, CopyCheck } from "lucide-react";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import {
-  vs2015,
-  atelierCaveLight,
-} from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { vs2015 } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { CopyButton } from "./home/interactive";
 
 export default function Code({ code }: { code: string }) {
-  const { theme } = useTheme();
-  const [mounted, setMounted] = useState<boolean>(false);
-  const [copied, setCopied] = useState<boolean>(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-  };
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => setCopied(false), 4000);
-
-    return () => clearTimeout(timeoutId);
-  }, [copied]);
-
-  if (!mounted) {
-    return null;
-  }
-
   return (
-    <article className="relative container mx-auto rounded-full">
-      <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
-        Embed this code into your website
-      </p>
-
-      {copied ? (
-        <CopyCheck className="absolute top-7 right-2 w-5" />
-      ) : (
-        <Copy
-          className="absolute top-7 right-2 w-5 cursor-pointer hover:text-zinc-400"
-          onClick={handleCopy}
-        />
-      )}
+    <div className="relative mt-4 overflow-hidden rounded-lg bg-zinc-950">
+      <CopyButton
+        value={code}
+        label="Copy code"
+        className="absolute top-2 right-2 text-zinc-400 hover:bg-white/10 hover:text-white"
+      />
 
       <SyntaxHighlighter
         language="html"
         wrapLongLines={true}
-        style={theme === "dark" ? vs2015 : atelierCaveLight}
-        customStyle={{ borderRadius: "7px", padding: "12px" }}
+        style={vs2015}
+        customStyle={{
+          margin: 0,
+          padding: "14px 48px 14px 14px",
+          background: "transparent",
+          fontSize: "13px",
+          lineHeight: "1.6",
+        }}
       >
         {code}
       </SyntaxHighlighter>
-    </article>
+    </div>
   );
 }
