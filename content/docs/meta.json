@@ -1,0 +1,14 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "quickstart",
+    "---Guides---",
+    "create-a-product",
+    "collect-feedback",
+    "manage-feedback",
+    "embed-widget",
+    "---Developers---",
+    "self-hosting"
+  ]
+}
