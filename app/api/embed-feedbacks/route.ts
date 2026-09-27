@@ -88,7 +88,7 @@ export async function GET(req: NextRequest) {
         msgP.style.margin = 0;
 
         // Content
-        img.src = feedback.customerImage || "https://usefeedback.vercel.app/user-icon.png";
+        img.src = feedback.customerImage || "${process.env.NEXT_PUBLIC_BASE_URL}user-icon.png";
         msgP.textContent = feedback.message;
         nameP.textContent = feedback.customerName;
 
