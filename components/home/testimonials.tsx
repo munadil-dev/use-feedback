@@ -1,56 +1,73 @@
-import { cn } from "@/lib/utils";
-import type { Variants } from "motion/react";
-import Marquee from "@/components/ui/marquee";
-import * as motion from "motion/react-client";
-import { testimonials } from "@/lib/constant/testimonials.constant";
+import {
+  testimonialColumns,
+  testimonials,
+} from "@/lib/constant/testimonials.constant";
+import { Avatar } from "./avatar";
+import { FavoriteToggle } from "./interactive";
+import { Stars } from "./stars";
 
-interface TestimonialCardProps {
-  name: string;
-  username: string;
-  body: string;
-}
+type Testimonial = (typeof testimonials)[number];
 
-interface TestimonialProps {
-  variants?: Variants;
-}
-
-const TestimonialCard = ({ name, username, body }: TestimonialCardProps) => {
+function Card({
+  testimonial,
+  favorite,
+}: {
+  testimonial: Testimonial;
+  favorite: boolean;
+}) {
   return (
-    <figure
-      className={cn(
-        "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
-        "border-gray-950/10 bg-gray-950/1 hover:bg-gray-950/5",
-        "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15"
-      )}
-    >
-      <div className="flex flex-row items-center gap-2">
-        <div className="h-7 w-7 rounded-full bg-linear-to-r from-cyan-500 to-blue-500"></div>
-        <div className="flex flex-col">
-          <figcaption className="text-sm font-medium dark:text-white">
-            {name}
-          </figcaption>
-          <p className="text-xs font-medium dark:text-white/40">{username}</p>
+    <li className="shadow-card-raised rounded-2xl border border-zinc-200 bg-white p-5">
+      <header className="flex items-center gap-3">
+        <Avatar name={testimonial.name} size="md" />
+        <p className="flex min-w-0 flex-1 flex-col text-sm">
+          <span className="truncate font-medium text-zinc-950">
+            {testimonial.name}
+          </span>
+          <span className="truncate text-zinc-500">{testimonial.username}</span>
+        </p>
+        <FavoriteToggle name={testimonial.name} initial={favorite} />
+      </header>
+      <blockquote className="mt-4 text-[15px] leading-6 text-zinc-700">
+        {testimonial.body}
+      </blockquote>
+      <Stars count={5} size="sm" className="mt-4" />
+    </li>
+  );
+}
+
+export default function Testimonials() {
+  return (
+    <section className="overflow-hidden py-16">
+      <header className="mx-auto max-w-2xl px-5 text-center">
+        <h2 className="text-3xl leading-[1.1] font-semibold tracking-[-0.035em] text-balance text-zinc-950 sm:text-5xl">
+          People like being asked
+        </h2>
+        <p className="mt-4 text-lg leading-7 text-pretty text-zinc-600">
+          Kind words from people who put a feedback link in front of their
+          customers.
+        </p>
+      </header>
+
+      <div className="mx-auto mt-14 max-w-[100rem] mask-[linear-gradient(to_right,transparent,#000_12%,#000_88%,transparent)] px-5 md:mask-[linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
+        <div className="overflow-hidden mask-[linear-gradient(to_bottom,#000_65%,transparent)] md:h-[44rem]">
+          <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-5">
+            {testimonialColumns.map((column, columnIndex) => (
+              <ul
+                key={columnIndex}
+                className={`${column.visibility} ${column.offset} flex-col gap-4 max-md:pt-0`}
+              >
+                {column.items.map((item, itemIndex) => (
+                  <Card
+                    key={item}
+                    testimonial={testimonials[item]}
+                    favorite={(columnIndex + itemIndex) % 3 === 0}
+                  />
+                ))}
+              </ul>
+            ))}
+          </div>
         </div>
       </div>
-      <blockquote className="mt-2 text-sm">{body}</blockquote>
-    </figure>
-  );
-};
-
-export default function Testimonials({ variants }: TestimonialProps) {
-  return (
-    <motion.div
-      className="bg-background relative flex h-fit w-full flex-col items-center justify-center overflow-hidden rounded-lg"
-      variants={variants}
-    >
-      <Marquee pauseOnHover className="[--duration:40s]">
-        {testimonials.map((testimonial) => (
-          <TestimonialCard key={testimonial.username} {...testimonial} />
-        ))}
-      </Marquee>
-
-      <div className="dark:from-background pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-white"></div>
-      <div className="dark:from-background pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-linear-to-l from-white"></div>
-    </motion.div>
+    </section>
   );
 }

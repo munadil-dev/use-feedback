@@ -45,3 +45,11 @@ export const testimonials = [
     body: "I can't run my business without UseFeedback. Essential for understanding clients.",
   },
 ];
+
+export const testimonialColumns = [
+  { items: [0, 1, 2], offset: "pt-24", visibility: "hidden xl:flex" },
+  { items: [3, 4, 5], offset: "pt-10", visibility: "hidden md:flex" },
+  { items: [6, 7, 8], offset: "pt-0", visibility: "flex" },
+  { items: [2, 0, 1], offset: "pt-16", visibility: "hidden md:flex" },
+  { items: [5, 3, 4], offset: "pt-32", visibility: "hidden xl:flex" },
+];
