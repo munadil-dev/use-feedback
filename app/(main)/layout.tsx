@@ -1,5 +1,7 @@
-import Footer from "@/components/footer";
+import { Geist } from "next/font/google";
 import Navbar from "@/components/navbar";
+
+const geist = Geist({ subsets: ["latin"], display: "swap" });
 
 export default function MainLayout({
   children,
@@ -7,17 +9,9 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="relative min-h-screen w-full">
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(125% 125% at 50% 90%, #fff 40%, #6366f1 100%)",
-        }}
-      />
+    <div className={`${geist.className} min-h-screen w-full bg-zinc-50`}>
       <Navbar />
       {children}
-      <Footer />
     </div>
   );
 }
