@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { newFeedbackSchema } from "./new-feedback";
 
 const validFeedback = {
+  id: "product-1",
   message: "Great product!",
   customerName: "Jane",
   customerEmail: "jane@example.com",
@@ -32,6 +33,12 @@ describe("newFeedbackSchema", () => {
 
     expect(result.success).toBe(false);
     expect(result.error?.issues[0].message).toBe("Message is required");
+  });
+
+  it("rejects a missing product id", () => {
+    const { id: _id, ...withoutId } = validFeedback;
+
+    expect(newFeedbackSchema.safeParse(withoutId).success).toBe(false);
   });
 
   it("rejects an empty name", () => {

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const newFeedbackSchema = z.object({
-  id: z.string().optional(),
+  id: z.string("Product is required").min(1, "Product is required"),
   message: z.string().trim().min(1, "Message is required"),
   customerName: z.string().trim().min(1, "Name is required"),
   customerEmail: z.email("Invalid email address"),
