@@ -45,7 +45,6 @@
     "react-dom": "^19.2.8",
     "react-spinners": "^0.17.1",
     "react-syntax-highlighter": "^16.1.1",
-    "react-tweet": "^3.2.2",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.6.0",
     "tailwindcss-animate": "^1.0.7",
