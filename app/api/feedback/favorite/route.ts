@@ -25,14 +25,22 @@ export async function POST(request: NextRequest) {
   const body: BodyProps = await request.json();
 
   try {
-    await prisma.feedback.update({
+    const { count } = await prisma.feedback.updateMany({
       where: {
         id: body.feedbackId,
+        product: { userId: session.user.id },
       },
       data: {
         isFavorite: body.isFavorite,
       },
     });
+
+    if (count === 0) {
+      return NextResponse.json(
+        { message: "Feedback not found", success: false },
+        { status: 400 }
+      );
+    }
 
     return NextResponse.json(
       {
