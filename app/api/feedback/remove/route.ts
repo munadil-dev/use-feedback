@@ -15,18 +15,26 @@ export async function POST(request: NextRequest) {
   const body: { feedbackId: string } = await request.json();
 
   try {
-    await prisma.feedback.delete({
+    const { count } = await prisma.feedback.deleteMany({
       where: {
         id: body.feedbackId,
+        product: { userId: session.user.id },
       },
     });
+
+    if (count === 0) {
+      return NextResponse.json(
+        { message: "Feedback not found", success: false },
+        { status: 400 }
+      );
+    }
 
     return NextResponse.json(
       { message: "Feedback deleted successfully", success: true },
       { status: 201 }
     );
   } catch (err) {
-    console.error("Error while adding feedback as favorite: ", err);
+    console.error("Error while deleting feedback: ", err);
     return NextResponse.json(
       { message: "Internal server error", success: false },
       { status: 500 }
