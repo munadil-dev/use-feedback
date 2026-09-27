@@ -39,10 +39,6 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           Dashboard
         </DropdownMenuItem>
 
-        <DropdownMenuItem onClick={() => router.push("/docs")}>
-          Docs
-        </DropdownMenuItem>
-
         <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
