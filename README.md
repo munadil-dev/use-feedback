@@ -26,7 +26,7 @@ No hosting, no forms to build, no technical skills required.
 - **Accessible by default**: a keyboard-operable star rating, inline form errors announced to screen readers, and widget cards with list semantics and text alternatives for ratings.
 - **Validated end to end**: the same Zod schema checks input in the browser and on the server.
 - **Secure**: Google sign-in via Auth.js, and every mutation is scoped to the owner of the product.
-- **Dark mode** across the app.
+- **Built-in docs**: guides for users at `/docs`, powered by Fumadocs with full-text search.
 
 ## How it works
 
@@ -55,6 +55,7 @@ Only feedback you mark as a favorite is shown. Responses are cached for up to 2 
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | Framework  | [Next.js 16](https://nextjs.org/) (App Router), [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) |
 | Styling    | [Tailwind CSS 4](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/), [Motion](https://motion.dev/)                |
+| Docs       | [Fumadocs](https://fumadocs.dev/) (MDX)                                                                                       |
 | Data       | [PostgreSQL](https://www.postgresql.org/), [Prisma 7](https://www.prisma.io/)                                                 |
 | Auth       | [Auth.js](https://authjs.dev/) with Google                                                                                    |
 | Validation | [Zod 4](https://zod.dev/)                                                                                                     |
@@ -136,12 +137,15 @@ Only feedback you mark as a favorite is shown. Responses are cached for up to 2 
 
 ```
 app/
-  (feedback)/[productId]/   Public feedback form
-  api/                      Route handlers (feedback, products, embed widget)
-  dashboard/                Product and feedback management
-  docs/                     User documentation
+  (main)/                   App pages with the site navbar and footer
+    (feedback)/[productId]/ Public feedback form
+    auth/                   Sign-in page
+    dashboard/              Product and feedback management
+  api/                      Route handlers (feedback, products, embed widget, docs search)
+  docs/                     Documentation site (Fumadocs)
 components/                 UI components (shadcn/ui in components/ui)
-lib/                        Auth, database client, utilities
+content/docs/               Documentation pages in MDX
+lib/                        Auth, database client, docs source, utilities
 prisma/                     Schema and migrations
 schemas/                    Zod schemas shared by client and server
 store/                      Jotai atoms
