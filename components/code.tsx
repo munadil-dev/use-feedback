@@ -34,16 +34,16 @@ export default function Code({ code }: { code: string }) {
   }
 
   return (
-    <article className="container relative mx-auto rounded-full">
+    <article className="relative container mx-auto rounded-full">
       <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
         Embed this code into your website
       </p>
 
       {copied ? (
-        <CopyCheck className="absolute right-2 top-7 w-5" />
+        <CopyCheck className="absolute top-7 right-2 w-5" />
       ) : (
         <Copy
-          className="absolute right-2 top-7 w-5 cursor-pointer hover:text-zinc-400"
+          className="absolute top-7 right-2 w-5 cursor-pointer hover:text-zinc-400"
           onClick={handleCopy}
         />
       )}

@@ -13,6 +13,8 @@
     "dev": "next dev",
     "build": "dotenv -e .env.local -- prisma generate && next build",
     "start": "next start",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest"
   },

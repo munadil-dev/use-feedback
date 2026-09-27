@@ -56,7 +56,7 @@ export default async function Product({
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-semibold">{productDetails.name}</h1>
 
-          <p className="text-[0.84rem] text-neutral-500 dark:text-neutral-400 sm:text-sm">
+          <p className="text-[0.84rem] text-neutral-500 sm:text-sm dark:text-neutral-400">
             Feedback URL:{" "}
             <Link
               className="break-all underline hover:text-neutral-800 dark:hover:text-neutral-200"
