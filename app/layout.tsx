@@ -15,7 +15,7 @@ const instrumentSerif = Instrument_Serif({
 
 export const metadata: Metadata = {
   title: "UseFeedback",
-  description: "Getting feedbacks made easy",
+  description: "Getting feedback made easy",
 };
 
 export default function RootLayout({

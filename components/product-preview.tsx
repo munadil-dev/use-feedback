@@ -1,41 +1,48 @@
 "use client";
 
 import { newProductAtom } from "@/store/atoms/new-product";
+import { Fragment } from "react";
 import { useAtomValue } from "jotai";
-import { Input } from "./ui/input";
+import { previewFields } from "@/lib/constant/product.constant";
 import { Label } from "./ui/label";
-import { Button } from "./ui/button";
+import { Stars } from "./home/stars";
+import { WindowDots } from "./home/window-dots";
 
 export default function ProductPreview() {
   const newProduct = useAtomValue(newProductAtom);
 
   return (
-    <article className="relative flex w-full flex-col gap-3 rounded-md border bg-white p-6 shadow-md lg:w-[90%] xl:w-[70%] dark:shadow-neutral-900">
-      <p className="absolute -top-3 w-fit rounded-full bg-green-400 px-2 py-1 text-xs font-semibold text-green-900">
-        Live preview
-      </p>
+    <section
+      aria-label="Preview"
+      className="shadow-card-raised overflow-hidden rounded-2xl border border-zinc-200 bg-white"
+    >
+      <header className="flex items-center gap-3 border-b border-zinc-200 px-5 py-3">
+        <WindowDots />
+        <p className="text-xs text-zinc-500">Preview of your feedback page</p>
+      </header>
 
-      <p className="text-center text-xl font-semibold">{newProduct.title}</p>
+      <div aria-hidden="true" className="flex flex-col gap-3 bg-zinc-50 p-6">
+        <p className="text-center text-xl font-semibold tracking-tight break-words text-zinc-950">
+          {newProduct.title || "Your title"}
+        </p>
+        <p className="mb-2 text-center text-sm break-words text-zinc-600">
+          {newProduct.message || "Your custom message"}
+        </p>
 
-      <p className="mb-3 text-center text-sm text-neutral-400">
-        {newProduct.message}
-      </p>
-
-      <Label>Message</Label>
-      <Input className="h-16" disabled />
-
-      <Label>Your name</Label>
-      <Input disabled />
-
-      <Label>Your email</Label>
-      <Input disabled />
-
-      <Label>Upload your photo</Label>
-      <Input type="file" disabled />
-
-      <Button className="w-full" disabled>
-        Submit feedback
-      </Button>
-    </article>
+        {previewFields.map(({ label, height }) => (
+          <Fragment key={label}>
+            <Label>{label}</Label>
+            <div
+              className={`${height} rounded-md border border-zinc-200 bg-white`}
+            />
+          </Fragment>
+        ))}
+        <Label>Rate</Label>
+        <Stars count={5} />
+        <div className="bg-primary mt-2 flex h-10 items-center justify-center rounded-lg text-sm font-medium text-white">
+          Submit feedback
+        </div>
+      </div>
+    </section>
   );
 }

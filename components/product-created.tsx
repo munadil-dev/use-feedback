@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import SuccessIcon from "@/components/success-icon";
 import { MouseEvent, useEffect, useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { newProductAtom } from "@/store/atoms/new-product";
@@ -11,7 +12,7 @@ import { productCreatedAtom } from "@/store/atoms/product-created";
 export default function ProductCreated() {
   const router = useRouter();
   const [link, setLink] = useState("");
-  const [copy, setCopy] = useState("Copy to clipboard");
+  const [copy, setCopy] = useState("Copy link");
   const newProduct = useAtomValue(newProductAtom);
   const setIsProductCreated = useSetAtom(productCreatedAtom);
 
@@ -50,35 +51,33 @@ export default function ProductCreated() {
   }, [newProduct.name]);
 
   return (
-    <main className="flex min-h-[80svh] items-center justify-center">
-      <section className="flex w-[80svw] flex-col items-center gap-2 rounded-lg border p-5 text-center sm:w-[60svw] md:w-[50svw] lg:w-[40svw] xl:w-[30svw]">
-        <p className="text-lg font-semibold">
-          Created {newProduct.name} &#x1F973;
+    <main className="flex min-h-[calc(100svh-3.5rem)] items-center justify-center px-5 py-12">
+      <section className="shadow-card-raised w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 text-center">
+        <SuccessIcon />
+        <h1 className="mt-4 text-xl font-semibold tracking-tight text-zinc-950">
+          {newProduct.name} is ready
+        </h1>
+        <p className="mt-1 text-sm text-zinc-600">
+          Send this link to customers to collect feedback.
         </p>
 
-        <p className="text-sm text-neutral-400">
-          Below is the link to get feedbacks from customers:
+        <p className="mt-5 min-h-11 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 font-mono text-[13px] break-all text-zinc-700">
+          {link}
         </p>
 
-        <p className="text-xs break-all sm:text-sm">{link}</p>
-
-        <Button
-          className="w-full text-base text-neutral-400"
-          variant="link"
-          type="button"
-          onClick={handleCopyToClipboard}
-        >
-          {copy}
-        </Button>
-
-        <Button
-          className="w-[90%]"
-          variant="destructive"
-          type="button"
-          onClick={handleClose}
-        >
-          Close
-        </Button>
+        <div className="mt-5 grid gap-2 sm:grid-cols-2">
+          <Button
+            variant="outline"
+            type="button"
+            onClick={handleCopyToClipboard}
+            disabled={!link}
+          >
+            {copy}
+          </Button>
+          <Button type="button" onClick={handleClose}>
+            Go to dashboard
+          </Button>
+        </div>
       </section>
     </main>
   );

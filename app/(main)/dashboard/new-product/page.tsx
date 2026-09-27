@@ -5,6 +5,7 @@ import { useAtomValue } from "jotai";
 
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import BackLink from "@/components/back-link";
 import ProductForm from "@/components/product-form";
 import ProductPreview from "@/components/product-preview";
 import ProductCreated from "@/components/product-created";
@@ -27,11 +28,20 @@ export default function NewProduct() {
   }
 
   return (
-    <main className="mb-6 flex min-h-[85dvh] items-start justify-center pt-4 sm:mb-2">
-      <section className="mt-10 grid w-[90svw] grid-cols-1 gap-12 rounded-md border bg-white/50 p-6 shadow-md sm:w-[70svw] lg:grid-cols-2 lg:gap-6 xl:gap-0">
-        <ProductPreview />
+    <main className="mx-auto max-w-6xl px-5 py-12">
+      <BackLink />
+
+      <h1 className="mt-4 text-3xl font-semibold tracking-[-0.03em] text-zinc-950">
+        New product
+      </h1>
+      <p className="mt-1.5 text-[15px] text-zinc-600">
+        Set up the page your customers see when they open your link.
+      </p>
+
+      <div className="mt-8 grid items-start gap-4 lg:grid-cols-2">
         <ProductForm />
-      </section>
+        <ProductPreview />
+      </div>
     </main>
   );
 }

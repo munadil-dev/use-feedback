@@ -4,9 +4,9 @@ import { GoogleSVG } from "@/icons/Google";
 
 export default function SignInComponent() {
   return (
-    <main className="flex min-h-[80svh] items-center">
+    <main className="flex min-h-[calc(100svh-3.5rem)] items-center justify-center px-5 py-12">
       <form
-        className="flex flex-5 flex-col items-center gap-2 p-8 text-center"
+        className="shadow-card-raised w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-8 text-center"
         action={async () => {
           "use server";
           await signIn("google", {
@@ -14,28 +14,18 @@ export default function SignInComponent() {
           });
         }}
       >
-        <h1 className="text-4xl font-semibold">Welcome back!</h1>
-
-        <p className="font-medium text-black/70 dark:text-white/80">
-          Sign in to continue
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+          Sign in to useFeedback
+        </h1>
+        <p className="mt-1.5 text-sm text-zinc-600">
+          Pick up where you left off.
         </p>
 
-        <Button
-          type="submit"
-          className="mt-8 flex gap-6 bg-black/80 p-6 text-base font-medium"
-        >
+        <Button type="submit" variant="outline" className="mt-8 h-11 w-full">
           <GoogleSVG />
-          Sign in with Google
+          Continue with Google
         </Button>
       </form>
-
-      {/*<section className="mr-10 hidden rounded-3xl bg-neutral-100 p-2 dark:bg-white/10 lg:block">
-        <img
-          className="aspect-video rounded-3xl object-cover lg:h-[50vh] lg:w-160 xl:h-[60vh] xl:w-180"
-          alt="UseFeedback dashboard on Sign in page"
-          src={"/images/sign-in.png"}
-        />
-      </section>*/}
     </main>
   );
 }
