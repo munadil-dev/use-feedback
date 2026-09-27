@@ -10,8 +10,6 @@ vi.mock("@/lib/db", () => ({
   default: { feedback: { updateMany: vi.fn() } },
 }));
 
-// auth() is overloaded (it also wraps middleware), so its mock is typed
-// loosely to accept a session object.
 const mockAuth = vi.mocked(auth as () => Promise<unknown>);
 const mockUpdateMany = vi.mocked(prisma.feedback.updateMany);
 

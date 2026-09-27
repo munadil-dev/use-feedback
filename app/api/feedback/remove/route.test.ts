@@ -10,8 +10,6 @@ vi.mock("@/lib/db", () => ({
   default: { feedback: { deleteMany: vi.fn() } },
 }));
 
-// auth() is overloaded (it also wraps middleware), so its mock is typed
-// loosely to accept a session object.
 const mockAuth = vi.mocked(auth as () => Promise<unknown>);
 const mockDeleteMany = vi.mocked(prisma.feedback.deleteMany);
 

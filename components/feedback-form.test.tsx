@@ -13,8 +13,6 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ push }),
 }));
 
-// The Uploadcare widget is loaded with next/dynamic and talks to a CDN,
-// so it is replaced with an empty component.
 vi.mock("next/dynamic", () => ({
   default: () => () => null,
 }));

@@ -28,8 +28,6 @@ function embedRequest(query = "?productId=product-1") {
   return new NextRequest(`http://localhost/api/embed-feedbacks${query}`);
 }
 
-// Runs the returned widget script against a host page, as a customer's
-// site would after loading it with a <script> tag.
 async function runWidget() {
   document.body.innerHTML = '<div id="embed-feedbacks"></div>';
 
