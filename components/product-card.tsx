@@ -2,24 +2,16 @@
 
 import { toast } from "sonner";
 import axios, { AxiosError } from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ChevronRight, MoreHorizontal } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import DeleteDialog from "@/components/delete-dialog";
 
 interface ProductCardProps {
   id: string;
@@ -33,43 +25,61 @@ export default function ProductCard({
   details: ProductCardProps;
 }) {
   const router = useRouter();
+  const href = `/dashboard/product/${id}`;
 
   return (
-    <div
-      className="flex cursor-pointer items-center justify-between rounded-md bg-white p-5 hover:bg-white/70 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-      onClick={() => router.push(`/dashboard/product/${id}`)}
-    >
-      <div className="flex flex-col gap-1">
-        <p className="text-xl font-medium">{name}</p>
+    <article className="group shadow-card hover:shadow-card-raised relative flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 transition-[border-color,box-shadow] duration-150 hover:border-zinc-300">
+      <header className="flex items-start justify-between gap-3">
+        <span
+          aria-hidden="true"
+          className="flex size-9 items-center justify-center rounded-lg bg-zinc-950 text-sm font-semibold text-white uppercase"
+        >
+          {name.charAt(0)}
+        </span>
 
-        <p className="text-sm text-neutral-500">
-          Total feedbacks: {feedbacks.length}
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            aria-label={`Actions for ${name}`}
+            className="focus-visible:ring-primary relative z-10 -mt-1 -mr-1 flex size-8 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:ring-2 focus-visible:outline-hidden"
+          >
+            <MoreHorizontal className="size-4" />
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => router.push(href)}
+            >
+              View
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onSelect={(e) => e.preventDefault()}
+            >
+              <DeleteAlert productId={id} />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </header>
+
+      <Link
+        href={href}
+        className="focus-visible:after:ring-primary mt-6 rounded-sm font-semibold tracking-tight text-zinc-950 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:ring-2"
+      >
+        {name}
+      </Link>
+
+      <div className="mt-1 flex items-center justify-between text-sm text-zinc-500">
+        <p className="tabular-nums">
+          {feedbacks.length} {feedbacks.length === 1 ? "response" : "responses"}
         </p>
+        <ChevronRight
+          aria-hidden="true"
+          className="size-4 text-zinc-400 transition-transform duration-150 group-hover:translate-x-0.5"
+        />
       </div>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <p>&#8226;&#8226;&#8226;</p>
-        </DropdownMenuTrigger>
-
-        <DropdownMenuContent align="center">
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => router.push(`/dashboard/product/${id}`)}
-          >
-            View
-          </DropdownMenuItem>
-
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={(e) => e.stopPropagation()}
-            onSelect={(e) => e.preventDefault()}
-          >
-            <DeleteAlert productId={id} />
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    </article>
   );
 }
 
@@ -101,30 +111,12 @@ function DeleteAlert({ productId }: { productId: string }) {
   };
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger className="w-full text-start">
-        Delete
-      </AlertDialogTrigger>
-
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            product and remove the data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleDelete}
-            className="bg-red-700 text-white hover:bg-red-600"
-          >
-            Delete
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <DeleteDialog
+      description="This action cannot be undone. This will permanently delete your product and remove the data from our servers."
+      onConfirm={handleDelete}
+      triggerClassName="w-full text-start"
+    >
+      Delete
+    </DeleteDialog>
   );
 }

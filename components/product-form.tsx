@@ -39,15 +39,15 @@ export default function ProductForm() {
   };
 
   return (
-    <article className="flex flex-col gap-8 rounded-md border bg-white p-4 shadow-md">
-      <h1 className="text-center text-xl font-semibold">
-        Create a new Feedback page
-      </h1>
+    <article className="shadow-card rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6">
+      <h2 className="mb-5 font-semibold tracking-tight text-zinc-950">
+        Details
+      </h2>
 
       <form onSubmit={handleSubmit}>
         <Label htmlFor="product-name">Product name</Label>
         <Input
-          className="mb-4"
+          className="mt-1.5 mb-4"
           id="product-name"
           placeholder="Blog App"
           type="text"
@@ -58,7 +58,7 @@ export default function ProductForm() {
 
         <Label htmlFor="title">Title</Label>
         <Input
-          className="mb-4"
+          className="mt-1.5 mb-4"
           id="title"
           placeholder="Blog App review"
           type="text"
@@ -69,7 +69,7 @@ export default function ProductForm() {
 
         <Label htmlFor="message">Custom message</Label>
         <Textarea
-          className="mb-4 resize-none"
+          className="mt-1.5 mb-4 resize-none"
           id="message"
           placeholder="Review my blog app which has ..."
           onChange={(e) =>
@@ -77,8 +77,8 @@ export default function ProductForm() {
           }
         />
 
-        <Button className="mt-4 w-full" type="submit">
-          Create
+        <Button className="mt-2 w-full" type="submit">
+          Create product
         </Button>
       </form>
     </article>
