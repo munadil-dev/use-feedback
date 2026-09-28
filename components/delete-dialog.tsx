@@ -16,23 +16,37 @@ export default function DeleteDialog({
   triggerLabel,
   triggerClassName,
   children,
+  open,
+  onOpenChange,
+  returnFocusRef,
 }: {
   description: string;
   onConfirm: () => void;
   triggerLabel?: string;
-  triggerClassName: string;
-  children: React.ReactNode;
+  triggerClassName?: string;
+  children?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  returnFocusRef?: React.RefObject<HTMLElement | null>;
 }) {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger
-        aria-label={triggerLabel}
-        className={triggerClassName}
-      >
-        {children}
-      </AlertDialogTrigger>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      {children && (
+        <AlertDialogTrigger
+          aria-label={triggerLabel}
+          className={triggerClassName}
+        >
+          {children}
+        </AlertDialogTrigger>
+      )}
 
-      <AlertDialogContent>
+      <AlertDialogContent
+        onCloseAutoFocus={(event) => {
+          if (!returnFocusRef?.current) return;
+          event.preventDefault();
+          returnFocusRef.current.focus();
+        }}
+      >
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
