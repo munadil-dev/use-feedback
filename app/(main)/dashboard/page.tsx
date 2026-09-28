@@ -3,10 +3,12 @@ import prisma from "@/lib/db";
 import { Plus } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import EmptyState from "@/components/empty-state";
+import NoProducts from "@/components/no-products";
+import StatsBar from "@/components/stats-bar";
 import ProductCard from "@/components/product-card";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { averageRating, formatRating } from "@/lib/feedback-stats";
 
 function NewProductLink({ className }: { className?: string }) {
   return (
@@ -37,10 +39,16 @@ export default async function Dashboard() {
       feedbacks: {
         select: {
           id: true,
+          rating: true,
+          message: true,
+          isFavorite: true,
+          createdAt: true,
         },
       },
     },
   });
+
+  const feedbacks = products.flatMap((product) => product.feedbacks);
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-12">
@@ -58,21 +66,35 @@ export default async function Dashboard() {
       </header>
 
       {products.length === 0 ? (
-        <EmptyState
-          title="No products yet"
-          body="Create a product to get a feedback link you can send to customers."
-          className="mt-8"
-        >
-          <NewProductLink className="mt-6" />
-        </EmptyState>
+        <NoProducts className="mt-8">
+          <NewProductLink className="mt-8 bg-white text-zinc-950 hover:bg-zinc-100" />
+        </NoProducts>
       ) : (
-        <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <li key={product.id}>
-              <ProductCard details={product} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <StatsBar
+            className="mt-8"
+            stats={[
+              { label: "Responses", value: feedbacks.length },
+              {
+                label: "Average rating",
+                value: formatRating(averageRating(feedbacks)),
+              },
+              {
+                label: "On your sites",
+                value: feedbacks.filter((feedback) => feedback.isFavorite)
+                  .length,
+              },
+            ]}
+          />
+
+          <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <li key={product.id}>
+                <ProductCard details={product} />
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </main>
   );

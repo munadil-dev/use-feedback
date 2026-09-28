@@ -57,13 +57,34 @@ export default function FeedbackCard({
 
   return (
     <article className="shadow-card flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5">
-      <header className="flex items-center gap-3">
+      <header className="flex items-center justify-between gap-3">
+        <Stars count={feedback.rating} size="sm" />
+
+        <time
+          dateTime={createdAt.toISOString()}
+          className="text-xs text-zinc-500"
+        >
+          {createdAt.toLocaleDateString("en-us", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </time>
+      </header>
+
+      <p className="mt-3 flex-1 text-[15px] leading-6 break-words text-zinc-800">
+        {feedback.message}
+      </p>
+
+      <footer className="mt-5 flex items-center gap-3 border-t border-zinc-100 pt-4">
         <Avatar name={feedback.customerName} size="md" />
+
         <p className="flex min-w-0 flex-1 flex-col text-sm">
           <span className="truncate font-medium text-zinc-950">
             {feedback.customerName}
           </span>
-          <span className="truncate text-zinc-500">
+
+          <span className="truncate text-xs text-zinc-500">
             {feedback.customerEmail}
           </span>
         </p>
@@ -73,27 +94,7 @@ export default function FeedbackCard({
           onToggle={updateFavorite}
           label={`Show ${feedback.customerName}'s feedback on your site`}
         />
-      </header>
 
-      <Stars count={feedback.rating} size="sm" className="mt-4" />
-
-      <p className="mt-3 flex-1 text-[15px] leading-6 break-words text-zinc-700">
-        {feedback.message}
-      </p>
-
-      <footer className="mt-5 flex items-center justify-between border-t border-zinc-100 pt-3">
-        <time
-          dateTime={createdAt.toISOString()}
-          className="text-xs text-zinc-500"
-        >
-          {createdAt.toLocaleString("en-us", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-          })}
-        </time>
         <DeleteFeedbackAlert feedbackId={feedback.id} />
       </footer>
     </article>
@@ -132,7 +133,7 @@ function DeleteFeedbackAlert({ feedbackId }: { feedbackId: string }) {
       description="This action cannot be undone. This will permanently delete the feedback from the product and remove it from our servers."
       onConfirm={removeFeedback}
       triggerLabel="Delete feedback"
-      triggerClassName="-mr-1.5 flex size-8 cursor-pointer items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden"
+      triggerClassName="-mr-1.5 flex shrink-0 size-8 cursor-pointer items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden"
     >
       <Trash2 className="size-4" />
     </DeleteDialog>

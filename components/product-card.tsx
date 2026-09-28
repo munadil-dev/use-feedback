@@ -5,7 +5,7 @@ import axios, { AxiosError } from "axios";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { ChevronRight, MoreHorizontal, Star } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,11 +13,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import DeleteDialog from "@/components/delete-dialog";
+import { averageRating, formatRating } from "@/lib/feedback-stats";
 
 interface ProductCardProps {
   id: string;
   name: string;
-  feedbacks: Array<{ id: string }>;
+  feedbacks: Array<{
+    id: string;
+    rating: number;
+    message: string;
+    isFavorite: boolean;
+    createdAt: Date;
+  }>;
 }
 
 export default function ProductCard({
@@ -29,6 +36,16 @@ export default function ProductCard({
   const href = `/dashboard/product/${id}`;
   const [deleteOpen, setDeleteOpen] = useState(false);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
+
+  const onSite = feedbacks.filter((feedback) => feedback.isFavorite).length;
+
+  const latest = feedbacks.reduce<(typeof feedbacks)[number] | undefined>(
+    (newest, feedback) =>
+      !newest || new Date(feedback.createdAt) > new Date(newest.createdAt)
+        ? feedback
+        : newest,
+    undefined
+  );
 
   return (
     <article className="group shadow-card hover:shadow-card-raised relative flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 transition-[border-color,box-shadow] duration-150 hover:border-zinc-300">
@@ -76,20 +93,44 @@ export default function ProductCard({
 
       <Link
         href={href}
-        className="focus-visible:after:ring-primary mt-6 rounded-sm font-semibold tracking-tight wrap-anywhere text-zinc-950 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:ring-2"
+        className="focus-visible:after:ring-primary mt-5 rounded-sm font-semibold tracking-tight wrap-anywhere text-zinc-950 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:ring-2"
       >
         {name}
       </Link>
 
-      <div className="mt-1 flex items-center justify-between text-sm text-zinc-500">
-        <p className="tabular-nums">
-          {feedbacks.length} {feedbacks.length === 1 ? "response" : "responses"}
-        </p>
+      <p className="mt-1 flex items-center gap-1.5 text-sm text-zinc-500 tabular-nums">
+        {feedbacks.length} {feedbacks.length === 1 ? "response" : "responses"}
+        {feedbacks.length > 0 && (
+          <>
+            <span aria-hidden="true">·</span>
+
+            <Star
+              aria-hidden="true"
+              className="size-3.5 fill-amber-400 text-amber-400"
+            />
+
+            <span>
+              {formatRating(averageRating(feedbacks))}
+              <span className="sr-only"> average rating</span>
+            </span>
+          </>
+        )}
+      </p>
+
+      <p className="mt-4 line-clamp-2 flex-1 text-sm leading-6 text-zinc-600">
+        {latest
+          ? `“${latest.message}”`
+          : "No replies yet. Share your link to get the first one."}
+      </p>
+
+      <footer className="mt-5 flex items-center justify-between border-t border-zinc-100 pt-3 text-xs text-zinc-500 tabular-nums">
+        <span>{onSite} on your site</span>
+
         <ChevronRight
           aria-hidden="true"
           className="size-4 text-zinc-400 transition-transform duration-150 group-hover:translate-x-0.5"
         />
-      </div>
+      </footer>
     </article>
   );
 }
