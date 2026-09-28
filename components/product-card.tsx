@@ -5,7 +5,7 @@ import axios, { AxiosError } from "axios";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { ChevronRight, MoreHorizontal, Star } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,15 +13,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import DeleteDialog from "@/components/delete-dialog";
+import { formatRating } from "@/lib/feedback-stats";
 
 interface ProductCardProps {
   id: string;
   name: string;
-  feedbacks: Array<{ id: string }>;
+  responses: number;
+  averageRating: number;
+  onSite: number;
+  latestMessage?: string;
 }
 
 export default function ProductCard({
-  details: { id, name, feedbacks },
+  details: { id, name, responses, averageRating, onSite, latestMessage },
 }: {
   details: ProductCardProps;
 }) {
@@ -76,20 +80,44 @@ export default function ProductCard({
 
       <Link
         href={href}
-        className="focus-visible:after:ring-primary mt-6 rounded-sm font-semibold tracking-tight wrap-anywhere text-zinc-950 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:ring-2"
+        className="focus-visible:after:ring-primary mt-5 rounded-sm font-semibold tracking-tight wrap-anywhere text-zinc-950 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:ring-2"
       >
         {name}
       </Link>
 
-      <div className="mt-1 flex items-center justify-between text-sm text-zinc-500">
-        <p className="tabular-nums">
-          {feedbacks.length} {feedbacks.length === 1 ? "response" : "responses"}
-        </p>
+      <p className="mt-1 flex items-center gap-1.5 text-sm text-zinc-500 tabular-nums">
+        {responses} {responses === 1 ? "response" : "responses"}
+        {responses > 0 && (
+          <>
+            <span aria-hidden="true">·</span>
+
+            <Star
+              aria-hidden="true"
+              className="size-3.5 fill-amber-400 text-amber-400"
+            />
+
+            <span>
+              {formatRating(averageRating)}
+              <span className="sr-only"> average rating</span>
+            </span>
+          </>
+        )}
+      </p>
+
+      <p className="mt-4 line-clamp-2 flex-1 text-sm leading-6 text-zinc-600">
+        {latestMessage
+          ? `“${latestMessage}”`
+          : "No replies yet. Share your link to get the first one."}
+      </p>
+
+      <footer className="mt-5 flex items-center justify-between border-t border-zinc-100 pt-3 text-xs text-zinc-500 tabular-nums">
+        <span>{onSite} on your site</span>
+
         <ChevronRight
           aria-hidden="true"
           className="size-4 text-zinc-400 transition-transform duration-150 group-hover:translate-x-0.5"
         />
-      </div>
+      </footer>
     </article>
   );
 }

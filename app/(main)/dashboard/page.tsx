@@ -3,10 +3,12 @@ import prisma from "@/lib/db";
 import { Plus } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import EmptyState from "@/components/empty-state";
+import NoProducts from "@/components/no-products";
+import StatsBar from "@/components/stats-bar";
 import ProductCard from "@/components/product-card";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { formatRating } from "@/lib/feedback-stats";
 
 function NewProductLink({ className }: { className?: string }) {
   return (
@@ -27,20 +29,61 @@ export default async function Dashboard() {
     redirect("/auth/signin");
   }
 
-  const products = await prisma.product.findMany({
-    where: {
-      userId: session.user.id,
-    },
-    select: {
-      id: true,
-      name: true,
-      feedbacks: {
-        select: {
-          id: true,
+  const ownedFeedback = { product: { userId: session.user.id } };
+
+  const [products, ratings, favorites] = await Promise.all([
+    prisma.product.findMany({
+      where: {
+        userId: session.user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        _count: {
+          select: { feedbacks: true },
+        },
+        feedbacks: {
+          select: { message: true },
+          orderBy: { createdAt: "desc" },
+          take: 1,
         },
       },
-    },
-  });
+    }),
+
+    prisma.feedback.groupBy({
+      by: ["productId"],
+      where: ownedFeedback,
+      _avg: { rating: true },
+    }),
+
+    prisma.feedback.groupBy({
+      by: ["productId"],
+      where: { ...ownedFeedback, isFavorite: true },
+      _count: { _all: true },
+    }),
+  ]);
+
+  const cards = products.map((product) => ({
+    id: product.id,
+    name: product.name,
+    responses: product._count.feedbacks,
+    averageRating:
+      ratings.find((rating) => rating.productId === product.id)?._avg.rating ??
+      0,
+    onSite:
+      favorites.find((favorite) => favorite.productId === product.id)?._count
+        ._all ?? 0,
+    latestMessage: product.feedbacks[0]?.message,
+  }));
+
+  const responses = cards.reduce((sum, card) => sum + card.responses, 0);
+
+  const overallRating = responses
+    ? cards.reduce(
+        (sum, card) => sum + card.averageRating * card.responses,
+        0
+      ) / responses
+    : 0;
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-12">
@@ -58,21 +101,34 @@ export default async function Dashboard() {
       </header>
 
       {products.length === 0 ? (
-        <EmptyState
-          title="No products yet"
-          body="Create a product to get a feedback link you can send to customers."
-          className="mt-8"
-        >
-          <NewProductLink className="mt-6" />
-        </EmptyState>
+        <NoProducts className="mt-8">
+          <NewProductLink className="mt-8 bg-white text-zinc-950 hover:bg-zinc-100" />
+        </NoProducts>
       ) : (
-        <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <li key={product.id}>
-              <ProductCard details={product} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <StatsBar
+            className="mt-8"
+            stats={[
+              { label: "Responses", value: responses },
+              {
+                label: "Average rating",
+                value: formatRating(overallRating),
+              },
+              {
+                label: "On your sites",
+                value: cards.reduce((sum, card) => sum + card.onSite, 0),
+              },
+            ]}
+          />
+
+          <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {cards.map((card) => (
+              <li key={card.id}>
+                <ProductCard details={card} />
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </main>
   );

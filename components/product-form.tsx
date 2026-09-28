@@ -2,85 +2,149 @@
 
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
-import { SubmitEvent } from "react";
+import { SubmitEvent, useState } from "react";
+import { flushSync } from "react-dom";
+import { useAtom, useSetAtom } from "jotai";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { useAtom, useSetAtom } from "jotai";
 import { newProductAtom } from "@/store/atoms/new-product";
 import { productCreatedAtom } from "@/store/atoms/product-created";
+import { newProductSchema } from "@/schemas/new-product";
+
+type Field = "name" | "title" | "message";
+type FieldErrors = Partial<Record<Field, string>>;
+
+const fields: {
+  id: Field;
+  label: string;
+  hint: string;
+  placeholder: string;
+  multiline?: boolean;
+}[] = [
+  {
+    id: "name",
+    label: "Product name",
+    hint: "Only you see this, on your dashboard.",
+    placeholder: "Acme",
+  },
+  {
+    id: "title",
+    label: "Page title",
+    hint: "The heading customers see when they open your link.",
+    placeholder: "How are you finding Acme?",
+  },
+  {
+    id: "message",
+    label: "Message",
+    hint: "A short note asking for feedback.",
+    placeholder: "We read every reply. Tell us what you love and what to fix.",
+    multiline: true,
+  },
+];
 
 export default function ProductForm() {
   const [newProduct, setNewProduct] = useAtom(newProductAtom);
   const setIsProductCreated = useSetAtom(productCreatedAtom);
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (field: Field, value: string) => {
+    setNewProduct((current) => ({ ...current, [field]: value }));
+    setErrors((current) => ({ ...current, [field]: undefined }));
+  };
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const toastId = toast.loading("Loading...");
+
+    const result = newProductSchema.safeParse(newProduct);
+
+    if (!result.success) {
+      const fieldErrors: FieldErrors = {};
+
+      for (const issue of result.error.issues) {
+        fieldErrors[issue.path[0] as Field] ??= issue.message;
+      }
+
+      flushSync(() => setErrors(fieldErrors));
+
+      const firstInvalid = fields.find((field) => fieldErrors[field.id]);
+      document.getElementById(firstInvalid?.id ?? "")?.focus();
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
-      const res = await axios.post("/api/product/create-product", newProduct);
+      const res = await axios.post("/api/product/create-product", result.data);
 
       if (res.data.success) {
-        toast.dismiss(toastId);
         toast.success(res.data.message);
         setIsProductCreated(true);
       }
     } catch (err) {
-      toast.dismiss(toastId);
-
       if (err instanceof AxiosError) {
         toast.error(err.response?.data.message);
       } else {
         toast.error("An unexpected error occurred");
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <article className="shadow-card rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6">
-      <h2 className="mb-5 font-semibold tracking-tight text-zinc-950">
-        Details
-      </h2>
+    <form className="mt-10" onSubmit={handleSubmit} noValidate>
+      <div className="flex flex-col gap-7">
+        {fields.map((field) => {
+          const error = errors[field.id];
 
-      <form onSubmit={handleSubmit}>
-        <Label htmlFor="product-name">Product name</Label>
-        <Input
-          className="mt-1.5 mb-4"
-          id="product-name"
-          placeholder="Blog App"
-          type="text"
-          onChange={(e) =>
-            setNewProduct((val) => ({ ...val, name: e.target.value }))
-          }
-        />
+          const inputProps = {
+            id: field.id,
+            placeholder: field.placeholder,
+            value: newProduct[field.id],
+            onChange: (
+              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => handleChange(field.id, e.target.value),
+            "aria-required": true,
+            "aria-invalid": error ? true : undefined,
+            "aria-describedby": `${field.id}-hint`,
+            className: "mt-2 bg-white aria-invalid:border-red-500",
+          };
 
-        <Label htmlFor="title">Title</Label>
-        <Input
-          className="mt-1.5 mb-4"
-          id="title"
-          placeholder="Blog App review"
-          type="text"
-          onChange={(e) =>
-            setNewProduct((val) => ({ ...val, title: e.target.value }))
-          }
-        />
+          return (
+            <div key={field.id}>
+              <Label htmlFor={field.id}>{field.label}</Label>
 
-        <Label htmlFor="message">Custom message</Label>
-        <Textarea
-          className="mt-1.5 mb-4 resize-none"
-          id="message"
-          placeholder="Review my blog app which has ..."
-          onChange={(e) =>
-            setNewProduct((val) => ({ ...val, message: e.target.value }))
-          }
-        />
+              {field.multiline ? (
+                <Textarea
+                  {...inputProps}
+                  rows={3}
+                  className={`${inputProps.className} resize-none`}
+                />
+              ) : (
+                <Input {...inputProps} />
+              )}
 
-        <Button className="mt-2 w-full" type="submit">
-          Create product
-        </Button>
-      </form>
-    </article>
+              <p
+                id={`${field.id}-hint`}
+                className={`mt-2 text-sm ${error ? "text-red-600" : "text-zinc-500"}`}
+              >
+                {error ?? field.hint}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+
+      <Button
+        className="mt-10 h-11 w-full"
+        type="submit"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Creating..." : "Create product"}
+      </Button>
+    </form>
   );
 }

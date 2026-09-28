@@ -42,7 +42,7 @@ export default function SignInStory() {
       <div aria-hidden="true" className="mx-auto flex w-full max-w-sm flex-col">
         <p className="flex w-fit items-center gap-2 self-center rounded-full bg-white/90 py-1.5 pr-4 pl-3 text-sm text-zinc-700 shadow-[0_1px_2px_rgba(20,30,90,0.2)] backdrop-blur-sm">
           <Link2 className="text-primary size-4" />
-          usefeedback.munadil.com/paperjet
+          usefeedback.munadil.com/acme
         </p>
 
         <ul className="mt-6 flex h-[17.5rem] flex-col gap-2.5">
@@ -91,11 +91,11 @@ export default function SignInStory() {
         <div className="mt-6 overflow-hidden rounded-xl border border-white/60 bg-white shadow-[0_1px_2px_rgba(20,30,90,0.2),0_32px_64px_-24px_rgba(20,30,90,0.6)]">
           <div className="flex items-center gap-3 border-b border-zinc-200 px-4 py-2.5">
             <WindowDots />
-            <span className="text-xs text-zinc-500">paperjet.app</span>
+            <span className="text-xs text-zinc-500">acme.app</span>
           </div>
           <div className="bg-zinc-50 p-4">
             <p className="text-sm font-semibold text-zinc-900">
-              What writers say about Paperjet
+              What customers say about Acme
             </p>
             <ul className="mt-3 grid h-24 grid-cols-2 gap-2.5">
               {[0, 1].map((slot) => (

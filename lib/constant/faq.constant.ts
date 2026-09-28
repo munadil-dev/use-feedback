@@ -2,7 +2,7 @@ export const faqs = [
   {
     question: "Is it free?",
     answer:
-      "Yes. The hosted version is free to use. The code is MIT licensed, so you can also run your own copy.",
+      "Yes. Sign in with Google and create as many products as you like, at no cost. The code is open source under the MIT license.",
   },
   {
     question: "Do my customers need an account?",
