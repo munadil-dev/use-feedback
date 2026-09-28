@@ -2,12 +2,18 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import SignInComponent from "@/components/sign-in";
 
-export default async function SignIn() {
+export default async function SignIn({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   const session = await auth();
 
   if (session?.user) {
     redirect("/");
   }
 
-  return <SignInComponent />;
+  const { error } = await searchParams;
+
+  return <SignInComponent error={error} />;
 }
