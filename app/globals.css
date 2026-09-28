@@ -44,8 +44,6 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  --background-image-hero: url("/images/background.jpg");
-
   --shadow-card: 0 1px 2px rgba(24, 24, 27, 0.04);
   --shadow-card-raised:
     0 1px 2px rgba(24, 24, 27, 0.04), 0 8px 20px -8px rgba(24, 24, 27, 0.12);
@@ -54,29 +52,11 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(30, 45, 110, 0.3);
   --shadow-outline: 0 1px 2px rgba(24, 24, 27, 0.05);
 
-  --animate-marquee: marquee var(--duration) infinite linear;
-  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
   --animate-caret: caret 1s steps(1) infinite;
 
-  @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(calc(-100% - var(--gap)));
-    }
-  }
   @keyframes caret {
     50% {
       opacity: 0;
-    }
-  }
-  @keyframes marquee-vertical {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(calc(-100% - var(--gap)));
     }
   }
 
