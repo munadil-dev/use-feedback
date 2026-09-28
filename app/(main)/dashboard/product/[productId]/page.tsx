@@ -2,10 +2,9 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import BackLink from "@/components/back-link";
-import EmptyState from "@/components/empty-state";
 import CodeComponent from "@/components/code";
 import { notFound, redirect } from "next/navigation";
-import FeedbackCard from "@/components/feedback-card";
+import FeedbackList from "@/components/feedback-list";
 
 function Panel({
   title,
@@ -60,19 +59,15 @@ export default async function Product({
 
   const productFeedbackURL = `${process.env.NEXT_PUBLIC_BASE_URL}${productId}`;
 
-  const favorites = productDetails.feedbacks.filter(
-    (feedback) => feedback.isFavorite
-  ).length;
-
   return (
     <main className="mx-auto max-w-6xl px-5 py-12">
       <BackLink />
 
-      <h1 className="mt-4 text-3xl font-semibold tracking-[-0.03em] text-zinc-950">
+      <h1 className="mt-4 text-3xl font-semibold tracking-[-0.03em] wrap-anywhere text-zinc-950">
         {productDetails.name}
       </h1>
 
-      <div className="mt-8 grid gap-4 lg:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Panel
           title="Feedback link"
           description="Send this to customers so they can leave feedback."
@@ -94,30 +89,7 @@ export default async function Product({
         </Panel>
       </div>
 
-      <header className="mt-12 flex items-baseline justify-between gap-4">
-        <h2 className="text-xl font-semibold tracking-tight text-zinc-950">
-          Feedback
-        </h2>
-        <p className="text-sm text-zinc-500 tabular-nums">
-          {favorites} of {productDetails.feedbacks.length} on your site
-        </p>
-      </header>
-
-      {productDetails.feedbacks.length === 0 ? (
-        <EmptyState
-          title="No feedback yet"
-          body="Responses show up here as soon as customers send them."
-          className="mt-4"
-        />
-      ) : (
-        <ul className="mt-4 grid gap-4 md:grid-cols-2">
-          {productDetails.feedbacks.map((feedback) => (
-            <li key={feedback.id}>
-              <FeedbackCard feedback={feedback} />
-            </li>
-          ))}
-        </ul>
-      )}
+      <FeedbackList feedbacks={productDetails.feedbacks} />
     </main>
   );
 }

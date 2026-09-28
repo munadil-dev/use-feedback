@@ -3,6 +3,7 @@
 import { newProductAtom } from "@/store/atoms/new-product";
 import { Fragment } from "react";
 import { useAtomValue } from "jotai";
+import { Upload } from "lucide-react";
 import { previewFields } from "@/lib/constant/product.constant";
 import { Label } from "./ui/label";
 import { Stars } from "./home/stars";
@@ -37,6 +38,11 @@ export default function ProductPreview() {
             />
           </Fragment>
         ))}
+        <Label>Upload your photo</Label>
+        <div className="flex h-8 w-fit items-center gap-2 rounded-md bg-zinc-900 px-3 text-sm text-white">
+          <Upload className="size-4" />
+          Upload file
+        </div>
         <Label>Rate</Label>
         <Stars count={5} />
         <div className="bg-primary mt-2 flex h-10 items-center justify-center rounded-lg text-sm font-medium text-white">

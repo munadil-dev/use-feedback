@@ -169,9 +169,6 @@ importers:
       next-auth:
         specifier: 5.0.0-beta.30
         version: 5.0.0-beta.30(next@16.3.4(@babel/core@7.29.0)(@types/node@26.5.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
-      next-themes:
-        specifier: ^0.4.6
-        version: 0.4.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       pg:
         specifier: ^8.23.0
         version: 8.23.0

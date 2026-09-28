@@ -23,6 +23,7 @@ export default function Code({ code }: { code: string }) {
           background: "transparent",
           fontSize: "13px",
           lineHeight: "1.6",
+          overflowWrap: "anywhere",
         }}
       >
         {code}
