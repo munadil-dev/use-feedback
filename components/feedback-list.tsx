@@ -8,15 +8,24 @@ type Feedback = React.ComponentProps<typeof FeedbackCard>["feedback"] & {
   isFavorite: boolean;
 };
 
-export default function FeedbackList({ feedbacks }: { feedbacks: Feedback[] }) {
-  const [favoriteIds, setFavoriteIds] = useState(
-    () =>
-      new Set(
-        feedbacks
-          .filter((feedback) => feedback.isFavorite)
-          .map((feedback) => feedback.id)
-      )
+function getFavoriteIds(feedbacks: Feedback[]) {
+  return new Set(
+    feedbacks
+      .filter((feedback) => feedback.isFavorite)
+      .map((feedback) => feedback.id)
   );
+}
+
+export default function FeedbackList({ feedbacks }: { feedbacks: Feedback[] }) {
+  const [favoriteIds, setFavoriteIds] = useState(() =>
+    getFavoriteIds(feedbacks)
+  );
+  const [prevFeedbacks, setPrevFeedbacks] = useState(feedbacks);
+
+  if (feedbacks !== prevFeedbacks) {
+    setPrevFeedbacks(feedbacks);
+    setFavoriteIds(getFavoriteIds(feedbacks));
+  }
 
   const favorites = feedbacks.filter((feedback) =>
     favoriteIds.has(feedback.id)
