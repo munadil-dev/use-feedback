@@ -29,7 +29,7 @@ export function Avatar({
       aria-hidden="true"
       className={`flex shrink-0 items-center justify-center rounded-lg font-semibold ${sizes[size]} ${tone}`}
     >
-      {name[0].toUpperCase()}
+      {[...name][0]?.toUpperCase() ?? "?"}
     </span>
   );
 }

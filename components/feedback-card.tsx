@@ -1,7 +1,6 @@
 "use client";
 
 import { toast } from "sonner";
-import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
@@ -18,12 +17,16 @@ interface FeedbackProps {
     customerEmail: string;
     rating: number;
     createdAt: Date;
-    isFavorite: boolean;
   };
+  isFavorite: boolean;
+  onFavoriteChange: (isFavorite: boolean) => void;
 }
 
-export default function FeedbackCard({ feedback }: FeedbackProps) {
-  const [isFavorite, setIsFavorite] = useState<boolean>(feedback.isFavorite);
+export default function FeedbackCard({
+  feedback,
+  isFavorite,
+  onFavoriteChange,
+}: FeedbackProps) {
   const createdAt = new Date(feedback.createdAt);
 
   const updateFavorite = async () => {
@@ -38,7 +41,7 @@ export default function FeedbackCard({ feedback }: FeedbackProps) {
 
       if (res.data.success) {
         toast.dismiss(toastId);
-        setIsFavorite(newFavorite);
+        onFavoriteChange(newFavorite);
         toast.success(res.data.message);
       }
     } catch (err) {

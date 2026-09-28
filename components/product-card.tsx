@@ -37,7 +37,7 @@ export default function ProductCard({
           aria-hidden="true"
           className="flex size-9 items-center justify-center rounded-lg bg-zinc-950 text-sm font-semibold text-white uppercase"
         >
-          {name.charAt(0)}
+          {[...name][0]}
         </span>
 
         <DropdownMenu>
@@ -76,7 +76,7 @@ export default function ProductCard({
 
       <Link
         href={href}
-        className="focus-visible:after:ring-primary mt-6 rounded-sm font-semibold tracking-tight text-zinc-950 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:ring-2"
+        className="focus-visible:after:ring-primary mt-6 rounded-sm font-semibold tracking-tight wrap-anywhere text-zinc-950 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:ring-2"
       >
         {name}
       </Link>
