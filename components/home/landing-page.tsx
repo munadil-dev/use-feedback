@@ -1,11 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, ImagePlus } from "lucide-react";
+import { ImagePlus } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { GithubIconSVG } from "@/icons/Github";
 import { buttonVariants } from "@/components/ui/button";
 import { grainTexture } from "@/lib/constant/ui.constant";
 import { siteLinks } from "@/lib/constant/site.constant";
+import skyImage from "@/public/sky.jpg";
 import {
   demoFeedbackUrl,
   embedCode,
@@ -67,68 +69,69 @@ function SimpleIcon({
 
 function Hero({ startHref }: { startHref: string }) {
   return (
-    <section className="mx-auto max-w-6xl px-5 pt-16 sm:pt-24">
-      <div className="flex flex-col items-center text-center">
-        <Link
-          href={siteLinks.github}
-          target="_blank"
-          className="group shadow-outline inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white py-1 pr-2.5 pl-1 text-sm text-zinc-700 transition-[border-color,transform] duration-150 hover:border-zinc-300 active:scale-[0.97]"
-        >
-          <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium">
-            Open source
-          </span>
-          Free and MIT licensed
-          <ChevronRight
-            aria-hidden="true"
-            className="size-3.5 text-zinc-400 transition-transform duration-150 group-hover:translate-x-0.5"
-          />
-        </Link>
-
-        <h1 className="mt-7 max-w-4xl text-5xl leading-[1.02] font-semibold tracking-[-0.045em] text-balance text-zinc-950 sm:text-[5.25rem]">
-          Collect testimonials. Show the ones you love.
-        </h1>
-        <p className="mt-6 max-w-xl text-lg leading-7 text-pretty text-zinc-600">
-          Send customers a link, favorite the best replies, and they appear on
-          your website with two lines of HTML.
-        </p>
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Link href={startHref} className={buttonVariants({ size: "lg" })}>
-            Start collecting
-          </Link>
-          <Link
-            href="/docs"
-            className={buttonVariants({ variant: "outline", size: "lg" })}
-          >
-            Read the docs
-          </Link>
-        </div>
+    <div className="relative isolate">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 -top-14 -z-10 h-[49.5rem] bg-white mask-[radial-gradient(ellipse_75%_85%_at_50%_0%,#000_45%,transparent_100%)] sm:h-[55.5rem]"
+      >
+        <Image
+          src={skyImage}
+          alt=""
+          fill
+          priority
+          placeholder="blur"
+          sizes="100vw"
+          className="object-cover object-bottom opacity-45"
+        />
       </div>
-
-      <figure className="relative isolate mt-16 overflow-hidden rounded-3xl px-3 pt-10 pb-4 shadow-[0_40px_80px_-40px_rgba(31,62,181,0.55)] sm:mt-20 sm:px-14 sm:pt-20 sm:pb-28">
-        <Scene id="hero" />
-        <div className="mx-auto max-w-5xl">
-          <HeroDemo />
-        </div>
-        <figcaption className="mt-5 text-center text-sm font-medium text-white/90 sm:mt-8">
-          Try it: click a heart and watch the site update.
-        </figcaption>
-      </figure>
-
-      <div className="mt-14 flex flex-col items-center gap-6">
-        <p className="text-sm text-zinc-500">Paste it into any site</p>
-        <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
-          {platforms.map((platform) => (
-            <li
-              key={platform.slug}
-              className="flex items-center gap-2 text-[17px] font-semibold tracking-tight text-zinc-400"
+      <section className="mx-auto max-w-6xl px-5 pt-16 sm:pt-24">
+        <div className="flex flex-col items-center text-center">
+          <h1 className="max-w-4xl text-5xl leading-[1.02] font-semibold tracking-[-0.045em] text-balance text-zinc-950 sm:text-[5.25rem]">
+            Collect testimonials. Show the ones you love.
+          </h1>
+          <p className="mt-6 max-w-xl text-lg leading-7 text-pretty text-zinc-700">
+            Send customers a link, favorite the best replies, and they appear on
+            your website with two lines of HTML.
+          </p>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <Link href={startHref} className={buttonVariants({ size: "lg" })}>
+              Start collecting
+            </Link>
+            <Link
+              href="/docs"
+              className={buttonVariants({ variant: "outline", size: "lg" })}
             >
-              <SimpleIcon slug={platform.slug} color="a1a1aa" size={20} />
-              {platform.name}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
+              Read the docs
+            </Link>
+          </div>
+        </div>
+
+        <figure className="relative isolate mt-16 overflow-hidden rounded-3xl px-3 pt-10 pb-4 shadow-[0_40px_80px_-40px_rgba(31,62,181,0.55)] sm:mt-20 sm:px-14 sm:pt-20 sm:pb-28">
+          <Scene id="hero" />
+          <div className="mx-auto max-w-5xl">
+            <HeroDemo />
+          </div>
+          <figcaption className="mt-5 text-center text-sm font-medium text-white/90 sm:mt-8">
+            Try it: click a heart and watch the site update.
+          </figcaption>
+        </figure>
+
+        <div className="mt-14 flex flex-col items-center gap-6">
+          <p className="text-sm text-zinc-500">Paste it into any site</p>
+          <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
+            {platforms.map((platform) => (
+              <li
+                key={platform.slug}
+                className="flex items-center gap-2 text-[17px] font-semibold tracking-tight text-zinc-400"
+              >
+                <SimpleIcon slug={platform.slug} color="a1a1aa" size={20} />
+                {platform.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </div>
   );
 }
 

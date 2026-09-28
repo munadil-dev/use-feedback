@@ -150,4 +150,7 @@
   body {
     @apply bg-background text-foreground;
   }
+  html {
+    overscroll-behavior-y: none;
+  }
 }

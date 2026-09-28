@@ -5,6 +5,7 @@ import { GithubIconSVG } from "@/icons/Github";
 import { siteLinks } from "@/lib/constant/site.constant";
 import { buttonVariants } from "./ui/button";
 import ProfileDropdown from "./profile-dropdown";
+import NavbarShell from "./navbar-shell";
 
 const navLink = "text-zinc-600 transition-colors hover:text-zinc-950";
 
@@ -12,7 +13,7 @@ export default async function Navbar() {
   const session = await auth();
 
   return (
-    <header className="sticky top-0 left-0 z-50 border-b border-zinc-200/70 bg-white/80 backdrop-blur-md">
+    <NavbarShell>
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5">
         <div className="flex items-center gap-8">
           <Link
@@ -75,6 +76,6 @@ export default async function Navbar() {
           )}
         </div>
       </nav>
-    </header>
+    </NavbarShell>
   );
 }
