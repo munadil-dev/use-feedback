@@ -72,7 +72,7 @@ export default async function Product({
         {productDetails.name}
       </h1>
 
-      <div className="mt-8 grid gap-4 lg:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Panel
           title="Feedback link"
           description="Send this to customers so they can leave feedback."
