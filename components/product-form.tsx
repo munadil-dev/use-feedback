@@ -3,6 +3,7 @@
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { SubmitEvent, useState } from "react";
+import { flushSync } from "react-dom";
 import { useAtom, useSetAtom } from "jotai";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -26,13 +27,13 @@ const fields: {
     id: "name",
     label: "Product name",
     hint: "Only you see this, on your dashboard.",
-    placeholder: "Paperjet",
+    placeholder: "Acme",
   },
   {
     id: "title",
     label: "Page title",
     hint: "The heading customers see when they open your link.",
-    placeholder: "How are you finding Paperjet?",
+    placeholder: "How are you finding Acme?",
   },
   {
     id: "message",
@@ -66,7 +67,7 @@ export default function ProductForm() {
         fieldErrors[issue.path[0] as Field] ??= issue.message;
       }
 
-      setErrors(fieldErrors);
+      flushSync(() => setErrors(fieldErrors));
 
       const firstInvalid = fields.find((field) => fieldErrors[field.id]);
       document.getElementById(firstInvalid?.id ?? "")?.focus();
@@ -106,6 +107,7 @@ export default function ProductForm() {
             onChange: (
               e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
             ) => handleChange(field.id, e.target.value),
+            "aria-required": true,
             "aria-invalid": error ? true : undefined,
             "aria-describedby": `${field.id}-hint`,
             className: "mt-2 bg-white aria-invalid:border-red-500",

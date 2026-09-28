@@ -251,10 +251,10 @@ function FormMock() {
     <div className="shadow-card-raised w-full max-w-md rounded-xl border border-zinc-200 bg-white p-5 sm:p-6">
       <div className="flex items-center gap-2.5">
         <ProductMark />
-        <p className="text-sm font-medium text-zinc-950">Paperjet</p>
+        <p className="text-sm font-medium text-zinc-950">Acme</p>
       </div>
       <p className="mt-5 text-lg font-semibold tracking-tight text-zinc-950">
-        How was your first week with Paperjet?
+        How was your first week with Acme?
       </p>
       <KeyboardRating className="mt-4" />
       <div
@@ -286,7 +286,7 @@ function EmailMock() {
         <header className="flex items-center gap-2.5 border-b border-zinc-100 px-4 py-3">
           <ProductMark />
           <div className="min-w-0 text-xs">
-            <p className="font-medium text-zinc-950">Paperjet</p>
+            <p className="font-medium text-zinc-950">Acme</p>
             <p className="truncate text-zinc-500">How did your order go?</p>
           </div>
         </header>

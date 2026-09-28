@@ -14,8 +14,8 @@ describe("newProductSchema", () => {
 
   it.each([
     ["name", "Product name is required"],
-    ["title", "Title is required"],
-    ["message", "Custom message is required"],
+    ["title", "Page title is required"],
+    ["message", "Message is required"],
   ])("rejects a blank %s", (field, expectedMessage) => {
     const result = newProductSchema.safeParse({
       ...validProduct,

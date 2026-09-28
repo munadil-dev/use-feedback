@@ -34,9 +34,7 @@ export default function HeroDemo() {
           className="border-b border-zinc-200 md:border-r md:border-b-0"
         >
           <header className="flex items-baseline justify-between border-b border-zinc-200 px-5 py-4">
-            <p className="text-sm font-semibold text-zinc-900">
-              Paperjet feedback
-            </p>
+            <p className="text-sm font-semibold text-zinc-900">Acme feedback</p>
             <p className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium tabular-nums">
               {favorites.length} of {demoResponses.length} on your site
             </p>
@@ -74,12 +72,12 @@ export default function HeroDemo() {
         <section aria-label="Your website" className="bg-[#f5f7ff]">
           <header className="flex items-center gap-3 border-b border-zinc-200 bg-white px-5 py-4">
             <WindowDots />
-            <p className="text-xs text-zinc-500">paperjet.app</p>
+            <p className="text-xs text-zinc-500">acme.app</p>
           </header>
 
           <div className="px-5 py-6 sm:px-8">
             <p className="text-lg font-semibold tracking-tight text-zinc-900">
-              What writers say about Paperjet
+              What customers say about Acme
             </p>
 
             <ul className="mt-5 flex flex-wrap gap-3" aria-live="polite">

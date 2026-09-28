@@ -137,9 +137,9 @@ Only feedback you mark as a favorite is shown. Responses are cached for up to 2 
 
 ```
 app/
+  (auth)/auth/signin/       Sign-in page, without the site navbar
   (main)/                   App pages with the site navbar and footer
     (feedback)/[productId]/ Public feedback form
-    auth/                   Sign-in page
     dashboard/              Product and feedback management
   api/                      Route handlers (feedback, products, embed widget, docs search)
   docs/                     Documentation site (Fumadocs)

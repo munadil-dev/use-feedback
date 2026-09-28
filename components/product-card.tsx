@@ -13,22 +13,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import DeleteDialog from "@/components/delete-dialog";
-import { averageRating, formatRating } from "@/lib/feedback-stats";
+import { formatRating } from "@/lib/feedback-stats";
 
 interface ProductCardProps {
   id: string;
   name: string;
-  feedbacks: Array<{
-    id: string;
-    rating: number;
-    message: string;
-    isFavorite: boolean;
-    createdAt: Date;
-  }>;
+  responses: number;
+  averageRating: number;
+  onSite: number;
+  latestMessage?: string;
 }
 
 export default function ProductCard({
-  details: { id, name, feedbacks },
+  details: { id, name, responses, averageRating, onSite, latestMessage },
 }: {
   details: ProductCardProps;
 }) {
@@ -36,16 +33,6 @@ export default function ProductCard({
   const href = `/dashboard/product/${id}`;
   const [deleteOpen, setDeleteOpen] = useState(false);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
-
-  const onSite = feedbacks.filter((feedback) => feedback.isFavorite).length;
-
-  const latest = feedbacks.reduce<(typeof feedbacks)[number] | undefined>(
-    (newest, feedback) =>
-      !newest || new Date(feedback.createdAt) > new Date(newest.createdAt)
-        ? feedback
-        : newest,
-    undefined
-  );
 
   return (
     <article className="group shadow-card hover:shadow-card-raised relative flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 transition-[border-color,box-shadow] duration-150 hover:border-zinc-300">
@@ -99,8 +86,8 @@ export default function ProductCard({
       </Link>
 
       <p className="mt-1 flex items-center gap-1.5 text-sm text-zinc-500 tabular-nums">
-        {feedbacks.length} {feedbacks.length === 1 ? "response" : "responses"}
-        {feedbacks.length > 0 && (
+        {responses} {responses === 1 ? "response" : "responses"}
+        {responses > 0 && (
           <>
             <span aria-hidden="true">·</span>
 
@@ -110,7 +97,7 @@ export default function ProductCard({
             />
 
             <span>
-              {formatRating(averageRating(feedbacks))}
+              {formatRating(averageRating)}
               <span className="sr-only"> average rating</span>
             </span>
           </>
@@ -118,8 +105,8 @@ export default function ProductCard({
       </p>
 
       <p className="mt-4 line-clamp-2 flex-1 text-sm leading-6 text-zinc-600">
-        {latest
-          ? `“${latest.message}”`
+        {latestMessage
+          ? `“${latestMessage}”`
           : "No replies yet. Share your link to get the first one."}
       </p>
 
