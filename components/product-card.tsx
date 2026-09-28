@@ -3,6 +3,7 @@
 import { toast } from "sonner";
 import axios, { AxiosError } from "axios";
 import Link from "next/link";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 import {
@@ -26,6 +27,8 @@ export default function ProductCard({
 }) {
   const router = useRouter();
   const href = `/dashboard/product/${id}`;
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
 
   return (
     <article className="group shadow-card hover:shadow-card-raised relative flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 transition-[border-color,box-shadow] duration-150 hover:border-zinc-300">
@@ -39,6 +42,7 @@ export default function ProductCard({
 
         <DropdownMenu>
           <DropdownMenuTrigger
+            ref={menuTriggerRef}
             aria-label={`Actions for ${name}`}
             className="focus-visible:ring-primary relative z-10 -mt-1 -mr-1 flex size-8 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:ring-2 focus-visible:outline-hidden"
           >
@@ -55,12 +59,19 @@ export default function ProductCard({
 
             <DropdownMenuItem
               className="cursor-pointer"
-              onSelect={(e) => e.preventDefault()}
+              onSelect={() => setDeleteOpen(true)}
             >
-              <DeleteAlert productId={id} />
+              Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <DeleteAlert
+          productId={id}
+          open={deleteOpen}
+          onOpenChange={setDeleteOpen}
+          returnFocusRef={menuTriggerRef}
+        />
       </header>
 
       <Link
@@ -83,7 +94,17 @@ export default function ProductCard({
   );
 }
 
-function DeleteAlert({ productId }: { productId: string }) {
+function DeleteAlert({
+  productId,
+  open,
+  onOpenChange,
+  returnFocusRef,
+}: {
+  productId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  returnFocusRef: React.RefObject<HTMLButtonElement | null>;
+}) {
   const router = useRouter();
 
   const handleDelete = async () => {
@@ -114,9 +135,9 @@ function DeleteAlert({ productId }: { productId: string }) {
     <DeleteDialog
       description="This action cannot be undone. This will permanently delete your product and remove the data from our servers."
       onConfirm={handleDelete}
-      triggerClassName="w-full text-start"
-    >
-      Delete
-    </DeleteDialog>
+      open={open}
+      onOpenChange={onOpenChange}
+      returnFocusRef={returnFocusRef}
+    />
   );
 }
