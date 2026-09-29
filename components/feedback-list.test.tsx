@@ -84,4 +84,17 @@ describe("FeedbackList filters", () => {
 
     expect(screen.getByText("No matching feedback")).toBeInTheDocument();
   });
+
+  it("shows new favorites on the Favorites tab when feedbacks change", async () => {
+    const { rerender } = render(<FeedbackList feedbacks={feedbacks} />);
+
+    await userEvent.click(screen.getByRole("button", { name: /Favorites/ }));
+    rerender(
+      <FeedbackList
+        feedbacks={feedbacks.map((item) => ({ ...item, isFavorite: true }))}
+      />
+    );
+
+    expect(names()).toEqual(["Ana", "Ben", "Cleo"]);
+  });
 });

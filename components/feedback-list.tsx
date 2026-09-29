@@ -29,7 +29,9 @@ export default function FeedbackList({ feedbacks }: { feedbacks: Feedback[] }) {
 
   if (feedbacks !== prevFeedbacks) {
     setPrevFeedbacks(feedbacks);
-    setFavoriteIds(getFavoriteIds(feedbacks));
+    const nextFavoriteIds = getFavoriteIds(feedbacks);
+    setFavoriteIds(nextFavoriteIds);
+    setShownFavoriteIds(new Set([...shownFavoriteIds, ...nextFavoriteIds]));
   }
 
   const favorites = feedbacks.filter((feedback) =>
@@ -67,14 +69,9 @@ export default function FeedbackList({ feedbacks }: { feedbacks: Feedback[] }) {
 
   return (
     <>
-      <header className="mt-12 flex items-baseline justify-between gap-4">
-        <h2 className="text-xl font-semibold tracking-tight text-zinc-950">
-          Feedback
-        </h2>
-        <p className="text-sm text-zinc-500 tabular-nums">
-          {favorites} of {feedbacks.length} on your site
-        </p>
-      </header>
+      <h2 className="mt-12 text-xl font-semibold tracking-tight text-zinc-950">
+        Feedback
+      </h2>
 
       {feedbacks.length === 0 ? (
         <EmptyState
