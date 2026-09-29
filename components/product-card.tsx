@@ -23,7 +23,7 @@ interface ProductCardProps {
   message: string;
   responses: number;
   averageRating: number;
-  onSite: number;
+  favorites: number;
   latestMessage?: string;
 }
 
@@ -35,7 +35,7 @@ export default function ProductCard({
     message,
     responses,
     averageRating,
-    onSite,
+    favorites,
     latestMessage,
   },
 }: {
@@ -141,7 +141,9 @@ export default function ProductCard({
       </p>
 
       <footer className="mt-5 flex items-center justify-between border-t border-zinc-100 pt-3 text-xs text-zinc-500 tabular-nums">
-        <span>{onSite} on your site</span>
+        <span>
+          {favorites} {favorites === 1 ? "favorite" : "favorites"}
+        </span>
 
         <ChevronRight
           aria-hidden="true"

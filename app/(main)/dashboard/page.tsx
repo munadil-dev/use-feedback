@@ -31,7 +31,7 @@ export default async function Dashboard() {
 
   const ownedFeedback = { product: { userId: session.user.id } };
 
-  const [products, ratings, favorites] = await Promise.all([
+  const [products, ratings, favoriteCounts] = await Promise.all([
     prisma.product.findMany({
       where: {
         userId: session.user.id,
@@ -75,8 +75,8 @@ export default async function Dashboard() {
     averageRating:
       ratings.find((rating) => rating.productId === product.id)?._avg.rating ??
       0,
-    onSite:
-      favorites.find((favorite) => favorite.productId === product.id)?._count
+    favorites:
+      favoriteCounts.find((count) => count.productId === product.id)?._count
         ._all ?? 0,
     latestMessage: product.feedbacks[0]?.message,
   }));
@@ -120,8 +120,8 @@ export default async function Dashboard() {
                 value: formatRating(overallRating),
               },
               {
-                label: "On your sites",
-                value: cards.reduce((sum, card) => sum + card.onSite, 0),
+                label: "Favorites",
+                value: cards.reduce((sum, card) => sum + card.favorites, 0),
               },
             ]}
           />
