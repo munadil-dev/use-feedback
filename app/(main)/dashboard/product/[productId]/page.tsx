@@ -30,7 +30,9 @@ export default async function Product({
     select: {
       userId: true,
       name: true,
-      feedbacks: true,
+      feedbacks: {
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
 

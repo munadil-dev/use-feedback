@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 import axios, { AxiosError } from "axios";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { Avatar } from "./home/avatar";
@@ -15,6 +16,7 @@ interface FeedbackProps {
     message: string;
     customerName: string;
     customerEmail: string;
+    customerImage: string | null;
     rating: number;
     createdAt: Date;
   };
@@ -29,29 +31,30 @@ export default function FeedbackCard({
 }: FeedbackProps) {
   const createdAt = new Date(feedback.createdAt);
 
-  const updateFavorite = async () => {
+  const saving = useRef(false);
+
+  const toggleFavorite = async () => {
+    if (saving.current) return;
+    saving.current = true;
+
     const newFavorite = !isFavorite;
-    const toastId = toast.loading("Updating...");
+    onFavoriteChange(newFavorite);
 
     try {
-      const res = await axios.post("/api/feedback/favorite", {
+      await axios.post("/api/feedback/favorite", {
         feedbackId: feedback.id,
         isFavorite: newFavorite,
       });
-
-      if (res.data.success) {
-        toast.dismiss(toastId);
-        onFavoriteChange(newFavorite);
-        toast.success(res.data.message);
-      }
     } catch (err) {
-      toast.dismiss(toastId);
+      onFavoriteChange(isFavorite);
 
       if (err instanceof AxiosError) {
         toast.error(err.response?.data.message);
       } else {
         toast.error("An unexpected error occurred");
       }
+    } finally {
+      saving.current = false;
     }
   };
 
@@ -77,7 +80,10 @@ export default function FeedbackCard({
       </p>
 
       <footer className="mt-5 flex items-center gap-3 border-t border-zinc-100 pt-4">
-        <Avatar name={feedback.customerName} size="md" />
+        <CustomerPhoto
+          name={feedback.customerName}
+          src={feedback.customerImage}
+        />
 
         <p className="flex min-w-0 flex-1 flex-col text-sm">
           <span className="truncate font-medium text-zinc-950">
@@ -91,13 +97,32 @@ export default function FeedbackCard({
 
         <HeartButton
           pressed={isFavorite}
-          onToggle={updateFavorite}
+          onToggle={toggleFavorite}
           label={`Show ${feedback.customerName}'s feedback on your site`}
         />
 
         <DeleteFeedbackAlert feedbackId={feedback.id} />
       </footer>
     </article>
+  );
+}
+
+function CustomerPhoto({ name, src }: { name: string; src: string | null }) {
+  const [failed, setFailed] = useState(false);
+
+  if (!src || failed) {
+    return <Avatar name={name} size="md" />;
+  }
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt=""
+      loading="lazy"
+      onError={() => setFailed(true)}
+      className="size-9 shrink-0 rounded-lg bg-zinc-100 object-cover"
+    />
   );
 }
 
