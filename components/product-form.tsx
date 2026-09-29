@@ -5,12 +5,13 @@ import { toast } from "sonner";
 import { SubmitEvent, useState } from "react";
 import { flushSync } from "react-dom";
 import { useAtom, useSetAtom } from "jotai";
+import { useResetAtom } from "jotai/utils";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { newProductAtom } from "@/store/atoms/new-product";
-import { productCreatedAtom } from "@/store/atoms/product-created";
+import { createdProductAtom } from "@/store/atoms/created-product";
 import { newProductSchema } from "@/schemas/new-product";
 
 type Field = "name" | "title" | "message";
@@ -46,7 +47,8 @@ const fields: {
 
 export default function ProductForm() {
   const [newProduct, setNewProduct] = useAtom(newProductAtom);
-  const setIsProductCreated = useSetAtom(productCreatedAtom);
+  const resetNewProduct = useResetAtom(newProductAtom);
+  const setCreatedProduct = useSetAtom(createdProductAtom);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -81,7 +83,8 @@ export default function ProductForm() {
 
       if (res.data.success) {
         toast.success(res.data.message);
-        setIsProductCreated(true);
+        setCreatedProduct({ id: res.data.id, name: result.data.name });
+        resetNewProduct();
       }
     } catch (err) {
       if (err instanceof AxiosError) {
