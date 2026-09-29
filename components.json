@@ -2,6 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "base-vega",
   "rsc": true,
+  "iconLibrary": "lucide",
   "tsx": true,
   "tailwind": {
     "config": "",
