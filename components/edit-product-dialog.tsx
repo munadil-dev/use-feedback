@@ -4,7 +4,6 @@ import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { SubmitEvent, useState } from "react";
 import { flushSync } from "react-dom";
-import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
@@ -31,12 +30,14 @@ const fields: { id: Field; label: string; multiline?: boolean }[] = [
 export default function EditProductDialog({
   productId,
   values,
+  onSaved,
   open,
   onOpenChange,
   returnFocusRef,
 }: {
   productId: string;
   values: NewProductType;
+  onSaved: (saved: NewProductType) => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   returnFocusRef: React.RefObject<HTMLButtonElement | null>;
@@ -70,7 +71,10 @@ export default function EditProductDialog({
           values={values}
           isSaving={isSaving}
           setIsSaving={setIsSaving}
-          onSaved={() => onOpenChange(false)}
+          onSaved={(saved) => {
+            onSaved(saved);
+            onOpenChange(false);
+          }}
         />
       </DialogContent>
     </Dialog>
@@ -88,9 +92,8 @@ function EditProductForm({
   values: NewProductType;
   isSaving: boolean;
   setIsSaving: (isSaving: boolean) => void;
-  onSaved: () => void;
+  onSaved: (saved: NewProductType) => void;
 }) {
-  const router = useRouter();
   const [product, setProduct] = useState(values);
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
@@ -122,8 +125,7 @@ function EditProductForm({
 
       if (res.data.success) {
         toast.success(res.data.message);
-        onSaved();
-        router.refresh();
+        onSaved(result.data);
       }
     } catch (err) {
       if (err instanceof AxiosError) {

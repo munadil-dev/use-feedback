@@ -43,6 +43,7 @@ export default function ProductCard({
 }) {
   const router = useRouter();
   const href = `/dashboard/product/${id}`;
+  const [product, setProduct] = useState({ name, title, message });
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
@@ -54,13 +55,13 @@ export default function ProductCard({
           aria-hidden="true"
           className="flex size-9 items-center justify-center rounded-lg bg-zinc-950 text-sm font-semibold text-white uppercase"
         >
-          {[...name][0]}
+          {[...product.name][0]}
         </span>
 
         <DropdownMenu>
           <DropdownMenuTrigger
             ref={menuTriggerRef}
-            aria-label={`Actions for ${name}`}
+            aria-label={`Actions for ${product.name}`}
             className="focus-visible:ring-primary relative z-10 -mt-1 -mr-1 flex size-8 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:ring-2 focus-visible:outline-hidden"
           >
             <MoreHorizontal className="size-4" />
@@ -92,7 +93,8 @@ export default function ProductCard({
 
         <EditProductDialog
           productId={id}
-          values={{ name, title, message }}
+          values={product}
+          onSaved={setProduct}
           open={editOpen}
           onOpenChange={setEditOpen}
           returnFocusRef={menuTriggerRef}
@@ -110,7 +112,7 @@ export default function ProductCard({
         href={href}
         className="focus-visible:after:ring-primary mt-5 rounded-sm font-semibold tracking-tight wrap-anywhere text-zinc-950 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:ring-2"
       >
-        {name}
+        {product.name}
       </Link>
 
       <p className="mt-1 flex items-center gap-1.5 text-sm text-zinc-500 tabular-nums">
