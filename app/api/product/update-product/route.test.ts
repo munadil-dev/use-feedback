@@ -54,6 +54,20 @@ describe("POST /api/product/update-product", () => {
     expect(mockUpdateMany).not.toHaveBeenCalled();
   });
 
+  it("returns 400 when the body is not valid JSON", async () => {
+    mockAuth.mockResolvedValue({ user: { id: "user-1" } });
+
+    const res = await POST(
+      new NextRequest("http://localhost/api/product/update-product", {
+        method: "POST",
+        body: "{",
+      })
+    );
+
+    expect(res.status).toBe(400);
+    expect(mockUpdateMany).not.toHaveBeenCalled();
+  });
+
   it("only updates products the user owns", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
     mockUpdateMany.mockResolvedValue({ count: 1 });

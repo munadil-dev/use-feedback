@@ -41,8 +41,15 @@ export default function EditProductDialog({
   onOpenChange: (open: boolean) => void;
   returnFocusRef: React.RefObject<HTMLButtonElement | null>;
 }) {
+  const [isSaving, setIsSaving] = useState(false);
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        if (!isSaving) onOpenChange(next);
+      }}
+    >
       <DialogContent
         onCloseAutoFocus={(event) => {
           if (!returnFocusRef.current) return;
@@ -61,6 +68,8 @@ export default function EditProductDialog({
         <EditProductForm
           productId={productId}
           values={values}
+          isSaving={isSaving}
+          setIsSaving={setIsSaving}
           onSaved={() => onOpenChange(false)}
         />
       </DialogContent>
@@ -71,17 +80,19 @@ export default function EditProductDialog({
 function EditProductForm({
   productId,
   values,
+  isSaving,
+  setIsSaving,
   onSaved,
 }: {
   productId: string;
   values: NewProductType;
+  isSaving: boolean;
+  setIsSaving: (isSaving: boolean) => void;
   onSaved: () => void;
 }) {
   const router = useRouter();
   const [product, setProduct] = useState(values);
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
-  const [isSaving, setIsSaving] = useState(false);
-
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -116,7 +127,10 @@ function EditProductForm({
       }
     } catch (err) {
       if (err instanceof AxiosError) {
-        toast.error(err.response?.data.message);
+        toast.error(
+          err.response?.data?.message ??
+            "Could not save the product. Try again."
+        );
       } else {
         toast.error("An unexpected error occurred");
       }
@@ -176,7 +190,7 @@ function EditProductForm({
 
       <DialogFooter className="mt-8">
         <DialogClose asChild>
-          <Button type="button" variant="outline">
+          <Button type="button" variant="outline" disabled={isSaving}>
             Cancel
           </Button>
         </DialogClose>

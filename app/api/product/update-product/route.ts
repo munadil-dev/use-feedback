@@ -13,9 +13,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { success, error, data } = updateProductSchema.safeParse(
-    await req.json()
-  );
+  const body = await req.json().catch(() => null);
+  const { success, error, data } = updateProductSchema.safeParse(body);
 
   if (!success) {
     return NextResponse.json(
