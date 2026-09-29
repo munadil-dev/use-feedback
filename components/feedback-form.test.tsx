@@ -37,10 +37,8 @@ vi.mock("axios", async (importOriginal) => {
 
 const productDetails = {
   id: "product-1",
-  name: "UseFeedback",
   title: "How was your experience?",
   message: "We read every message.",
-  userId: "user-1",
 };
 
 function renderForm() {

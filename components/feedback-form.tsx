@@ -50,10 +50,8 @@ const invalidProps = (field: Field, error?: string) => ({
 
 interface ProductProps {
   id: string;
-  name: string;
   title: string;
   message: string;
-  userId: string;
 }
 
 export default function FeedbackForm({
