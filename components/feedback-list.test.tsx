@@ -65,7 +65,7 @@ describe("FeedbackList filters", () => {
   });
 
   it("keeps an unfavorited card on the Favorites tab until the tab changes", async () => {
-    vi.spyOn(axios, "post").mockResolvedValue({ data: { success: true } });
+    vi.spyOn(axios, "patch").mockResolvedValue({ data: { success: true } });
     render(<FeedbackList feedbacks={feedbacks} />);
 
     const favoritesTab = screen.getByRole("button", { name: /Favorites/ });

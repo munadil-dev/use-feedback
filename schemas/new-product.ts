@@ -7,7 +7,3 @@ export const newProductSchema = z.object({
 });
 
 export type NewProductType = z.infer<typeof newProductSchema>;
-
-export const updateProductSchema = newProductSchema.extend({
-  productId: z.string().min(1, "Product id is required"),
-});

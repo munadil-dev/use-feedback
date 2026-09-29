@@ -11,5 +11,3 @@ export const newFeedbackSchema = z.object({
     .min(1, "Rating must be between 1 and 5")
     .max(5, "Rating must be between 1 and 5"),
 });
-
-export type FeedbackType = z.infer<typeof newFeedbackSchema>;

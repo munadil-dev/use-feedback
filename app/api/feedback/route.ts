@@ -1,9 +1,9 @@
 import prisma from "@/lib/db";
 import { type NextRequest, NextResponse } from "next/server";
-import { newFeedbackSchema, FeedbackType } from "@/schemas/new-feedback";
+import { newFeedbackSchema } from "@/schemas/new-feedback";
 
 export async function POST(req: NextRequest) {
-  const body: FeedbackType = await req.json();
+  const body = await req.json().catch(() => null);
   const { success, error, data } = newFeedbackSchema.safeParse(body);
 
   if (!success) {

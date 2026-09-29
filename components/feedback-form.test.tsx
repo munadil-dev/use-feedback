@@ -91,7 +91,7 @@ describe("FeedbackForm", () => {
 
     await fillAndSubmit();
 
-    expect(axios.post).toHaveBeenCalledWith("/api/feedback/create", {
+    expect(axios.post).toHaveBeenCalledWith("/api/feedback", {
       id: "product-1",
       message: "Loved it",
       customerName: "Jane",

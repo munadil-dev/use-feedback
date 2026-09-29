@@ -171,9 +171,7 @@ function DeleteAlert({
     const toastId = toast.loading("Product getting deleted...");
 
     try {
-      const res = await axios.post("/api/product/delete-product", {
-        productId,
-      });
+      const res = await axios.delete(`/api/product/${productId}`);
 
       if (res.data.success) {
         toast.dismiss(toastId);

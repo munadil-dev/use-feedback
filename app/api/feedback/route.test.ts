@@ -24,13 +24,13 @@ const validFeedback = {
 };
 
 function createRequest(body: object) {
-  return new NextRequest("http://localhost/api/feedback/create", {
+  return new NextRequest("http://localhost/api/feedback", {
     method: "POST",
     body: JSON.stringify(body),
   });
 }
 
-describe("POST /api/feedback/create", () => {
+describe("POST /api/feedback", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -46,6 +46,18 @@ describe("POST /api/feedback/create", () => {
       success: false,
     });
     expect(mockFindUnique).not.toHaveBeenCalled();
+    expect(mockCreate).not.toHaveBeenCalled();
+  });
+
+  it("returns 400 when the body is not valid JSON", async () => {
+    const res = await POST(
+      new NextRequest("http://localhost/api/feedback", {
+        method: "POST",
+        body: "{",
+      })
+    );
+
+    expect(res.status).toBe(400);
     expect(mockCreate).not.toHaveBeenCalled();
   });
 

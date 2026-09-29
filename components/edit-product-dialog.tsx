@@ -112,10 +112,7 @@ function EditProductForm({
     setIsSaving(true);
 
     try {
-      const res = await axios.post("/api/product/update-product", {
-        productId,
-        ...result.data,
-      });
+      const res = await axios.patch(`/api/product/${productId}`, result.data);
 
       if (res.data.success) {
         toast.success(res.data.message);

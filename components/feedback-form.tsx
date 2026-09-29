@@ -109,7 +109,7 @@ export default function FeedbackForm({
     const toastId = toast.loading("Loading...");
 
     try {
-      const res = await axios.post("/api/feedback/create", feedback);
+      const res = await axios.post("/api/feedback", feedback);
 
       if (res.data.success) {
         toast.dismiss(toastId);
