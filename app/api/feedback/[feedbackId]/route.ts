@@ -12,7 +12,7 @@ const MESSAGE = {
 export async function PATCH(req: NextRequest, { params }: Context) {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     return NextResponse.json(
       { message: "Unauthenticated", success: false },
       { status: 401 }
@@ -66,7 +66,7 @@ export async function PATCH(req: NextRequest, { params }: Context) {
 export async function DELETE(_req: NextRequest, { params }: Context) {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     return NextResponse.json(
       { message: "Unauthenticated", success: false },
       { status: 401 }

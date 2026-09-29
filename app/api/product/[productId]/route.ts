@@ -8,7 +8,7 @@ type Context = { params: Promise<{ productId: string }> };
 export async function PATCH(req: NextRequest, { params }: Context) {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     return NextResponse.json(
       { message: "Unauthenticated", success: false },
       { status: 401 }
@@ -57,7 +57,7 @@ export async function PATCH(req: NextRequest, { params }: Context) {
 export async function DELETE(_req: NextRequest, { params }: Context) {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     return NextResponse.json(
       { message: "Unauthenticated", success: false },
       { status: 401 }
@@ -67,25 +67,16 @@ export async function DELETE(_req: NextRequest, { params }: Context) {
   const { productId } = await params;
 
   try {
-    const product = await prisma.product.findFirst({
-      where: {
-        id: productId,
-        userId: session.user.id,
-      },
+    const { count } = await prisma.product.deleteMany({
+      where: { id: productId, userId: session.user.id },
     });
 
-    if (!product) {
+    if (count === 0) {
       return NextResponse.json(
         { message: "Product not found", success: false },
         { status: 404 }
       );
     }
-
-    await prisma.product.delete({
-      where: {
-        id: productId,
-      },
-    });
 
     return NextResponse.json(
       { message: "Product deleted successfully", success: true },

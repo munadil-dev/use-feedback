@@ -8,14 +8,13 @@ import prisma from "@/lib/db";
 vi.mock("@/lib/auth", () => ({ auth: vi.fn() }));
 vi.mock("@/lib/db", () => ({
   default: {
-    product: { updateMany: vi.fn(), findFirst: vi.fn(), delete: vi.fn() },
+    product: { updateMany: vi.fn(), deleteMany: vi.fn() },
   },
 }));
 
 const mockAuth = vi.mocked(auth as () => Promise<unknown>);
 const mockUpdateMany = vi.mocked(prisma.product.updateMany);
-const mockFindFirst = vi.mocked(prisma.product.findFirst);
-const mockDelete = vi.mocked(prisma.product.delete);
+const mockDeleteMany = vi.mocked(prisma.product.deleteMany);
 
 const context = { params: Promise.resolve({ productId: "product-1" }) };
 
@@ -51,6 +50,15 @@ beforeEach(() => {
 describe("PATCH /api/product/[productId]", () => {
   it("returns 401 when the user is not signed in", async () => {
     mockAuth.mockResolvedValue(null);
+
+    const res = await update(product);
+
+    expect(res.status).toBe(401);
+    expect(mockUpdateMany).not.toHaveBeenCalled();
+  });
+
+  it("returns 401 when the session has no user id", async () => {
+    mockAuth.mockResolvedValue({ user: {} });
 
     const res = await update(product);
 
@@ -120,29 +128,36 @@ describe("DELETE /api/product/[productId]", () => {
     const res = await remove();
 
     expect(res.status).toBe(401);
-    expect(mockDelete).not.toHaveBeenCalled();
+    expect(mockDeleteMany).not.toHaveBeenCalled();
   });
 
-  it("returns 404 when the product belongs to another user", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user-2" } });
-    mockFindFirst.mockResolvedValue(null);
+  it("returns 401 when the session has no user id", async () => {
+    mockAuth.mockResolvedValue({ user: {} });
 
     const res = await remove();
 
-    expect(res.status).toBe(404);
-    expect(mockFindFirst).toHaveBeenCalledWith({
-      where: { id: "product-1", userId: "user-2" },
-    });
-    expect(mockDelete).not.toHaveBeenCalled();
+    expect(res.status).toBe(401);
+    expect(mockDeleteMany).not.toHaveBeenCalled();
   });
 
-  it("deletes the product when the user owns it", async () => {
+  it("only deletes products the user owns", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
-    mockFindFirst.mockResolvedValue({ id: "product-1" } as never);
+    mockDeleteMany.mockResolvedValue({ count: 1 });
 
     const res = await remove();
 
     expect(res.status).toBe(200);
-    expect(mockDelete).toHaveBeenCalledWith({ where: { id: "product-1" } });
+    expect(mockDeleteMany).toHaveBeenCalledWith({
+      where: { id: "product-1", userId: "user-1" },
+    });
+  });
+
+  it("returns 404 when the product belongs to another user", async () => {
+    mockAuth.mockResolvedValue({ user: { id: "user-2" } });
+    mockDeleteMany.mockResolvedValue({ count: 0 });
+
+    const res = await remove();
+
+    expect(res.status).toBe(404);
   });
 });

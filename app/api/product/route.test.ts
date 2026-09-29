@@ -40,6 +40,15 @@ describe("POST /api/product", () => {
     expect(mockCreate).not.toHaveBeenCalled();
   });
 
+  it("returns 401 when the session has no user id", async () => {
+    mockAuth.mockResolvedValue({ user: {} });
+
+    const res = await POST(createRequest(product));
+
+    expect(res.status).toBe(401);
+    expect(mockCreate).not.toHaveBeenCalled();
+  });
+
   it("returns 400 when a field is empty", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
 

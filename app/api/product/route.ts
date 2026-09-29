@@ -6,7 +6,7 @@ import { newProductSchema } from "@/schemas/new-product";
 export async function POST(req: NextRequest) {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     return NextResponse.json(
       { message: "Unauthenticated", success: false },
       { status: 401 }

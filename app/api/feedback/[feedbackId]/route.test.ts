@@ -49,6 +49,15 @@ describe("PATCH /api/feedback/[feedbackId]", () => {
     expect(mockUpdateMany).not.toHaveBeenCalled();
   });
 
+  it("returns 401 when the session has no user id", async () => {
+    mockAuth.mockResolvedValue({ user: {} });
+
+    const res = await favorite(true);
+
+    expect(res.status).toBe(401);
+    expect(mockUpdateMany).not.toHaveBeenCalled();
+  });
+
   it("returns 400 when isFavorite is not a boolean", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
 
@@ -110,6 +119,15 @@ describe("PATCH /api/feedback/[feedbackId]", () => {
 describe("DELETE /api/feedback/[feedbackId]", () => {
   it("returns 401 when the user is not signed in", async () => {
     mockAuth.mockResolvedValue(null);
+
+    const res = await remove();
+
+    expect(res.status).toBe(401);
+    expect(mockDeleteMany).not.toHaveBeenCalled();
+  });
+
+  it("returns 401 when the session has no user id", async () => {
+    mockAuth.mockResolvedValue({ user: {} });
 
     const res = await remove();
 

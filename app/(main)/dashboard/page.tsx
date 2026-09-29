@@ -25,7 +25,7 @@ function NewProductLink({ className }: { className?: string }) {
 export default async function Dashboard() {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect("/auth/signin");
   }
 
