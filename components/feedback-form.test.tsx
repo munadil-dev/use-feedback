@@ -37,10 +37,8 @@ vi.mock("axios", async (importOriginal) => {
 
 const productDetails = {
   id: "product-1",
-  name: "UseFeedback",
   title: "How was your experience?",
   message: "We read every message.",
-  userId: "user-1",
 };
 
 function renderForm() {
@@ -91,7 +89,7 @@ describe("FeedbackForm", () => {
 
     await fillAndSubmit();
 
-    expect(axios.post).toHaveBeenCalledWith("/api/feedback/create", {
+    expect(axios.post).toHaveBeenCalledWith("/api/feedback", {
       id: "product-1",
       message: "Loved it",
       customerName: "Jane",

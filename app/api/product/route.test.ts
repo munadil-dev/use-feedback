@@ -20,13 +20,13 @@ const product = {
 };
 
 function createRequest(body: object) {
-  return new NextRequest("http://localhost/api/product/create-product", {
+  return new NextRequest("http://localhost/api/product", {
     method: "POST",
     body: JSON.stringify(body),
   });
 }
 
-describe("POST /api/product/create-product", () => {
+describe("POST /api/product", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -40,10 +40,33 @@ describe("POST /api/product/create-product", () => {
     expect(mockCreate).not.toHaveBeenCalled();
   });
 
+  it("returns 401 when the session has no user id", async () => {
+    mockAuth.mockResolvedValue({ user: {} });
+
+    const res = await POST(createRequest(product));
+
+    expect(res.status).toBe(401);
+    expect(mockCreate).not.toHaveBeenCalled();
+  });
+
   it("returns 400 when a field is empty", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
 
     const res = await POST(createRequest({ ...product, name: "  " }));
+
+    expect(res.status).toBe(400);
+    expect(mockCreate).not.toHaveBeenCalled();
+  });
+
+  it("returns 400 when the body is not valid JSON", async () => {
+    mockAuth.mockResolvedValue({ user: { id: "user-1" } });
+
+    const res = await POST(
+      new NextRequest("http://localhost/api/product", {
+        method: "POST",
+        body: "{",
+      })
+    );
 
     expect(res.status).toBe(400);
     expect(mockCreate).not.toHaveBeenCalled();

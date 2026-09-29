@@ -1,12 +1,12 @@
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { type NextRequest, NextResponse } from "next/server";
-import { updateProductSchema } from "@/schemas/new-product";
+import { newProductSchema } from "@/schemas/new-product";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     return NextResponse.json(
       { message: "Unauthenticated", success: false },
       { status: 401 }
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json().catch(() => null);
-  const { success, error, data } = updateProductSchema.safeParse(body);
+  const { success, error, data } = newProductSchema.safeParse(body);
 
   if (!success) {
     return NextResponse.json(
@@ -23,27 +23,29 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { productId, name, title, message } = data;
+  const { name, title, message } = data;
 
   try {
-    const { count } = await prisma.product.updateMany({
-      where: { id: productId, userId: session.user.id },
-      data: { name, title, message },
+    const product = await prisma.product.create({
+      data: {
+        name,
+        title,
+        message,
+        user: {
+          connect: {
+            id: session.user.id,
+          },
+        },
+      },
+      select: { id: true },
     });
 
-    if (count === 0) {
-      return NextResponse.json(
-        { message: "Product not found", success: false },
-        { status: 404 }
-      );
-    }
-
     return NextResponse.json(
-      { message: "Product updated", success: true },
-      { status: 200 }
+      { id: product.id, message: "Product created", success: true },
+      { status: 201 }
     );
   } catch (err) {
-    console.log("Error while updating a product: ", err);
+    console.log("Error while creating a new product: ", err);
     return NextResponse.json(
       { message: "Internal server error", success: false },
       { status: 500 }

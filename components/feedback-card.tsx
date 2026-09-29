@@ -41,8 +41,7 @@ export default function FeedbackCard({
     onFavoriteChange(newFavorite);
 
     try {
-      await axios.post("/api/feedback/favorite", {
-        feedbackId: feedback.id,
+      await axios.patch(`/api/feedback/${feedback.id}`, {
         isFavorite: newFavorite,
       });
     } catch (err) {
@@ -133,9 +132,7 @@ function DeleteFeedbackAlert({ feedbackId }: { feedbackId: string }) {
     const toastId = toast.loading("Removing...");
 
     try {
-      const res = await axios.post("/api/feedback/remove", {
-        feedbackId,
-      });
+      const res = await axios.delete(`/api/feedback/${feedbackId}`);
 
       if (res.data.success) {
         toast.dismiss(toastId);

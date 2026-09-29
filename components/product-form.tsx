@@ -79,7 +79,7 @@ export default function ProductForm() {
     setIsSubmitting(true);
 
     try {
-      const res = await axios.post("/api/product/create-product", result.data);
+      const res = await axios.post("/api/product", result.data);
 
       if (res.data.success) {
         toast.success(res.data.message);

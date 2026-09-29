@@ -19,7 +19,7 @@ export default async function Product({
   const code = `<div id="embed-feedbacks"></div>
 <script src="${process.env.NEXT_PUBLIC_BASE_URL}api/embed-feedbacks?productId=${productId}"></script>`;
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect("/auth/signin");
   }
 

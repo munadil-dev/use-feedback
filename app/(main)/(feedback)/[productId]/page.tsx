@@ -15,6 +15,7 @@ export default async function FeedbackPage({ params }: FeedbackPageProps) {
     where: {
       id: productId,
     },
+    select: { id: true, title: true, message: true },
   });
 
   if (!productDetails) {
