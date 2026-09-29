@@ -36,9 +36,14 @@ export default async function Dashboard() {
       where: {
         userId: session.user.id,
       },
+      // cuids start with a timestamp, so this keeps creation order stable
+      // after edits. Switch to createdAt once Product has one.
+      orderBy: { id: "asc" },
       select: {
         id: true,
         name: true,
+        title: true,
+        message: true,
         _count: {
           select: { feedbacks: true },
         },
@@ -66,6 +71,8 @@ export default async function Dashboard() {
   const cards = products.map((product) => ({
     id: product.id,
     name: product.name,
+    title: product.title,
+    message: product.message,
     responses: product._count.feedbacks,
     averageRating:
       ratings.find((rating) => rating.productId === product.id)?._avg.rating ??

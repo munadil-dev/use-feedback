@@ -13,11 +13,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import DeleteDialog from "@/components/delete-dialog";
+import EditProductDialog from "@/components/edit-product-dialog";
 import { formatRating } from "@/lib/feedback-stats";
 
 interface ProductCardProps {
   id: string;
   name: string;
+  title: string;
+  message: string;
   responses: number;
   averageRating: number;
   onSite: number;
@@ -25,12 +28,22 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({
-  details: { id, name, responses, averageRating, onSite, latestMessage },
+  details: {
+    id,
+    name,
+    title,
+    message,
+    responses,
+    averageRating,
+    onSite,
+    latestMessage,
+  },
 }: {
   details: ProductCardProps;
 }) {
   const router = useRouter();
   const href = `/dashboard/product/${id}`;
+  const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
 
@@ -63,12 +76,27 @@ export default function ProductCard({
 
             <DropdownMenuItem
               className="cursor-pointer"
+              onSelect={() => setEditOpen(true)}
+            >
+              Edit
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              className="cursor-pointer"
               onSelect={() => setDeleteOpen(true)}
             >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <EditProductDialog
+          productId={id}
+          values={{ name, title, message }}
+          open={editOpen}
+          onOpenChange={setEditOpen}
+          returnFocusRef={menuTriggerRef}
+        />
 
         <DeleteAlert
           productId={id}
