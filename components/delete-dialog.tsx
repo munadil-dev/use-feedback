@@ -40,13 +40,7 @@ export default function DeleteDialog({
         </AlertDialogTrigger>
       )}
 
-      <AlertDialogContent
-        onCloseAutoFocus={(event) => {
-          if (!returnFocusRef?.current) return;
-          event.preventDefault();
-          returnFocusRef.current.focus();
-        }}
-      >
+      <AlertDialogContent finalFocus={returnFocusRef}>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

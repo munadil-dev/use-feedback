@@ -51,13 +51,7 @@ export default function EditProductDialog({
         if (!isSaving) onOpenChange(next);
       }}
     >
-      <DialogContent
-        onCloseAutoFocus={(event) => {
-          if (!returnFocusRef.current) return;
-          event.preventDefault();
-          returnFocusRef.current.focus();
-        }}
-      >
+      <DialogContent finalFocus={returnFocusRef}>
         <DialogHeader>
           <DialogTitle>Edit product</DialogTitle>
 
@@ -191,10 +185,11 @@ function EditProductForm({
       </div>
 
       <DialogFooter className="mt-8">
-        <DialogClose asChild>
-          <Button type="button" variant="outline" disabled={isSaving}>
-            Cancel
-          </Button>
+        <DialogClose
+          disabled={isSaving}
+          render={<Button type="button" variant="outline" />}
+        >
+          Cancel
         </DialogClose>
 
         <Button type="submit" disabled={isSaving}>
