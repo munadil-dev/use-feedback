@@ -77,14 +77,14 @@ export default function ProductCard({
 
             <DropdownMenuItem
               className="cursor-pointer"
-              onSelect={() => setEditOpen(true)}
+              onClick={() => setEditOpen(true)}
             >
               Edit
             </DropdownMenuItem>
 
             <DropdownMenuItem
               className="cursor-pointer"
-              onSelect={() => setDeleteOpen(true)}
+              onClick={() => setDeleteOpen(true)}
             >
               Delete
             </DropdownMenuItem>

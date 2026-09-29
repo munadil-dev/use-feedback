@@ -21,15 +21,18 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Image
-          className="cursor-pointer rounded-full select-none"
-          src={user.image ?? "/user-icon.png"}
-          width={33}
-          height={33}
-          alt="profile image"
-        />
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        nativeButton={false}
+        render={
+          <Image
+            className="cursor-pointer rounded-full select-none"
+            src={user.image ?? "/user-icon.png"}
+            width={33}
+            height={33}
+            alt="profile image"
+          />
+        }
+      />
 
       <DropdownMenuContent align="end" className="mt-1">
         <DropdownMenuItem
