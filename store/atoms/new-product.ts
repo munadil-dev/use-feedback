@@ -1,6 +1,6 @@
-import { atom } from "jotai";
+import { atomWithReset } from "jotai/utils";
 
-export const newProductAtom = atom({
+export const newProductAtom = atomWithReset({
   name: "",
   title: "",
   message: "",

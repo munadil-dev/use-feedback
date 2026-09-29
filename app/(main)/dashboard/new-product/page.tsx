@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -9,7 +9,7 @@ import BackLink from "@/components/back-link";
 import ProductForm from "@/components/product-form";
 import ProductPreview from "@/components/product-preview";
 import ProductCreated from "@/components/product-created";
-import { productCreatedAtom } from "@/store/atoms/product-created";
+import { createdProductAtom } from "@/store/atoms/created-product";
 
 export default function NewProduct() {
   const router = useRouter();
@@ -21,10 +21,14 @@ export default function NewProduct() {
     }
   }, [session?.user, status, router]);
 
-  const isProductCreated = useAtomValue(productCreatedAtom);
+  const [createdProduct, setCreatedProduct] = useAtom(createdProductAtom);
 
-  if (isProductCreated) {
-    return <ProductCreated />;
+  useEffect(() => {
+    return () => setCreatedProduct(null);
+  }, [setCreatedProduct]);
+
+  if (createdProduct) {
+    return <ProductCreated {...createdProduct} />;
   }
 
   return (
