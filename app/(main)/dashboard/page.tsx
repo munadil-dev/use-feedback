@@ -36,9 +36,7 @@ export default async function Dashboard() {
       where: {
         userId: session.user.id,
       },
-      // cuids start with a timestamp, so this keeps creation order stable
-      // after edits. Switch to createdAt once Product has one.
-      orderBy: { id: "asc" },
+      orderBy: { createdAt: "desc" },
       select: {
         id: true,
         name: true,
