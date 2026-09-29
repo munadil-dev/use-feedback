@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
         name: body.name,
         userId: session.user.id,
       },
+      orderBy: { createdAt: "desc" },
     });
 
     return NextResponse.json(

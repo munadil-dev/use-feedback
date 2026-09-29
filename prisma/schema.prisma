@@ -20,6 +20,7 @@ model Product {
   name      String
   title     String
   message   String
+  createdAt DateTime   @default(now())
   userId    String
   user      User       @relation(fields: [userId], references: [id])
   feedbacks Feedback[]
