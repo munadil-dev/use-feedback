@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
+import TrackView from "@/components/track-view";
 import FeedbackForm from "@/components/feedback-form";
 
 interface FeedbackPageProps {
@@ -22,5 +23,11 @@ export default async function FeedbackPage({ params }: FeedbackPageProps) {
     notFound();
   }
 
-  return <FeedbackForm productDetails={productDetails} />;
+  return (
+    <>
+      <TrackView productId={productDetails.id} />
+
+      <FeedbackForm productDetails={productDetails} />
+    </>
+  );
 }
