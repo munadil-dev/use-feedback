@@ -3,11 +3,8 @@ import { auth } from "@/lib/auth";
 import BackLink from "@/components/back-link";
 import { notFound, redirect } from "next/navigation";
 import FeedbackList from "@/components/feedback-list";
-import {
-  ProductActions,
-  RatingSummary,
-  ShareSection,
-} from "@/components/product-overview";
+import ProductAnalytics from "@/components/product-analytics";
+import { ProductActions, ShareSection } from "@/components/product-overview";
 
 export default async function Product({
   params,
@@ -32,6 +29,12 @@ export default async function Product({
       name: true,
       feedbacks: {
         orderBy: { createdAt: "desc" },
+      },
+      views: {
+        where: {
+          date: { gte: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000) },
+        },
+        select: { date: true, count: true },
       },
     },
   });
@@ -69,7 +72,10 @@ export default async function Product({
       </header>
 
       <div className="mt-8 flex flex-col gap-4">
-        {hasFeedback && <RatingSummary feedbacks={productDetails.feedbacks} />}
+        <ProductAnalytics
+          views={productDetails.views}
+          feedbacks={productDetails.feedbacks}
+        />
 
         <ShareSection
           url={productFeedbackURL}

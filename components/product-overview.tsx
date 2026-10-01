@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, ChevronDown, Copy, ExternalLink } from "lucide-react";
+import { Check, ChevronDown, Copy, ExternalLink, Star } from "lucide-react";
 import CodeComponent from "./code";
 import { Stars } from "./home/stars";
 import { Button, buttonVariants } from "./ui/button";
@@ -61,10 +61,7 @@ export function RatingSummary({
   }));
 
   return (
-    <section
-      aria-label="Ratings"
-      className="shadow-card grid grid-cols-1 gap-6 rounded-2xl border border-zinc-200 bg-white p-5 sm:grid-cols-[auto_minmax(0,32rem)] sm:justify-start sm:gap-12 sm:p-6"
-    >
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-12">
       <div>
         <p className="text-5xl font-semibold tracking-[-0.04em] text-zinc-950 tabular-nums">
           {formatRating(average)}
@@ -83,9 +80,15 @@ export function RatingSummary({
             key={rating}
             className="flex items-center gap-3 text-sm text-zinc-600 tabular-nums"
           >
-            <span className="w-3 text-right">{rating}</span>
+            <span className="flex w-7 items-center justify-end gap-1">
+              {rating}
+              <Star
+                aria-hidden="true"
+                className="size-3 fill-amber-400 text-amber-400"
+              />
+            </span>
 
-            <span className="h-2 flex-1 overflow-hidden rounded-full bg-zinc-100">
+            <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-zinc-100">
               <span
                 className="block h-full rounded-full bg-amber-400"
                 style={{
@@ -98,7 +101,7 @@ export function RatingSummary({
           </li>
         ))}
       </ul>
-    </section>
+    </div>
   );
 }
 
