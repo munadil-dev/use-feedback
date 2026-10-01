@@ -41,6 +41,7 @@ export default function ProductAnalytics({
   feedbacks: { rating: number; createdAt: Date }[];
 }) {
   const [range, setRange] = useState(30);
+  const [active, setActive] = useState(-1);
 
   const series = buildDailySeries(range, views, feedbacks);
   const totalViews = series.reduce((sum, day) => sum + day.views, 0);
@@ -51,6 +52,25 @@ export default function ProductAnalytics({
   );
 
   const height = (value: number) => `${(value / max) * 100}%`;
+  const focusable =
+    active >= 0 && active < series.length ? active : series.length - 1;
+
+  const moveFocus = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const keys: Record<string, number> = {
+      ArrowLeft: focusable - 1,
+      ArrowRight: focusable + 1,
+      Home: 0,
+      End: series.length - 1,
+    };
+    const next = keys[event.key];
+
+    if (next === undefined) return;
+    event.preventDefault();
+
+    const index = Math.min(Math.max(next, 0), series.length - 1);
+    setActive(index);
+    (event.currentTarget.children[index] as HTMLElement).focus();
+  };
 
   return (
     <section
@@ -103,17 +123,22 @@ export default function ProductAnalytics({
         ) : (
           <>
             <div
-              role="img"
-              aria-label={`${totalViews} views and ${totalResponses} responses in the last ${range} days`}
+              role="list"
+              aria-label={`Daily views and responses, last ${range} days. Use arrow keys to move between days.`}
+              onKeyDown={moveFocus}
               className="mt-6 flex h-32 items-end gap-px sm:gap-0.5"
             >
               {series.map((day, index) => (
                 <div
                   key={day.date}
-                  className="group relative h-full flex-1 rounded-t-sm bg-zinc-50 hover:bg-zinc-100"
+                  role="listitem"
+                  tabIndex={index === focusable ? 0 : -1}
+                  aria-label={`${formatDay(day.date)}: ${plural(day.views, "view")}, ${plural(day.responses, "response")}`}
+                  onFocus={() => setActive(index)}
+                  className="group focus-visible:ring-ring relative h-full flex-1 rounded-t-sm bg-zinc-50 outline-none hover:bg-zinc-100 focus-visible:bg-zinc-100 focus-visible:ring-2"
                 >
                   <span
-                    className="bg-primary/20 group-hover:bg-primary/30 absolute inset-x-0 bottom-0 rounded-t-sm"
+                    className="bg-primary/20 group-hover:bg-primary/30 group-focus-visible:bg-primary/30 absolute inset-x-0 bottom-0 rounded-t-sm"
                     style={{ height: height(day.views) }}
                   />
 
@@ -123,7 +148,8 @@ export default function ProductAnalytics({
                   />
 
                   <span
-                    className={`pointer-events-none absolute bottom-full z-10 mb-2 hidden rounded-md bg-zinc-900 px-2.5 py-1.5 text-xs whitespace-nowrap text-white shadow-md group-hover:block ${tooltipPosition(index, series.length)}`}
+                    aria-hidden
+                    className={`pointer-events-none absolute bottom-full z-10 mb-2 hidden rounded-md bg-zinc-900 px-2.5 py-1.5 text-xs whitespace-nowrap text-white shadow-md group-hover:block group-focus-visible:block ${tooltipPosition(index, series.length)}`}
                   >
                     <span className="block font-medium">
                       {formatDay(day.date)}
