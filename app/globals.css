@@ -150,6 +150,9 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@media (pointer: fine) {
   html {
     overscroll-behavior-y: none;
   }
