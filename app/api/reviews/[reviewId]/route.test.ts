@@ -67,7 +67,7 @@ describe("PATCH /api/reviews/[reviewId]", () => {
     expect(mockUpdateMany).not.toHaveBeenCalled();
   });
 
-  it("only updates review on products the user owns", async () => {
+  it("only updates reviews on products the user owns", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
     mockUpdateMany.mockResolvedValue({ count: 1 });
 
@@ -135,7 +135,7 @@ describe("DELETE /api/reviews/[reviewId]", () => {
     expect(mockDeleteMany).not.toHaveBeenCalled();
   });
 
-  it("only deletes review on products the user owns", async () => {
+  it("only deletes reviews on products the user owns", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
     mockDeleteMany.mockResolvedValue({ count: 1 });
 

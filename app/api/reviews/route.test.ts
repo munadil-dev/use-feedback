@@ -61,7 +61,7 @@ describe("POST /api/reviews", () => {
     expect(mockCreate).not.toHaveBeenCalled();
   });
 
-  it("returns 400 for invalid review", async () => {
+  it("returns 400 for an invalid review", async () => {
     const res = await POST(createRequest({ ...validReview, rating: 0 }));
 
     expect(res.status).toBe(400);

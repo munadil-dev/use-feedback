@@ -48,7 +48,7 @@ Copy the snippet from your product page in the dashboard and paste it where the 
 <script src="https://vouch.munadil.com/api/embed-reviews?productId=YOUR_PRODUCT_ID"></script>
 ```
 
-Only reviews you mark as a favorite is shown. Responses are cached for up to 2 minutes, so a newly favorited review appears shortly after.
+Only reviews you mark as a favorite are shown. Responses are cached for up to 2 minutes, so a newly favorited review appears shortly after.
 
 ## Tech stack
 
@@ -142,7 +142,7 @@ app/
   (main)/                   App pages with the site navbar and footer
     (review)/[productId]/ Public review form
     dashboard/              Product and review management
-  api/                      Route handlers (review, products, embed widget, docs search)
+  api/                      Route handlers (reviews, products, embed widget, docs search)
   docs/                     Documentation site (Fumadocs)
 components/                 UI components (shadcn/ui in components/ui)
 content/docs/               Documentation pages in MDX

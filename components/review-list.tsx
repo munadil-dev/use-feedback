@@ -66,7 +66,7 @@ export default function ReviewList({ reviews }: { reviews: Review[] }) {
   return (
     <>
       <h2 className="mt-12 text-xl font-semibold tracking-tight text-zinc-950">
-        Review
+        Reviews
       </h2>
 
       {reviews.length === 0 ? (

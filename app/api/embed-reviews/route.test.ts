@@ -69,7 +69,7 @@ describe("GET /api/embed-reviews", () => {
     );
   });
 
-  it("only fetches favorite review for the product", async () => {
+  it("only fetches favorite reviews for the product", async () => {
     await GET(embedRequest());
 
     expect(mockFindMany).toHaveBeenCalledWith(
@@ -131,7 +131,7 @@ describe("GET /api/embed-reviews", () => {
     });
   });
 
-  it("leaves the container untouched when there is no review", async () => {
+  it("leaves the container untouched when there are no reviews", async () => {
     mockFindMany.mockResolvedValue([]);
 
     const container = await runWidget();

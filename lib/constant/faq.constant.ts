@@ -17,7 +17,7 @@ export const faqs = [
   {
     question: "Can a bad review end up on my site?",
     answer:
-      "Only reviews you favorite appears on your site. Unfavorite a review to hide it again, or delete it for good.",
+      "Only reviews you favorite appear on your site. Unfavorite a review to hide it again, or delete it for good.",
   },
   {
     question: "How quickly do changes show up?",
