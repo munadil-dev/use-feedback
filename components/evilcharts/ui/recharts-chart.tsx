@@ -95,6 +95,15 @@ function ChartContainer({
   className,
   children,
   footer,
+  aspect,
+  debounce,
+  minHeight,
+  minWidth,
+  maxHeight,
+  height,
+  width,
+  onResize,
+  innerResponsiveContainerStyle,
   ...props
 }: Readonly<ChartContainerProps>) {
   const uniqueId = React.useId();
@@ -120,6 +129,15 @@ function ChartContainer({
         <RechartsPrimitive.ResponsiveContainer
           className="min-h-0 w-full flex-1"
           initialDimension={initialDimension}
+          aspect={aspect}
+          debounce={debounce}
+          minHeight={minHeight}
+          minWidth={minWidth}
+          maxHeight={maxHeight}
+          height={height}
+          width={width}
+          onResize={onResize}
+          style={innerResponsiveContainerStyle}
         >
           {children}
         </RechartsPrimitive.ResponsiveContainer>
