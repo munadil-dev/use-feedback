@@ -1,13 +1,13 @@
 import Link from "next/link";
 import SuccessIcon from "@/components/success-icon";
 
-export default function FeedbackSubmitted() {
+export default function ReviewSubmitted() {
   return (
     <main className="flex min-h-[calc(100svh-3.5rem)] items-center justify-center px-5 py-12">
       <section className="shadow-card-raised w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-8 text-center">
         <SuccessIcon />
         <h1 className="mt-4 text-xl font-semibold tracking-tight text-zinc-950">
-          Thanks for your feedback
+          Thanks for your review
         </h1>
         <p className="mt-1 text-sm text-zinc-600">
           Your response was sent. You can close this page.

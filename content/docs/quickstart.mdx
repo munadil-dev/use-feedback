@@ -1,11 +1,11 @@
 ---
 title: Quickstart
-description: From sign-in to a live feedback widget in a few minutes.
+description: From sign-in to a live review widget in a few minutes.
 ---
 
 import { Step, Steps } from "fumadocs-ui/components/steps";
 
-By the end of this guide, your website shows real customer feedback that you picked.
+By the end of this guide, your website shows real customer reviews that you picked.
 
 ## Before you start
 
@@ -28,20 +28,20 @@ Open the [dashboard](/dashboard) and sign in with your Google account.
 
 ### Create a product
 
-Click **New product** and fill in the product name, page title and message. The page title and message are what customers see on the feedback form, so write them as a question or a short thank-you. See [Create a product](/docs/create-a-product) for what each field does.
+Click **New product** and fill in the product name, page title and message. The page title and message are what customers see on the review form, so write them as a question or a short thank-you. See [Create a product](/docs/create-a-product) for what each field does.
 
 </Step>
 <Step>
 
-### Share the feedback link
+### Share the review link
 
-When the product is created, click **Copy link** to copy its feedback link. It looks like this:
+When the product is created, click **Copy link** to copy its review link. It looks like this:
 
 ```txt
 https://vouch.munadil.com/YOUR_PRODUCT_ID
 ```
 
-Send it to your customers by email, on social media or on a thank-you page. You can copy it again later with **Copy link** on the product's page. See [Collect feedback](/docs/collect-feedback).
+Send it to your customers by email, on social media or on a thank-you page. You can copy it again later with **Copy link** on the product's page. See [Collect reviews](/docs/collect-review).
 
 <Callout title="Try it yourself first">
   Open the link in a private window and submit a test review. You'll see the
@@ -52,20 +52,20 @@ Send it to your customers by email, on social media or on a thank-you page. You 
 </Step>
 <Step>
 
-### Favorite the best feedback
+### Favorite the best reviews
 
-Open the product in your dashboard and click the heart on the feedback you want to show publicly. Only favorited feedback appears on your website. See [Manage feedback](/docs/manage-feedback).
+Open the product in your dashboard and click the heart on the reviews you want to show publicly. Only favorited reviews appear on your website. See [Manage reviews](/docs/manage-review).
 
 </Step>
 <Step>
 
 ### Embed the widget
 
-Copy the embed code from **Share and embed** on the product's page and paste it into your website's HTML where the feedback should appear:
+Copy the embed code from **Share and embed** on the product's page and paste it into your website's HTML where the reviews should appear:
 
 ```html
-<div id="embed-feedbacks"></div>
-<script src="https://vouch.munadil.com/api/embed-feedbacks?productId=YOUR_PRODUCT_ID"></script>
+<div id="embed-reviews"></div>
+<script src="https://vouch.munadil.com/api/embed-reviews?productId=YOUR_PRODUCT_ID"></script>
 ```
 
 See [Embed the widget](/docs/embed-widget) for platform tips.

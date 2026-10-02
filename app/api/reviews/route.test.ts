@@ -7,14 +7,14 @@ import prisma from "@/lib/db";
 vi.mock("@/lib/db", () => ({
   default: {
     product: { findUnique: vi.fn() },
-    feedback: { create: vi.fn() },
+    review: { create: vi.fn() },
   },
 }));
 
 const mockFindUnique = vi.mocked(prisma.product.findUnique);
-const mockCreate = vi.mocked(prisma.feedback.create);
+const mockCreate = vi.mocked(prisma.review.create);
 
-const validFeedback = {
+const validReview = {
   id: "product-1",
   message: "Loved it",
   customerName: "Jane",
@@ -24,19 +24,19 @@ const validFeedback = {
 };
 
 function createRequest(body: object) {
-  return new NextRequest("http://localhost/api/feedback", {
+  return new NextRequest("http://localhost/api/reviews", {
     method: "POST",
     body: JSON.stringify(body),
   });
 }
 
-describe("POST /api/feedback", () => {
+describe("POST /api/reviews", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("returns 400 when the product id is missing", async () => {
-    const { id: _id, ...withoutId } = validFeedback;
+    const { id: _id, ...withoutId } = validReview;
 
     const res = await POST(createRequest(withoutId));
 
@@ -51,7 +51,7 @@ describe("POST /api/feedback", () => {
 
   it("returns 400 when the body is not valid JSON", async () => {
     const res = await POST(
-      new NextRequest("http://localhost/api/feedback", {
+      new NextRequest("http://localhost/api/reviews", {
         method: "POST",
         body: "{",
       })
@@ -61,8 +61,8 @@ describe("POST /api/feedback", () => {
     expect(mockCreate).not.toHaveBeenCalled();
   });
 
-  it("returns 400 for invalid feedback", async () => {
-    const res = await POST(createRequest({ ...validFeedback, rating: 0 }));
+  it("returns 400 for invalid review", async () => {
+    const res = await POST(createRequest({ ...validReview, rating: 0 }));
 
     expect(res.status).toBe(400);
     expect(mockCreate).not.toHaveBeenCalled();
@@ -71,7 +71,7 @@ describe("POST /api/feedback", () => {
   it("returns 404 when the product does not exist", async () => {
     mockFindUnique.mockResolvedValue(null);
 
-    const res = await POST(createRequest(validFeedback));
+    const res = await POST(createRequest(validReview));
 
     expect(res.status).toBe(404);
     expect(await res.json()).toEqual({
@@ -81,15 +81,15 @@ describe("POST /api/feedback", () => {
     expect(mockCreate).not.toHaveBeenCalled();
   });
 
-  it("creates the feedback for an existing product", async () => {
+  it("creates the review for an existing product", async () => {
     mockFindUnique.mockResolvedValue({ id: "product-1" } as never);
     mockCreate.mockResolvedValue({} as never);
 
-    const res = await POST(createRequest(validFeedback));
+    const res = await POST(createRequest(validReview));
 
     expect(res.status).toBe(201);
     expect(await res.json()).toEqual({
-      message: "Feedback submitted",
+      message: "Review submitted",
       success: true,
     });
     expect(mockCreate).toHaveBeenCalledWith({
@@ -108,7 +108,7 @@ describe("POST /api/feedback", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     mockFindUnique.mockRejectedValue(new Error("db down"));
 
-    const res = await POST(createRequest(validFeedback));
+    const res = await POST(createRequest(validReview));
 
     expect(res.status).toBe(500);
   });

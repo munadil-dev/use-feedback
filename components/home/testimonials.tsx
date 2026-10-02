@@ -43,7 +43,7 @@ export default function Testimonials() {
           People like being asked
         </h2>
         <p className="mt-4 text-lg leading-7 text-pretty text-zinc-600">
-          Kind words from people who put a feedback link in front of their
+          Kind words from people who put a review link in front of their
           customers.
         </p>
       </header>

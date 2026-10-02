@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const newFeedbackSchema = z.object({
+export const newReviewSchema = z.object({
   id: z.string("Product is required").min(1, "Product is required"),
   message: z.string().trim().min(1, "Message is required"),
   customerName: z.string().trim().min(1, "Name is required"),

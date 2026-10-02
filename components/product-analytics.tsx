@@ -40,14 +40,14 @@ const chartConfig = {
 
 export default function ProductAnalytics({
   views,
-  feedbacks,
+  reviews,
 }: {
   views: { date: Date; count: number }[];
-  feedbacks: { rating: number; createdAt: Date }[];
+  reviews: { rating: number; createdAt: Date }[];
 }) {
   const [range, setRange] = useState(30);
 
-  const series = buildDailySeries(range, views, feedbacks);
+  const series = buildDailySeries(range, views, reviews);
   const totalViews = series.reduce((sum, day) => sum + day.views, 0);
   const totalResponses = series.reduce((sum, day) => sum + day.responses, 0);
 
@@ -158,14 +158,14 @@ export default function ProductAnalytics({
         )}
       </div>
 
-      {feedbacks.length > 0 && (
+      {reviews.length > 0 && (
         <div className="border-t border-zinc-100 p-5 sm:p-6">
           <h2 className="mb-4 font-semibold tracking-tight text-zinc-950">
             Ratings{" "}
             <span className="font-normal text-zinc-500">· all time</span>
           </h2>
 
-          <RatingSummary feedbacks={feedbacks} />
+          <RatingSummary reviews={reviews} />
         </div>
       )}
     </section>

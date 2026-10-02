@@ -39,7 +39,7 @@ const fields: {
   {
     id: "message",
     label: "Message",
-    hint: "A short note asking for feedback.",
+    hint: "A short note asking for a review.",
     placeholder: "We read every reply. Tell us what you love and what to fix.",
     multiline: true,
   },

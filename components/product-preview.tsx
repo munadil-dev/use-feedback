@@ -69,7 +69,7 @@ export default function ProductPreview() {
           <Stars count={5} />
 
           <div className="bg-primary mt-2 flex h-10 items-center justify-center rounded-lg text-sm font-medium text-white">
-            Submit feedback
+            Submit review
           </div>
         </div>
       </div>

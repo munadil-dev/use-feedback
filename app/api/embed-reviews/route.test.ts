@@ -5,12 +5,12 @@ import { GET } from "./route";
 import prisma from "@/lib/db";
 
 vi.mock("@/lib/db", () => ({
-  default: { feedback: { findMany: vi.fn() } },
+  default: { review: { findMany: vi.fn() } },
 }));
 
-const mockFindMany = vi.mocked(prisma.feedback.findMany);
+const mockFindMany = vi.mocked(prisma.review.findMany);
 
-const feedbacks = [
+const reviews = [
   {
     message: "Loved it",
     customerName: "Jane",
@@ -26,23 +26,23 @@ const feedbacks = [
 ];
 
 function embedRequest(query = "?productId=product-1") {
-  return new NextRequest(`http://localhost/api/embed-feedbacks${query}`);
+  return new NextRequest(`http://localhost/api/embed-reviews${query}`);
 }
 
-async function runWidget() {
-  document.body.innerHTML = '<div id="embed-feedbacks"></div>';
+async function runWidget(id = "embed-reviews") {
+  document.body.innerHTML = `<div id="${id}"></div>`;
 
   const res = await GET(embedRequest());
   new Function(await res.text())();
 
-  return document.getElementById("embed-feedbacks")!;
+  return document.getElementById(id)!;
 }
 
-describe("GET /api/embed-feedbacks", () => {
+describe("GET /api/embed-reviews", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubEnv("NEXT_PUBLIC_BASE_URL", "https://vouch.munadil.com/");
-    mockFindMany.mockResolvedValue(feedbacks as never);
+    mockFindMany.mockResolvedValue(reviews as never);
   });
 
   afterEach(() => {
@@ -69,7 +69,7 @@ describe("GET /api/embed-feedbacks", () => {
     );
   });
 
-  it("only fetches favorite feedback for the product", async () => {
+  it("only fetches favorite review for the product", async () => {
     await GET(embedRequest());
 
     expect(mockFindMany).toHaveBeenCalledWith(
@@ -79,7 +79,7 @@ describe("GET /api/embed-feedbacks", () => {
     );
   });
 
-  it("renders a card per feedback with its stars", async () => {
+  it("renders a card per review with its stars", async () => {
     const container = await runWidget();
     const cards = container.children;
 
@@ -104,7 +104,7 @@ describe("GET /api/embed-feedbacks", () => {
   it("exposes the cards as a labelled list", async () => {
     await runWidget();
 
-    const list = screen.getByRole("list", { name: "Customer feedback" });
+    const list = screen.getByRole("list", { name: "Customer reviews" });
 
     expect(within(list).getAllByRole("listitem")).toHaveLength(2);
   });
@@ -131,7 +131,7 @@ describe("GET /api/embed-feedbacks", () => {
     });
   });
 
-  it("leaves the container untouched when there is no feedback", async () => {
+  it("leaves the container untouched when there is no review", async () => {
     mockFindMany.mockResolvedValue([]);
 
     const container = await runWidget();
@@ -148,5 +148,11 @@ describe("GET /api/embed-feedbacks", () => {
       "<img src=x onerror=alert(1)>"
     );
     expect(container.querySelectorAll("img")).toHaveLength(2);
+  });
+
+  it("still fills the old embed-feedbacks container", async () => {
+    const container = await runWidget("embed-feedbacks");
+
+    expect(container.children).toHaveLength(2);
   });
 });

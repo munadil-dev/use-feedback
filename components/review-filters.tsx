@@ -23,7 +23,7 @@ const ratings = [
   })),
 ];
 
-export default function FeedbackFilters({
+export default function ReviewFilters({
   tab,
   onTabChange,
   counts,
@@ -79,8 +79,8 @@ export default function FeedbackFilters({
 
         <Input
           type="search"
-          aria-label="Search feedback"
-          placeholder="Search feedback"
+          aria-label="Search reviews"
+          placeholder="Search reviews"
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           className="pl-9"

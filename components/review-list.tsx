@@ -2,49 +2,45 @@
 
 import { useState } from "react";
 import EmptyState from "./empty-state";
-import FeedbackCard from "./feedback-card";
-import FeedbackFilters, { Tab } from "./feedback-filters";
+import ReviewCard from "./review-card";
+import ReviewFilters, { Tab } from "./review-filters";
 
-type Feedback = React.ComponentProps<typeof FeedbackCard>["feedback"] & {
+type Review = React.ComponentProps<typeof ReviewCard>["review"] & {
   isFavorite: boolean;
 };
 
-function getFavoriteIds(feedbacks: Feedback[]) {
+function getFavoriteIds(reviews: Review[]) {
   return new Set(
-    feedbacks
-      .filter((feedback) => feedback.isFavorite)
-      .map((feedback) => feedback.id)
+    reviews.filter((review) => review.isFavorite).map((review) => review.id)
   );
 }
 
-export default function FeedbackList({ feedbacks }: { feedbacks: Feedback[] }) {
-  const [favoriteIds, setFavoriteIds] = useState(() =>
-    getFavoriteIds(feedbacks)
-  );
-  const [prevFeedbacks, setPrevFeedbacks] = useState(feedbacks);
+export default function ReviewList({ reviews }: { reviews: Review[] }) {
+  const [favoriteIds, setFavoriteIds] = useState(() => getFavoriteIds(reviews));
+  const [prevReviews, setPrevReviews] = useState(reviews);
   const [tab, setTab] = useState<Tab>("all");
   const [shownFavoriteIds, setShownFavoriteIds] = useState(favoriteIds);
   const [rating, setRating] = useState<number | null>(null);
   const [query, setQuery] = useState("");
 
-  if (feedbacks !== prevFeedbacks) {
-    setPrevFeedbacks(feedbacks);
-    const nextFavoriteIds = getFavoriteIds(feedbacks);
+  if (reviews !== prevReviews) {
+    setPrevReviews(reviews);
+    const nextFavoriteIds = getFavoriteIds(reviews);
     setFavoriteIds(nextFavoriteIds);
     setShownFavoriteIds(new Set([...shownFavoriteIds, ...nextFavoriteIds]));
   }
 
-  const favorites = feedbacks.filter((feedback) =>
-    favoriteIds.has(feedback.id)
+  const favorites = reviews.filter((review) =>
+    favoriteIds.has(review.id)
   ).length;
 
   const search = query.trim().toLowerCase();
-  const visible = feedbacks.filter(
-    (feedback) =>
-      (tab === "all" || shownFavoriteIds.has(feedback.id)) &&
-      (rating === null || feedback.rating === rating) &&
-      [feedback.message, feedback.customerName, feedback.customerEmail].some(
-        (text) => text.toLowerCase().includes(search)
+  const visible = reviews.filter(
+    (review) =>
+      (tab === "all" || shownFavoriteIds.has(review.id)) &&
+      (rating === null || review.rating === rating) &&
+      [review.message, review.customerName, review.customerEmail].some((text) =>
+        text.toLowerCase().includes(search)
       )
   );
 
@@ -53,14 +49,14 @@ export default function FeedbackList({ feedbacks }: { feedbacks: Feedback[] }) {
     setShownFavoriteIds(favoriteIds);
   }
 
-  function setFavorite(feedbackId: string, isFavorite: boolean) {
+  function setFavorite(reviewId: string, isFavorite: boolean) {
     setFavoriteIds((ids) => {
       const next = new Set(ids);
 
       if (isFavorite) {
-        next.add(feedbackId);
+        next.add(reviewId);
       } else {
-        next.delete(feedbackId);
+        next.delete(reviewId);
       }
 
       return next;
@@ -70,21 +66,21 @@ export default function FeedbackList({ feedbacks }: { feedbacks: Feedback[] }) {
   return (
     <>
       <h2 className="mt-12 text-xl font-semibold tracking-tight text-zinc-950">
-        Feedback
+        Review
       </h2>
 
-      {feedbacks.length === 0 ? (
+      {reviews.length === 0 ? (
         <EmptyState
-          title="No feedback yet"
+          title="No reviews yet"
           body="Responses show up here as soon as customers send them."
           className="mt-4"
         />
       ) : (
         <>
-          <FeedbackFilters
+          <ReviewFilters
             tab={tab}
             onTabChange={changeTab}
-            counts={{ all: feedbacks.length, favorites }}
+            counts={{ all: reviews.length, favorites }}
             rating={rating}
             onRatingChange={setRating}
             query={query}
@@ -93,19 +89,19 @@ export default function FeedbackList({ feedbacks }: { feedbacks: Feedback[] }) {
 
           {visible.length === 0 ? (
             <EmptyState
-              title="No matching feedback"
+              title="No matching reviews"
               body="Try another tab, rating or search."
               className="mt-4"
             />
           ) : (
             <ul className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-              {visible.map((feedback) => (
-                <li key={feedback.id}>
-                  <FeedbackCard
-                    feedback={feedback}
-                    isFavorite={favoriteIds.has(feedback.id)}
+              {visible.map((review) => (
+                <li key={review.id}>
+                  <ReviewCard
+                    review={review}
+                    isFavorite={favoriteIds.has(review.id)}
                     onFavoriteChange={(isFavorite) =>
-                      setFavorite(feedback.id, isFavorite)
+                      setFavorite(review.id, isFavorite)
                     }
                   />
                 </li>

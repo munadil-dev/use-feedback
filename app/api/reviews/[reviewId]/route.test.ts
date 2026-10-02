@@ -7,18 +7,18 @@ import prisma from "@/lib/db";
 
 vi.mock("@/lib/auth", () => ({ auth: vi.fn() }));
 vi.mock("@/lib/db", () => ({
-  default: { feedback: { updateMany: vi.fn(), deleteMany: vi.fn() } },
+  default: { review: { updateMany: vi.fn(), deleteMany: vi.fn() } },
 }));
 
 const mockAuth = vi.mocked(auth as () => Promise<unknown>);
-const mockUpdateMany = vi.mocked(prisma.feedback.updateMany);
-const mockDeleteMany = vi.mocked(prisma.feedback.deleteMany);
+const mockUpdateMany = vi.mocked(prisma.review.updateMany);
+const mockDeleteMany = vi.mocked(prisma.review.deleteMany);
 
-const context = { params: Promise.resolve({ feedbackId: "feedback-1" }) };
+const context = { params: Promise.resolve({ reviewId: "review-1" }) };
 
 function favorite(isFavorite: unknown) {
   return PATCH(
-    new NextRequest("http://localhost/api/feedback/feedback-1", {
+    new NextRequest("http://localhost/api/reviews/review-1", {
       method: "PATCH",
       body: JSON.stringify({ isFavorite }),
     }),
@@ -28,7 +28,7 @@ function favorite(isFavorite: unknown) {
 
 function remove() {
   return DELETE(
-    new NextRequest("http://localhost/api/feedback/feedback-1", {
+    new NextRequest("http://localhost/api/reviews/review-1", {
       method: "DELETE",
     }),
     context
@@ -39,7 +39,7 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 
-describe("PATCH /api/feedback/[feedbackId]", () => {
+describe("PATCH /api/reviews/[reviewId]", () => {
   it("returns 401 when the user is not signed in", async () => {
     mockAuth.mockResolvedValue(null);
 
@@ -67,19 +67,19 @@ describe("PATCH /api/feedback/[feedbackId]", () => {
     expect(mockUpdateMany).not.toHaveBeenCalled();
   });
 
-  it("only updates feedback on products the user owns", async () => {
+  it("only updates review on products the user owns", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
     mockUpdateMany.mockResolvedValue({ count: 1 });
 
     await favorite(true);
 
     expect(mockUpdateMany).toHaveBeenCalledWith({
-      where: { id: "feedback-1", product: { userId: "user-1" } },
+      where: { id: "review-1", product: { userId: "user-1" } },
       data: { isFavorite: true },
     });
   });
 
-  it("returns 404 when the feedback belongs to another user", async () => {
+  it("returns 404 when the review belongs to another user", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-2" } });
     mockUpdateMany.mockResolvedValue({ count: 0 });
 
@@ -87,7 +87,7 @@ describe("PATCH /api/feedback/[feedbackId]", () => {
 
     expect(res.status).toBe(404);
     expect(await res.json()).toEqual({
-      message: "Feedback not found",
+      message: "Review not found",
       success: false,
     });
   });
@@ -116,7 +116,7 @@ describe("PATCH /api/feedback/[feedbackId]", () => {
   });
 });
 
-describe("DELETE /api/feedback/[feedbackId]", () => {
+describe("DELETE /api/reviews/[reviewId]", () => {
   it("returns 401 when the user is not signed in", async () => {
     mockAuth.mockResolvedValue(null);
 
@@ -135,18 +135,18 @@ describe("DELETE /api/feedback/[feedbackId]", () => {
     expect(mockDeleteMany).not.toHaveBeenCalled();
   });
 
-  it("only deletes feedback on products the user owns", async () => {
+  it("only deletes review on products the user owns", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
     mockDeleteMany.mockResolvedValue({ count: 1 });
 
     await remove();
 
     expect(mockDeleteMany).toHaveBeenCalledWith({
-      where: { id: "feedback-1", product: { userId: "user-1" } },
+      where: { id: "review-1", product: { userId: "user-1" } },
     });
   });
 
-  it("returns 404 when the feedback belongs to another user", async () => {
+  it("returns 404 when the review belongs to another user", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-2" } });
     mockDeleteMany.mockResolvedValue({ count: 0 });
 
@@ -154,12 +154,12 @@ describe("DELETE /api/feedback/[feedbackId]", () => {
 
     expect(res.status).toBe(404);
     expect(await res.json()).toEqual({
-      message: "Feedback not found",
+      message: "Review not found",
       success: false,
     });
   });
 
-  it("returns 200 when the owner deletes their feedback", async () => {
+  it("returns 200 when the owner deletes their review", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
     mockDeleteMany.mockResolvedValue({ count: 1 });
 
@@ -167,7 +167,7 @@ describe("DELETE /api/feedback/[feedbackId]", () => {
 
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({
-      message: "Feedback deleted successfully",
+      message: "Review deleted successfully",
       success: true,
     });
   });

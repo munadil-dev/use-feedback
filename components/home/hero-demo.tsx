@@ -34,7 +34,7 @@ export default function HeroDemo() {
           className="border-b border-zinc-200 md:border-r md:border-b-0"
         >
           <header className="flex items-baseline justify-between border-b border-zinc-200 px-5 py-4">
-            <p className="text-sm font-semibold text-zinc-900">Acme feedback</p>
+            <p className="text-sm font-semibold text-zinc-900">Acme reviews</p>
             <p className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium tabular-nums">
               {favorites.length} of {demoResponses.length} on your site
             </p>
@@ -61,7 +61,7 @@ export default function HeroDemo() {
                 <HeartButton
                   pressed={favorites.includes(response.id)}
                   onToggle={() => toggle(response.id)}
-                  label={`Show ${response.name}'s feedback on your site`}
+                  label={`Show ${response.name}'s review on your site`}
                   className="-m-1.5"
                 />
               </li>

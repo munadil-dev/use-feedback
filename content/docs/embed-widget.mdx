@@ -1,6 +1,6 @@
 ---
 title: Embed the widget
-description: Show your favorited feedback on any website with one script tag.
+description: Show your favorited reviews on any website with one script tag.
 ---
 
 ## Add it to your site
@@ -8,34 +8,34 @@ description: Show your favorited feedback on any website with one script tag.
 Open your product in the [dashboard](/dashboard) and copy the embed code. It looks like this:
 
 ```html
-<div id="embed-feedbacks"></div>
-<script src="https://vouch.munadil.com/api/embed-feedbacks?productId=YOUR_PRODUCT_ID"></script>
+<div id="embed-reviews"></div>
+<script src="https://vouch.munadil.com/api/embed-reviews?productId=YOUR_PRODUCT_ID"></script>
 ```
 
-Paste it into your site's HTML where the feedback should appear. The widget fills the `div` with a card for each favorited piece of feedback.
+Paste it into your site's HTML where the reviews should appear. The widget fills the `div` with a card for each favorited review.
 
 It works on any site that lets you add HTML: plain HTML, WordPress, Webflow, Framer, or a React/Vue/Svelte app. The script is plain JavaScript with no dependencies and no iframe.
 
 ## What it shows
 
-- Only feedback you [favorited](/docs/manage-feedback#favorite-feedback).
+- Only reviews you [favorited](/docs/manage-review#favorite-reviews).
 - Each customer's name, photo (or a default avatar), star rating and message.
-- Nothing at all if you haven't favorited any feedback yet. The `div` stays empty and takes up no space.
+- Nothing at all if you haven't favorited any reviews yet. The `div` stays empty and takes up no space.
 
 ## Good to know
 
 <Callout title="Updates can take up to 2 minutes">
-  The widget is cached for speed. After you favorite or unfavorite feedback, it
+  The widget is cached for speed. After you favorite or unfavorite a review, it
   can take up to 2 minutes to show on your site.
 </Callout>
 
-- **One widget per page.** The script looks for the element with `id="embed-feedbacks"`, so add one per page.
+- **One widget per page.** The script looks for the element with `id="embed-reviews"`, so add one per page.
 - **Place the `div` before the script.** The script fills the `div` as soon as it loads, so the `div` has to exist by then.
 - **Accessible.** Cards are announced as a list, ratings are read as "Rated 4 out of 5", and photos load lazily.
-- **Safe.** Feedback is inserted as text, never as HTML, so a customer can't inject code into your site.
+- **Safe.** Reviews are inserted as text, never as HTML, so a customer can't inject code into your site.
 
 ## Troubleshooting
 
-**Nothing shows up.** Check that you favorited at least one piece of feedback, that the `productId` in the script URL matches your product, and that the `div` comes before the `<script>`.
+**Nothing shows up.** Check that you favorited at least one review, that the `productId` in the script URL matches your product, and that the `div` comes before the `<script>`.
 
 **My change isn't showing.** Wait up to 2 minutes for the cache to refresh, then reload the page.

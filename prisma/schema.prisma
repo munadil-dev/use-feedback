@@ -23,13 +23,13 @@ model Product {
   createdAt DateTime      @default(now())
   userId    String
   user      User          @relation(fields: [userId], references: [id])
-  feedbacks Feedback[]
+  reviews   Review[]
   views     ProductView[]
 
   @@index([userId])
 }
 
-model Feedback {
+model Review {
   id            String   @id @default(uuid())
   message       String
   customerName  String

@@ -2,7 +2,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import BackLink from "@/components/back-link";
 import { notFound, redirect } from "next/navigation";
-import FeedbackList from "@/components/feedback-list";
+import ReviewList from "@/components/review-list";
 import ProductAnalytics from "@/components/product-analytics";
 import { ProductActions, ShareSection } from "@/components/product-overview";
 
@@ -13,8 +13,8 @@ export default async function Product({
 }) {
   const { productId } = await params;
   const session = await auth();
-  const code = `<div id="embed-feedbacks"></div>
-<script src="${process.env.NEXT_PUBLIC_BASE_URL}api/embed-feedbacks?productId=${productId}"></script>`;
+  const code = `<div id="embed-reviews"></div>
+<script src="${process.env.NEXT_PUBLIC_BASE_URL}api/embed-reviews?productId=${productId}"></script>`;
 
   if (!session?.user?.id) {
     redirect("/auth/signin");
@@ -27,7 +27,7 @@ export default async function Product({
     select: {
       userId: true,
       name: true,
-      feedbacks: {
+      reviews: {
         orderBy: { createdAt: "desc" },
       },
       views: {
@@ -47,9 +47,9 @@ export default async function Product({
     redirect("/");
   }
 
-  const productFeedbackURL = `${process.env.NEXT_PUBLIC_BASE_URL}${productId}`;
+  const productReviewURL = `${process.env.NEXT_PUBLIC_BASE_URL}${productId}`;
 
-  const hasFeedback = productDetails.feedbacks.length > 0;
+  const hasReview = productDetails.reviews.length > 0;
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-12">
@@ -62,29 +62,29 @@ export default async function Product({
           </h1>
 
           <p className="mt-1.5 text-[15px] text-zinc-600">
-            {hasFeedback
+            {hasReview
               ? "Favorite the replies you want on your site."
               : "Share your link to collect the first reply."}
           </p>
         </div>
 
-        <ProductActions url={productFeedbackURL} />
+        <ProductActions url={productReviewURL} />
       </header>
 
       <div className="mt-8 flex flex-col gap-4">
         <ProductAnalytics
           views={productDetails.views}
-          feedbacks={productDetails.feedbacks}
+          reviews={productDetails.reviews}
         />
 
         <ShareSection
-          url={productFeedbackURL}
+          url={productReviewURL}
           code={code}
-          defaultOpen={!hasFeedback}
+          defaultOpen={!hasReview}
         />
       </div>
 
-      <FeedbackList feedbacks={productDetails.feedbacks} />
+      <ReviewList reviews={productDetails.reviews} />
     </main>
   );
 }

@@ -1,15 +1,15 @@
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 import TrackView from "@/components/track-view";
-import FeedbackForm from "@/components/feedback-form";
+import ReviewForm from "@/components/review-form";
 
-interface FeedbackPageProps {
+interface ReviewPageProps {
   params: Promise<{
     productId: string;
   }>;
 }
 
-export default async function FeedbackPage({ params }: FeedbackPageProps) {
+export default async function ReviewPage({ params }: ReviewPageProps) {
   const { productId } = await params;
 
   const productDetails = await prisma.product.findUnique({
@@ -27,7 +27,7 @@ export default async function FeedbackPage({ params }: FeedbackPageProps) {
     <>
       <TrackView productId={productDetails.id} />
 
-      <FeedbackForm productDetails={productDetails} />
+      <ReviewForm productDetails={productDetails} />
     </>
   );
 }

@@ -9,7 +9,7 @@ import { grainTexture } from "@/lib/constant/ui.constant";
 import { siteLinks } from "@/lib/constant/site.constant";
 import skyImage from "@/public/sky.jpg";
 import {
-  demoFeedbackUrl,
+  demoReviewUrl,
   embedCode,
   platforms,
   stack,
@@ -272,7 +272,7 @@ function FormMock() {
           Add a photo
         </span>
         <span className="bg-primary shadow-highlight rounded-md px-3 py-1.5 text-xs font-medium text-white">
-          Send feedback
+          Submit review
         </span>
       </div>
     </div>
@@ -295,7 +295,7 @@ function EmailMock() {
             Hi Priya, got a minute? Tell us how it went.
           </p>
           <a
-            href={demoFeedbackUrl}
+            href={demoReviewUrl}
             target="_blank"
             className={cn(buttonVariants({ size: "sm" }), "mt-3 w-full")}
           >
@@ -303,7 +303,7 @@ function EmailMock() {
           </a>
         </div>
       </article>
-      <CopyLink href={demoFeedbackUrl} display="vouch.munadil.com/cm0w1y…" />
+      <CopyLink href={demoReviewUrl} display="vouch.munadil.com/cm0w1y…" />
     </div>
   );
 }
@@ -334,11 +334,11 @@ function EmbedCode() {
   return (
     <CopySnippet code={embedCode}>
       <EmbedLine tag="div" attr="id">
-        embed-feedbacks
+        embed-reviews
       </EmbedLine>
       {"\n"}
       <EmbedLine tag="script" attr="src">
-        https://vouch.munadil.com/api/embed-feedbacks?productId=
+        https://vouch.munadil.com/api/embed-reviews?productId=
         <span className="rounded bg-white/10 px-1 text-white">
           YOUR_PRODUCT_ID
         </span>

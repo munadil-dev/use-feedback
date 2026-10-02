@@ -10,8 +10,8 @@ import { Stars } from "./home/stars";
 import { HeartButton } from "./home/interactive";
 import DeleteDialog from "./delete-dialog";
 
-interface FeedbackProps {
-  feedback: {
+interface ReviewProps {
+  review: {
     id: string;
     message: string;
     customerName: string;
@@ -24,12 +24,12 @@ interface FeedbackProps {
   onFavoriteChange: (isFavorite: boolean) => void;
 }
 
-export default function FeedbackCard({
-  feedback,
+export default function ReviewCard({
+  review,
   isFavorite,
   onFavoriteChange,
-}: FeedbackProps) {
-  const createdAt = new Date(feedback.createdAt);
+}: ReviewProps) {
+  const createdAt = new Date(review.createdAt);
 
   const saving = useRef(false);
 
@@ -41,7 +41,7 @@ export default function FeedbackCard({
     onFavoriteChange(newFavorite);
 
     try {
-      await axios.patch(`/api/feedback/${feedback.id}`, {
+      await axios.patch(`/api/reviews/${review.id}`, {
         isFavorite: newFavorite,
       });
     } catch (err) {
@@ -63,7 +63,7 @@ export default function FeedbackCard({
   return (
     <article className="shadow-card flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5">
       <header className="flex items-center justify-between gap-3">
-        <Stars count={feedback.rating} size="sm" />
+        <Stars count={review.rating} size="sm" />
 
         <time
           dateTime={createdAt.toISOString()}
@@ -79,32 +79,29 @@ export default function FeedbackCard({
       </header>
 
       <p className="mt-3 flex-1 text-[15px] leading-6 break-words text-zinc-800">
-        {feedback.message}
+        {review.message}
       </p>
 
       <footer className="mt-5 flex items-center gap-3 border-t border-zinc-100 pt-4">
-        <CustomerPhoto
-          name={feedback.customerName}
-          src={feedback.customerImage}
-        />
+        <CustomerPhoto name={review.customerName} src={review.customerImage} />
 
         <p className="flex min-w-0 flex-1 flex-col text-sm">
           <span className="truncate font-medium text-zinc-950">
-            {feedback.customerName}
+            {review.customerName}
           </span>
 
           <span className="truncate text-xs text-zinc-500">
-            {feedback.customerEmail}
+            {review.customerEmail}
           </span>
         </p>
 
         <HeartButton
           pressed={isFavorite}
           onToggle={toggleFavorite}
-          label={`Show ${feedback.customerName}'s feedback on your site`}
+          label={`Show ${review.customerName}'s review on your site`}
         />
 
-        <DeleteFeedbackAlert feedbackId={feedback.id} />
+        <DeleteReviewAlert reviewId={review.id} />
       </footer>
     </article>
   );
@@ -129,14 +126,14 @@ function CustomerPhoto({ name, src }: { name: string; src: string | null }) {
   );
 }
 
-function DeleteFeedbackAlert({ feedbackId }: { feedbackId: string }) {
+function DeleteReviewAlert({ reviewId }: { reviewId: string }) {
   const router = useRouter();
 
-  const removeFeedback = async () => {
+  const removeReview = async () => {
     const toastId = toast.loading("Removing...");
 
     try {
-      const res = await axios.delete(`/api/feedback/${feedbackId}`);
+      const res = await axios.delete(`/api/reviews/${reviewId}`);
 
       if (res.data.success) {
         toast.dismiss(toastId);
@@ -149,7 +146,7 @@ function DeleteFeedbackAlert({ feedbackId }: { feedbackId: string }) {
       if (err instanceof AxiosError) {
         toast.error(
           err.response?.data?.message ??
-            "Could not delete the feedback. Try again."
+            "Could not delete the review. Try again."
         );
       } else {
         toast.error("An unexpected error occurred");
@@ -159,9 +156,9 @@ function DeleteFeedbackAlert({ feedbackId }: { feedbackId: string }) {
 
   return (
     <DeleteDialog
-      description="This action cannot be undone. This will permanently delete the feedback from the product and remove it from our servers."
-      onConfirm={removeFeedback}
-      triggerLabel="Delete feedback"
+      description="This action cannot be undone. This will permanently delete the review from the product and remove it from our servers."
+      onConfirm={removeReview}
+      triggerLabel="Delete review"
       triggerClassName="-mr-1.5 flex shrink-0 size-8 cursor-pointer items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden"
     >
       <Trash2 className="size-4" />
