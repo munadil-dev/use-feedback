@@ -1,8 +1,8 @@
 export const embedCode = `<div id="embed-feedbacks"></div>
-<script src="https://usefeedback.munadil.com/api/embed-feedbacks?productId=YOUR_PRODUCT_ID"></script>`;
+<script src="https://vouch.munadil.com/api/embed-feedbacks?productId=YOUR_PRODUCT_ID"></script>`;
 
 export const demoFeedbackUrl =
-  "https://usefeedback.munadil.com/cm0w1ywfi0000avxg97mkple4";
+  "https://vouch.munadil.com/cm0w1ywfi0000avxg97mkple4";
 
 export const platforms = [
   { name: "WordPress", slug: "wordpress" },

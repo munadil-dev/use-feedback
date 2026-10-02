@@ -2,47 +2,47 @@ export const testimonials = [
   {
     name: "Jane D.",
     username: "@jane",
-    body: "UseFeedback transformed how we collect and analyze customer insights. Highly recommended!",
+    body: "Vouch turned our happy customers into a wall of reviews on our homepage. Highly recommended!",
   },
   {
     name: "Mark T.",
     username: "@mark",
-    body: "No other platform compares to UseFeedback for customizable surveys.",
+    body: "One link in our welcome email and the testimonials started rolling in.",
   },
   {
     name: "Emily R.",
     username: "@emily",
-    body: "Seamless integration with our tools made collecting feedback easy and effective!",
+    body: "Two lines of HTML and our best reviews were live on the site.",
   },
   {
     name: "Tom K.",
     username: "@tom",
-    body: "Fantastic user experience! Easy to create forms and increase response rates.",
+    body: "Customers leave a review in under a minute. No account, no friction.",
   },
   {
     name: "Sarah L.",
     username: "@sarah",
-    body: "UseFeedback is a game changer! It provides actionable customer insights.",
+    body: "Vouch is a game changer! Our landing page finally has real social proof.",
   },
   {
     name: "Chris M.",
     username: "@chris",
-    body: "Versatile platform for gathering feedback through surveys and widgets.",
+    body: "I favorite the best reviews and they show up on my site automatically.",
   },
   {
     name: "David H.",
     username: "@david",
-    body: "UseFeedback helps me stay in tune with my customers' needs.",
+    body: "Vouch makes asking for testimonials feel effortless.",
   },
   {
     name: "Jessica W.",
     username: "@jessica",
-    body: "The dashboard visualizes feedback trends, making insights easy to share.",
+    body: "The dashboard shows views, responses and ratings at a glance.",
   },
   {
     name: "Brian P.",
     username: "@brian",
-    body: "I can't run my business without UseFeedback. Essential for understanding clients.",
+    body: "I can't imagine launching without Vouch. Our reviews do the selling now.",
   },
 ];
 

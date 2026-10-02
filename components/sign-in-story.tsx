@@ -42,7 +42,7 @@ export default function SignInStory() {
       <div aria-hidden="true" className="mx-auto flex w-full max-w-sm flex-col">
         <p className="flex w-fit items-center gap-2 self-center rounded-full bg-white/90 py-1.5 pr-4 pl-3 text-sm text-zinc-700 shadow-[0_1px_2px_rgba(20,30,90,0.2)] backdrop-blur-sm">
           <Link2 className="text-primary size-4" />
-          usefeedback.munadil.com/acme
+          vouch.munadil.com/acme
         </p>
 
         <ul className="mt-6 flex h-[17.5rem] flex-col gap-2.5">

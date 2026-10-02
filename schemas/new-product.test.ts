@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { newProductSchema } from "./new-product";
 
 const validProduct = {
-  name: "UseFeedback",
+  name: "Vouch",
   title: "How was your experience?",
   message: "Thanks for the feedback!",
 };

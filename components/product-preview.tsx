@@ -35,7 +35,7 @@ export default function ProductPreview() {
       <div className="mx-auto mt-5 max-w-md overflow-hidden rounded-xl border border-white/60 bg-white shadow-[0_1px_2px_rgba(20,30,90,0.2),0_32px_64px_-24px_rgba(20,30,90,0.6)]">
         <div className="flex items-center gap-3 border-b border-zinc-200 px-4 py-2.5">
           <WindowDots />
-          <span className="text-xs text-zinc-500">usefeedback.munadil.com</span>
+          <span className="text-xs text-zinc-500">vouch.munadil.com</span>
         </div>
 
         <div aria-hidden="true" className="flex flex-col gap-3 bg-zinc-50 p-6">

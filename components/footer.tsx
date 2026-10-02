@@ -10,10 +10,11 @@ export default function Footer() {
             className="font-instrument-serif text-xl font-medium text-zinc-950"
             href="/"
           >
-            useFeedback
+            Vouch
           </Link>
           <p className="mt-3 max-w-xs text-sm text-zinc-500">
-            Collect customer feedback and show the best of it on your website.
+            Collect testimonials from your customers and show the best ones on
+            your website.
           </p>
           <ul className="mt-5 flex items-center gap-4 [&_svg]:size-4.5">
             {socialLinks.map(({ label, href, Icon }) => (
@@ -55,13 +56,13 @@ export default function Footer() {
 
       <div className="border-t border-zinc-200">
         <p className="mx-auto max-w-6xl px-5 py-6 text-xs text-zinc-500">
-          © {new Date().getFullYear()} UseFeedback. MIT licensed.
+          © {new Date().getFullYear()} Vouch. MIT licensed.
         </p>
       </div>
 
       <div aria-hidden="true" className="overflow-hidden">
-        <p className="mx-auto max-w-6xl translate-y-[18%] mask-[linear-gradient(to_bottom,#000_40%,transparent)] px-5 text-center text-[clamp(3.5rem,15vw,12.25rem)] leading-[0.8] font-semibold tracking-[-0.06em] text-zinc-200 select-none">
-          useFeedback
+        <p className="mx-auto max-w-6xl translate-y-[18%] mask-[linear-gradient(to_bottom,#000_40%,transparent)] px-5 text-center text-[clamp(4.5rem,22vw,20rem)] leading-[0.8] font-semibold tracking-[-0.06em] text-zinc-200 select-none">
+          Vouch
         </p>
       </div>
     </footer>

@@ -63,7 +63,7 @@ export default async function Product({
 
           <p className="mt-1.5 text-[15px] text-zinc-600">
             {hasFeedback
-              ? "Heart the replies you want on your site."
+              ? "Favorite the replies you want on your site."
               : "Share your link to collect the first reply."}
           </p>
         </div>

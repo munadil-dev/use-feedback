@@ -1,5 +1,5 @@
 export const siteLinks = {
-  github: "https://github.com/munadil-dev/use-feedback",
-  issues: "https://github.com/munadil-dev/use-feedback/issues",
+  github: "https://github.com/munadil-dev/vouch",
+  issues: "https://github.com/munadil-dev/vouch/issues",
   x: "https://x.com/munadil_xd",
 };

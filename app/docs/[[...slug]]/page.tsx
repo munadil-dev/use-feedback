@@ -44,7 +44,7 @@ export async function generateMetadata(
   if (!page) notFound();
 
   return {
-    title: `${page.data.title} | UseFeedback Docs`,
+    title: `${page.data.title} | Vouch Docs`,
     description: page.data.description,
   };
 }

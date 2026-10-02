@@ -1,18 +1,18 @@
 <div align="center">
 
-<img src="public/images/readme/banner.png" alt="useFeedback" width="100%" />
+<img src="public/images/readme/banner.png" alt="Vouch" width="100%" />
 
-**Collect customer feedback with a shareable link and show your best reviews on any website with one script tag.**
+**Collect testimonials with a shareable link and show the best ones on any website with one script tag.**
 
 No hosting, no forms to build, no technical skills required.
 
-[![CI](https://github.com/munadil-dev/use-feedback/actions/workflows/ci.yml/badge.svg)](https://github.com/munadil-dev/use-feedback/actions/workflows/ci.yml)
+[![CI](https://github.com/munadil-dev/vouch/actions/workflows/ci.yml/badge.svg)](https://github.com/munadil-dev/vouch/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-7-3178c6?logo=typescript&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-7-2d3748?logo=prisma)
 
-[Live demo](https://usefeedback.munadil.com) · [Documentation](https://usefeedback.munadil.com/docs) · [Report a bug](https://github.com/munadil-dev/use-feedback/issues)
+[Live demo](https://vouch.munadil.com) · [Documentation](https://vouch.munadil.com/docs) · [Report a bug](https://github.com/munadil-dev/vouch/issues)
 
 </div>
 
@@ -23,7 +23,7 @@ No hosting, no forms to build, no technical skills required.
 - **Shareable feedback forms**: create a product and get a public link where customers leave a message, a 1–5 star rating and an optional photo.
 - **Dashboard**: see every submission per product, favorite the best ones and delete spam.
 - **Analytics**: daily views, responses and conversion over 7, 30 or 90 days, plus an all-time rating breakdown.
-- **Embeddable widget**: paste two lines of HTML to show your favorited feedback on any site. It's plain JavaScript with no framework and no iframe, served from a CDN cache.
+- **Embeddable widget**: paste two lines of HTML to show your favorited testimonials on any site. It's plain JavaScript with no framework and no iframe, served from a CDN cache.
 - **Accessible by default**: a keyboard-operable star rating, inline form errors announced to screen readers, and widget cards with list semantics and text alternatives for ratings.
 - **Validated end to end**: the same Zod schema checks input in the browser and on the server.
 - **Secure**: Google sign-in via Auth.js, and every mutation is scoped to the owner of the product.
@@ -45,7 +45,7 @@ Copy the snippet from your product page in the dashboard and paste it where the 
 
 ```html
 <div id="embed-feedbacks"></div>
-<script src="https://usefeedback.munadil.com/api/embed-feedbacks?productId=YOUR_PRODUCT_ID"></script>
+<script src="https://vouch.munadil.com/api/embed-feedbacks?productId=YOUR_PRODUCT_ID"></script>
 ```
 
 Only feedback you mark as a favorite is shown. Responses are cached for up to 2 minutes, so a newly favorited review appears shortly after.
@@ -79,8 +79,8 @@ Only feedback you mark as a favorite is shown. Responses are cached for up to 2 
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/munadil-dev/use-feedback.git
-   cd use-feedback
+   git clone https://github.com/munadil-dev/vouch.git
+   cd vouch
    ```
 
 2. **Configure environment variables**
@@ -171,7 +171,7 @@ Contributions are welcome.
 3. Run `pnpm format`, `pnpm test` and `pnpm build`.
 4. Open a pull request. CI must pass before merging.
 
-For larger changes, please [open an issue](https://github.com/munadil-dev/use-feedback/issues) first to discuss the idea.
+For larger changes, please [open an issue](https://github.com/munadil-dev/vouch/issues) first to discuss the idea.
 
 ## License
 

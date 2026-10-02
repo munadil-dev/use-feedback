@@ -14,8 +14,9 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "UseFeedback",
-  description: "Getting feedback made easy",
+  title: "Vouch",
+  description:
+    "Collect testimonials with one link and show the best ones on your site.",
 };
 
 export default function RootLayout({
