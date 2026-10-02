@@ -7,12 +7,6 @@ export const demoResponses = [
       "Moved our whole team over in an afternoon. The export alone saved me a weekend.",
   },
   {
-    id: "guest",
-    name: "guest_2231",
-    rating: 1,
-    message: "asdfgh",
-  },
-  {
     id: "daniel",
     name: "Daniel O.",
     rating: 4,
