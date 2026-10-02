@@ -16,15 +16,17 @@ model User {
 }
 
 model Product {
-  id        String     @id @default(cuid())
+  id        String        @id @default(cuid())
   name      String
   title     String
   message   String
-  createdAt DateTime   @default(now())
+  createdAt DateTime      @default(now())
   userId    String
-  user      User       @relation(fields: [userId], references: [id])
+  user      User          @relation(fields: [userId], references: [id])
   feedbacks Feedback[]
   views     ProductView[]
+
+  @@index([userId])
 }
 
 model Feedback {
@@ -38,6 +40,8 @@ model Feedback {
   createdAt     DateTime @default(now())
   productId     String
   product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, isFavorite])
 }
 
 model ProductView {
