@@ -5,7 +5,7 @@ import { Check, ChevronDown, Copy, ExternalLink, Star } from "lucide-react";
 import CodeComponent from "./code";
 import { Stars } from "./home/stars";
 import { Button, buttonVariants } from "./ui/button";
-import { averageRating, formatRating } from "@/lib/feedback-stats";
+import { averageRating, formatRating } from "@/lib/review-stats";
 
 export function ProductActions({ url }: { url: string }) {
   const [copied, setCopied] = useState(false);
@@ -48,16 +48,12 @@ export function ProductActions({ url }: { url: string }) {
   );
 }
 
-export function RatingSummary({
-  feedbacks,
-}: {
-  feedbacks: { rating: number }[];
-}) {
-  const average = averageRating(feedbacks);
+export function RatingSummary({ reviews }: { reviews: { rating: number }[] }) {
+  const average = averageRating(reviews);
 
   const counts = [5, 4, 3, 2, 1].map((rating) => ({
     rating,
-    count: feedbacks.filter((feedback) => feedback.rating === rating).length,
+    count: reviews.filter((review) => review.rating === rating).length,
   }));
 
   return (
@@ -70,7 +66,7 @@ export function RatingSummary({
         <Stars count={Math.round(average)} className="mt-3" />
 
         <p className="mt-2 text-sm text-zinc-500 tabular-nums">
-          {feedbacks.length} {feedbacks.length === 1 ? "response" : "responses"}
+          {reviews.length} {reviews.length === 1 ? "response" : "responses"}
         </p>
       </div>
 
@@ -92,7 +88,7 @@ export function RatingSummary({
               <span
                 className="block h-full rounded-full bg-amber-400"
                 style={{
-                  width: `${feedbacks.length ? (count / feedbacks.length) * 100 : 0}%`,
+                  width: `${reviews.length ? (count / reviews.length) * 100 : 0}%`,
                 }}
               />
             </span>
@@ -126,7 +122,7 @@ export function ShareSection({
           </span>
 
           <span className="mt-0.5 block text-sm text-zinc-600">
-            Your feedback link and the widget for your site.
+            Your review link and the widget for your site.
           </span>
         </span>
 
@@ -138,10 +134,10 @@ export function ShareSection({
 
       <div className="grid grid-cols-1 gap-6 border-t border-zinc-100 px-5 py-5 sm:px-6 lg:grid-cols-2">
         <div>
-          <h2 className="text-sm font-medium text-zinc-950">Feedback link</h2>
+          <h2 className="text-sm font-medium text-zinc-950">Review link</h2>
 
           <p className="mt-1 text-sm text-zinc-600">
-            Send this to customers so they can leave feedback.
+            Send this to customers so they can leave a review.
           </p>
 
           <a

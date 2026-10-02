@@ -4,6 +4,11 @@ import { createMDX } from "fumadocs-mdx/next";
 
 const nextConfig = {
   agentRules: false,
+  async rewrites() {
+    return [
+      { source: "/api/embed-feedbacks", destination: "/api/embed-reviews" },
+    ];
+  },
   images: {
     remotePatterns: [
       {

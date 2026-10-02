@@ -20,7 +20,7 @@ No hosting, no forms to build, no technical skills required.
 
 ## Features
 
-- **Shareable feedback forms**: create a product and get a public link where customers leave a message, a 1–5 star rating and an optional photo.
+- **Shareable review form**: create a product and get a public link where customers leave a message, a 1–5 star rating and an optional photo.
 - **Dashboard**: see every submission per product, favorite the best ones and delete spam.
 - **Analytics**: daily views, responses and conversion over 7, 30 or 90 days, plus an all-time rating breakdown.
 - **Embeddable widget**: paste two lines of HTML to show your favorited testimonials on any site. It's plain JavaScript with no framework and no iframe, served from a CDN cache.
@@ -33,22 +33,22 @@ No hosting, no forms to build, no technical skills required.
 
 ```mermaid
 flowchart LR
-    A[Create a product] --> B[Share the feedback link]
-    B --> C[Customers submit feedback]
+    A[Create a product] --> B[Share the review link]
+    B --> C[Customers submit reviews]
     C --> D[Review and favorite in the dashboard]
     D --> E[Favorites appear in your embedded widget]
 ```
 
 ## Embed the widget
 
-Copy the snippet from your product page in the dashboard and paste it where the feedback should appear:
+Copy the snippet from your product page in the dashboard and paste it where the reviews should appear:
 
 ```html
-<div id="embed-feedbacks"></div>
-<script src="https://vouch.munadil.com/api/embed-feedbacks?productId=YOUR_PRODUCT_ID"></script>
+<div id="embed-reviews"></div>
+<script src="https://vouch.munadil.com/api/embed-reviews?productId=YOUR_PRODUCT_ID"></script>
 ```
 
-Only feedback you mark as a favorite is shown. Responses are cached for up to 2 minutes, so a newly favorited review appears shortly after.
+Only reviews you mark as a favorite are shown. Responses are cached for up to 2 minutes, so a newly favorited review appears shortly after.
 
 ## Tech stack
 
@@ -140,9 +140,9 @@ Only feedback you mark as a favorite is shown. Responses are cached for up to 2 
 app/
   (auth)/auth/signin/       Sign-in page, without the site navbar
   (main)/                   App pages with the site navbar and footer
-    (feedback)/[productId]/ Public feedback form
-    dashboard/              Product and feedback management
-  api/                      Route handlers (feedback, products, embed widget, docs search)
+    (review)/[productId]/ Public review form
+    dashboard/              Product and review management
+  api/                      Route handlers (reviews, products, embed widget, docs search)
   docs/                     Documentation site (Fumadocs)
 components/                 UI components (shadcn/ui in components/ui)
 content/docs/               Documentation pages in MDX
@@ -160,7 +160,7 @@ Tests sit next to the code they cover (`*.test.ts` / `*.test.tsx`) and run with 
 pnpm test
 ```
 
-They cover the Zod schemas, the feedback form and star rating (including keyboard and screen reader behaviour), the API routes (ownership checks, status codes) and the embed widget, including XSS safety.
+They cover the Zod schemas, the review form and star rating (including keyboard and screen reader behaviour), the API routes (ownership checks, status codes) and the embed widget, including XSS safety.
 
 ## Contributing
 

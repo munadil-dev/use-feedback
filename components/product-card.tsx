@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DeleteDialog from "@/components/delete-dialog";
 import EditProductDialog from "@/components/edit-product-dialog";
-import { formatRating } from "@/lib/feedback-stats";
+import { formatRating } from "@/lib/review-stats";
 
 interface ProductCardProps {
   id: string;

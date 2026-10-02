@@ -4,7 +4,7 @@ import axios, { AxiosError, AxiosHeaders } from "axios";
 import { createStore, Provider } from "jotai";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import FeedbackForm from "./feedback-form";
+import ReviewForm from "./review-form";
 import { ratingAtom } from "@/store/atoms/rating";
 
 const push = vi.fn();
@@ -47,7 +47,7 @@ function renderForm() {
 
   render(
     <Provider store={store}>
-      <FeedbackForm productDetails={productDetails} />
+      <ReviewForm productDetails={productDetails} />
     </Provider>
   );
 }
@@ -55,13 +55,16 @@ function renderForm() {
 async function fillAndSubmit() {
   const user = userEvent.setup();
 
-  await user.type(screen.getByLabelText("Message"), "Loved it");
-  await user.type(screen.getByLabelText("Your name"), "Jane");
-  await user.type(screen.getByLabelText("Your email"), "jane@example.com");
-  await user.click(screen.getByRole("button", { name: "Submit feedback" }));
+  await user.type(screen.getByRole("textbox", { name: "Message" }), "Loved it");
+  await user.type(screen.getByRole("textbox", { name: "Your name" }), "Jane");
+  await user.type(
+    screen.getByRole("textbox", { name: "Your email" }),
+    "jane@example.com"
+  );
+  await user.click(screen.getByRole("button", { name: "Submit review" }));
 }
 
-describe("FeedbackForm", () => {
+describe("ReviewForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -75,21 +78,30 @@ describe("FeedbackForm", () => {
     expect(screen.getByText(productDetails.message)).toBeInTheDocument();
   });
 
-  it("labels the star rating with the visible Rate label", () => {
+  it("labels the star rating with the visible Rating label", () => {
     renderForm();
 
-    expect(screen.getByRole("group", { name: "Rate" })).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: "Rating" })).toBeInTheDocument();
+  });
+
+  it("marks the text fields as required and the photo as optional", () => {
+    renderForm();
+
+    for (const name of ["Message", "Your name", "Your email"]) {
+      expect(screen.getByRole("textbox", { name })).toBeRequired();
+    }
+    expect(screen.getByText("(optional)")).toBeInTheDocument();
   });
 
   it("submits the entered values with the selected rating", async () => {
     vi.mocked(axios.post).mockResolvedValue({
-      data: { success: true, message: "Feedback submitted" },
+      data: { success: true, message: "Review submitted" },
     });
     renderForm();
 
     await fillAndSubmit();
 
-    expect(axios.post).toHaveBeenCalledWith("/api/feedback", {
+    expect(axios.post).toHaveBeenCalledWith("/api/reviews", {
       id: "product-1",
       message: "Loved it",
       customerName: "Jane",
@@ -97,7 +109,7 @@ describe("FeedbackForm", () => {
       customerImage: "",
       rating: 4,
     });
-    expect(toast.success).toHaveBeenCalledWith("Feedback submitted");
+    expect(toast.success).toHaveBeenCalledWith("Review submitted");
     expect(push).toHaveBeenCalledWith("product-1/submitted");
   });
 
@@ -123,13 +135,13 @@ describe("FeedbackForm", () => {
     renderForm();
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Submit feedback" })
+      screen.getByRole("button", { name: "Submit review" })
     );
 
     expect(screen.getByText("Message is required")).toBeInTheDocument();
     expect(screen.getByText("Name is required")).toBeInTheDocument();
     expect(screen.getByText("Invalid email address")).toBeInTheDocument();
-    expect(screen.getByLabelText("Message")).toHaveFocus();
+    expect(screen.getByRole("textbox", { name: "Message" })).toHaveFocus();
     expect(axios.post).not.toHaveBeenCalled();
   });
 
@@ -137,19 +149,25 @@ describe("FeedbackForm", () => {
     const user = userEvent.setup();
     renderForm();
 
-    await user.type(screen.getByLabelText("Message"), "Loved it");
-    await user.type(screen.getByLabelText("Your name"), "Jane");
-    await user.type(screen.getByLabelText("Your email"), "not-an-email");
-    await user.click(screen.getByRole("button", { name: "Submit feedback" }));
+    await user.type(
+      screen.getByRole("textbox", { name: "Message" }),
+      "Loved it"
+    );
+    await user.type(screen.getByRole("textbox", { name: "Your name" }), "Jane");
+    await user.type(
+      screen.getByRole("textbox", { name: "Your email" }),
+      "not-an-email"
+    );
+    await user.click(screen.getByRole("button", { name: "Submit review" }));
 
-    const email = screen.getByLabelText("Your email");
+    const email = screen.getByRole("textbox", { name: "Your email" });
 
     expect(email).toHaveAttribute("aria-invalid", "true");
     expect(email).toHaveAccessibleDescription("Invalid email address");
     expect(email).toHaveFocus();
-    expect(screen.getByLabelText("Message")).not.toHaveAttribute(
-      "aria-invalid"
-    );
+    expect(
+      screen.getByRole("textbox", { name: "Message" })
+    ).not.toHaveAttribute("aria-invalid");
     expect(screen.queryByText("Message is required")).not.toBeInTheDocument();
     expect(axios.post).not.toHaveBeenCalled();
   });
@@ -158,8 +176,8 @@ describe("FeedbackForm", () => {
     const user = userEvent.setup();
     renderForm();
 
-    await user.click(screen.getByRole("button", { name: "Submit feedback" }));
-    await user.type(screen.getByLabelText("Your name"), "J");
+    await user.click(screen.getByRole("button", { name: "Submit review" }));
+    await user.type(screen.getByRole("textbox", { name: "Your name" }), "J");
 
     expect(screen.queryByText("Name is required")).not.toBeInTheDocument();
     expect(screen.getByText("Message is required")).toBeInTheDocument();

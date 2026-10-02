@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import StarRating from "@/components/star-rating";
 import { ratingAtom } from "@/store/atoms/rating";
-import { newFeedbackSchema } from "@/schemas/new-feedback";
+import { newReviewSchema } from "@/schemas/new-review";
 
 import "@uploadcare/react-uploader/core.css";
 const FileUploaderRegular = dynamic(
@@ -43,6 +43,14 @@ function FieldError({ field, error }: { field: Field; error?: string }) {
   );
 }
 
+function RequiredMark() {
+  return (
+    <span aria-hidden="true" className="text-red-500">
+      *
+    </span>
+  );
+}
+
 const invalidProps = (field: Field, error?: string) => ({
   "aria-invalid": error ? true : undefined,
   "aria-describedby": error ? `${fieldIds[field]}-error` : undefined,
@@ -54,7 +62,7 @@ interface ProductProps {
   message: string;
 }
 
-export default function FeedbackForm({
+export default function ReviewForm({
   productDetails,
 }: {
   productDetails: ProductProps;
@@ -72,11 +80,11 @@ export default function FeedbackForm({
   const clearError = (field: Field) =>
     setErrors((prev) => ({ ...prev, [field]: undefined }));
 
-  const handleFeedbackSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+  const handleReviewSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
 
-    const feedback = {
+    const review = {
       id: productDetails.id,
       message,
       customerName,
@@ -84,7 +92,7 @@ export default function FeedbackForm({
       customerImage,
       rating,
     };
-    const result = newFeedbackSchema.safeParse(feedback);
+    const result = newReviewSchema.safeParse(review);
 
     if (!result.success) {
       const fieldErrors: FieldErrors = {};
@@ -110,7 +118,7 @@ export default function FeedbackForm({
     const toastId = toast.loading("Loading...");
 
     try {
-      const res = await axios.post("/api/feedback", feedback);
+      const res = await axios.post("/api/reviews", review);
 
       if (res.data.success) {
         toast.dismiss(toastId);
@@ -124,7 +132,7 @@ export default function FeedbackForm({
       if (err instanceof AxiosError) {
         toast.error(
           err.response?.data?.message ??
-            "Could not send your feedback. Try again."
+            "Could not send your review. Try again."
         );
       } else {
         toast.error("An unexpected error occurred");
@@ -145,11 +153,14 @@ export default function FeedbackForm({
           {productDetails.message}
         </p>
 
-        <form onSubmit={handleFeedbackSubmit} noValidate>
-          <Label htmlFor="message">Message</Label>
+        <form onSubmit={handleReviewSubmit} noValidate>
+          <Label htmlFor="message">
+            Message <RequiredMark />
+          </Label>
           <Textarea
             className="mt-1.5 mb-3 resize-none aria-invalid:border-red-500"
             id="message"
+            required
             value={message}
             onChange={(e) => {
               setMessage(e.target.value);
@@ -159,10 +170,13 @@ export default function FeedbackForm({
           />
           <FieldError field="message" error={errors.message} />
 
-          <Label htmlFor="name">Your name</Label>
+          <Label htmlFor="name">
+            Your name <RequiredMark />
+          </Label>
           <Input
             className="mt-1.5 mb-3 aria-invalid:border-red-500"
             id="name"
+            required
             value={customerName}
             onChange={(e) => {
               setCustomerName(e.target.value);
@@ -172,10 +186,13 @@ export default function FeedbackForm({
           />
           <FieldError field="customerName" error={errors.customerName} />
 
-          <Label htmlFor="email">Your email</Label>
+          <Label htmlFor="email">
+            Your email <RequiredMark />
+          </Label>
           <Input
             className="mt-1.5 mb-3 aria-invalid:border-red-500"
             id="email"
+            required
             type="email"
             value={customerEmail}
             onChange={(e) => {
@@ -186,8 +203,9 @@ export default function FeedbackForm({
           />
           <FieldError field="customerEmail" error={errors.customerEmail} />
 
-          <Label className="block" htmlFor="photo">
-            Upload your photo
+          <Label className="block">
+            Profile picture{" "}
+            <span className="font-normal text-zinc-500">(optional)</span>
           </Label>
           <FileUploaderRegular
             pubkey="bcfc6ab51fbdad37a21b"
@@ -206,7 +224,7 @@ export default function FeedbackForm({
           <span className="text-sm text-zinc-600">{imageName}</span>
 
           <Label className="mt-2 block" id="rating-label">
-            Rate
+            Rating <RequiredMark />
           </Label>
           <StarRating labelledBy="rating-label" />
 
@@ -215,7 +233,7 @@ export default function FeedbackForm({
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Submitting..." : "Submit feedback"}
+            {isSubmitting ? "Submitting..." : "Submit review"}
           </Button>
         </form>
       </section>

@@ -1,10 +1,10 @@
 import prisma from "@/lib/db";
 import { type NextRequest, NextResponse } from "next/server";
-import { newFeedbackSchema } from "@/schemas/new-feedback";
+import { newReviewSchema } from "@/schemas/new-review";
 
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
-  const { success, error, data } = newFeedbackSchema.safeParse(body);
+  const { success, error, data } = newReviewSchema.safeParse(body);
 
   if (!success) {
     return NextResponse.json(
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await prisma.feedback.create({
+    await prisma.review.create({
       data: {
         message,
         customerName,
@@ -45,11 +45,11 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(
-      { message: "Feedback submitted", success: true },
+      { message: "Review submitted", success: true },
       { status: 201 }
     );
   } catch (err) {
-    console.error("Error while creating a feedback: ", err);
+    console.error("Error while creating a review: ", err);
     return NextResponse.json(
       { message: "Internal server error", success: false },
       { status: 500 }

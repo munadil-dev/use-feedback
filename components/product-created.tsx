@@ -42,7 +42,7 @@ export default function ProductCreated({
         </h1>
 
         <p className="mt-1 text-sm text-zinc-600">
-          Send this link to customers to collect feedback.
+          Send this link to customers to collect reviews.
         </p>
 
         <p className="mt-5 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 font-mono text-[13px] break-all text-zinc-700">

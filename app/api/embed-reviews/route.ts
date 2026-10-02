@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const feedbacks = await prisma.feedback.findMany({
+  const reviews = await prisma.review.findMany({
     where: {
       productId,
       isFavorite: true,
@@ -27,29 +27,31 @@ export async function GET(req: NextRequest) {
 
   const script = `
     ;(function() {
-      const embedFeedbacksDiv = document.getElementById("embed-feedbacks");
+      const embedReviewsDiv =
+        document.getElementById("embed-reviews") ??
+        document.getElementById("embed-feedbacks");
 
-      if (!embedFeedbacksDiv) {
-        console.error('Element with id "embed-feedbacks" not found.');
+      if (!embedReviewsDiv) {
+        console.error('Element with id "embed-reviews" not found.');
         return;
       }
 
-      const feedbacks = ${JSON.stringify(feedbacks)};
+      const reviews = ${JSON.stringify(reviews)};
 
-      if (feedbacks.length === 0) {
+      if (reviews.length === 0) {
         return;
       }
 
-      embedFeedbacksDiv.setAttribute("role", "list");
-      embedFeedbacksDiv.setAttribute("aria-label", "Customer feedback");
-      embedFeedbacksDiv.style.display = "flex";
-      embedFeedbacksDiv.style.gap = "16px";
-      embedFeedbacksDiv.style.padding = "10px";
-      embedFeedbacksDiv.style.flexWrap = "wrap";
-      embedFeedbacksDiv.style.justifyContent = "center";
-      embedFeedbacksDiv.style.fontFamily = "sans-serif";
+      embedReviewsDiv.setAttribute("role", "list");
+      embedReviewsDiv.setAttribute("aria-label", "Customer reviews");
+      embedReviewsDiv.style.display = "flex";
+      embedReviewsDiv.style.gap = "16px";
+      embedReviewsDiv.style.padding = "10px";
+      embedReviewsDiv.style.flexWrap = "wrap";
+      embedReviewsDiv.style.justifyContent = "center";
+      embedReviewsDiv.style.fontFamily = "sans-serif";
 
-      feedbacks.forEach(feedback => {
+      reviews.forEach(review => {
         // Create Elements
         const msgP = document.createElement("p");
         const nameP = document.createElement("p");
@@ -62,9 +64,9 @@ export async function GET(req: NextRequest) {
         starsDiv.style.display = "flex";
         starsDiv.style.gap = "2px";
         starsDiv.setAttribute("role", "img");
-        starsDiv.setAttribute("aria-label", "Rated " + feedback.rating + " out of 5");
+        starsDiv.setAttribute("aria-label", "Rated " + review.rating + " out of 5");
         
-        for (let i = 0; i < feedback.rating; i++) {
+        for (let i = 0; i < review.rating; i++) {
           const star = document.createElementNS("http://www.w3.org/2000/svg", "svg");
           star.setAttribute("viewBox", "0 0 24 24");
           star.setAttribute("width", "20");
@@ -102,9 +104,9 @@ export async function GET(req: NextRequest) {
         msgP.style.margin = 0;
 
         // Content
-        img.src = feedback.customerImage || "${process.env.NEXT_PUBLIC_BASE_URL}user-icon.png";
-        msgP.textContent = feedback.message;
-        nameP.textContent = feedback.customerName;
+        img.src = review.customerImage || "${process.env.NEXT_PUBLIC_BASE_URL}user-icon.png";
+        msgP.textContent = review.message;
+        nameP.textContent = review.customerName;
 
         // Append Elements
         innerDiv.appendChild(img);
@@ -114,7 +116,7 @@ export async function GET(req: NextRequest) {
         outerDiv.appendChild(starsDiv);
         outerDiv.appendChild(msgP);
 
-        embedFeedbacksDiv.appendChild(outerDiv);
+        embedReviewsDiv.appendChild(outerDiv);
       });
     })();
   `;

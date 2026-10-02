@@ -26,7 +26,7 @@ export default function NoProducts({
       </h2>
 
       <p className="mt-2 max-w-sm text-[15px] leading-6 text-white/85">
-        You get a feedback link to send to customers and a widget that shows the
+        You get a review link to send to customers and a widget that shows the
         replies you pick.
       </p>
 

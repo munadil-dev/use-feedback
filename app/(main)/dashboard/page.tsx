@@ -8,7 +8,7 @@ import StatsBar from "@/components/stats-bar";
 import ProductCard from "@/components/product-card";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { formatRating } from "@/lib/feedback-stats";
+import { formatRating } from "@/lib/review-stats";
 
 function NewProductLink({ className }: { className?: string }) {
   return (
@@ -29,7 +29,7 @@ export default async function Dashboard() {
     redirect("/auth/signin");
   }
 
-  const ownedFeedback = { product: { userId: session.user.id } };
+  const ownedReview = { product: { userId: session.user.id } };
 
   const [products, ratings, favoriteCounts] = await Promise.all([
     prisma.product.findMany({
@@ -43,9 +43,9 @@ export default async function Dashboard() {
         title: true,
         message: true,
         _count: {
-          select: { feedbacks: true },
+          select: { reviews: true },
         },
-        feedbacks: {
+        reviews: {
           select: { message: true },
           orderBy: { createdAt: "desc" },
           take: 1,
@@ -53,15 +53,15 @@ export default async function Dashboard() {
       },
     }),
 
-    prisma.feedback.groupBy({
+    prisma.review.groupBy({
       by: ["productId"],
-      where: ownedFeedback,
+      where: ownedReview,
       _avg: { rating: true },
     }),
 
-    prisma.feedback.groupBy({
+    prisma.review.groupBy({
       by: ["productId"],
-      where: { ...ownedFeedback, isFavorite: true },
+      where: { ...ownedReview, isFavorite: true },
       _count: { _all: true },
     }),
   ]);
@@ -71,14 +71,14 @@ export default async function Dashboard() {
     name: product.name,
     title: product.title,
     message: product.message,
-    responses: product._count.feedbacks,
+    responses: product._count.reviews,
     averageRating:
       ratings.find((rating) => rating.productId === product.id)?._avg.rating ??
       0,
     favorites:
       favoriteCounts.find((count) => count.productId === product.id)?._count
         ._all ?? 0,
-    latestMessage: product.feedbacks[0]?.message,
+    latestMessage: product.reviews[0]?.message,
   }));
 
   const responses = cards.reduce((sum, card) => sum + card.responses, 0);
@@ -98,7 +98,7 @@ export default async function Dashboard() {
             Products
           </h1>
           <p className="mt-1.5 text-[15px] text-zinc-600">
-            Each product has its own feedback link and widget.
+            Each product has its own review link and widget.
           </p>
         </div>
 

@@ -2,7 +2,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { type NextRequest, NextResponse } from "next/server";
 
-type Context = { params: Promise<{ feedbackId: string }> };
+type Context = { params: Promise<{ reviewId: string }> };
 
 const MESSAGE = {
   ADD: "Added to favorite",
@@ -19,7 +19,7 @@ export async function PATCH(req: NextRequest, { params }: Context) {
     );
   }
 
-  const { feedbackId } = await params;
+  const { reviewId } = await params;
   const body = await req.json().catch(() => null);
 
   if (typeof body?.isFavorite !== "boolean") {
@@ -30,9 +30,9 @@ export async function PATCH(req: NextRequest, { params }: Context) {
   }
 
   try {
-    const { count } = await prisma.feedback.updateMany({
+    const { count } = await prisma.review.updateMany({
       where: {
-        id: feedbackId,
+        id: reviewId,
         product: { userId: session.user.id },
       },
       data: {
@@ -42,7 +42,7 @@ export async function PATCH(req: NextRequest, { params }: Context) {
 
     if (count === 0) {
       return NextResponse.json(
-        { message: "Feedback not found", success: false },
+        { message: "Review not found", success: false },
         { status: 404 }
       );
     }
@@ -55,7 +55,7 @@ export async function PATCH(req: NextRequest, { params }: Context) {
       { status: 200 }
     );
   } catch (err) {
-    console.error("Error while adding feedback as favorite: ", err);
+    console.error("Error while favoriting a review: ", err);
     return NextResponse.json(
       { message: "Internal server error", success: false },
       { status: 500 }
@@ -73,29 +73,29 @@ export async function DELETE(_req: NextRequest, { params }: Context) {
     );
   }
 
-  const { feedbackId } = await params;
+  const { reviewId } = await params;
 
   try {
-    const { count } = await prisma.feedback.deleteMany({
+    const { count } = await prisma.review.deleteMany({
       where: {
-        id: feedbackId,
+        id: reviewId,
         product: { userId: session.user.id },
       },
     });
 
     if (count === 0) {
       return NextResponse.json(
-        { message: "Feedback not found", success: false },
+        { message: "Review not found", success: false },
         { status: 404 }
       );
     }
 
     return NextResponse.json(
-      { message: "Feedback deleted successfully", success: true },
+      { message: "Review deleted successfully", success: true },
       { status: 200 }
     );
   } catch (err) {
-    console.error("Error while deleting feedback: ", err);
+    console.error("Error while deleting a review: ", err);
     return NextResponse.json(
       { message: "Internal server error", success: false },
       { status: 500 }

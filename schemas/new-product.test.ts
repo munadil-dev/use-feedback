@@ -4,7 +4,7 @@ import { newProductSchema } from "./new-product";
 const validProduct = {
   name: "Vouch",
   title: "How was your experience?",
-  message: "Thanks for the feedback!",
+  message: "Thanks for the review!",
 };
 
 describe("newProductSchema", () => {

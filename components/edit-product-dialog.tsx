@@ -56,7 +56,7 @@ export default function EditProductDialog({
           <DialogTitle>Edit product</DialogTitle>
 
           <DialogDescription>
-            Changes show on your feedback page right away.
+            Changes show on your review page right away.
           </DialogDescription>
         </DialogHeader>
 

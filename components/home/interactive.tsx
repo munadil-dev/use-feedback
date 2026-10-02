@@ -160,7 +160,7 @@ export function CopyLink({ href, display }: { href: string; display: string }) {
       </a>
       <CopyButton
         value={href}
-        label="Copy feedback link"
+        label="Copy review link"
         className="rounded-full text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
       />
     </div>

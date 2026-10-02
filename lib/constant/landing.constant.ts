@@ -1,7 +1,7 @@
-export const embedCode = `<div id="embed-feedbacks"></div>
-<script src="https://vouch.munadil.com/api/embed-feedbacks?productId=YOUR_PRODUCT_ID"></script>`;
+export const embedCode = `<div id="embed-reviews"></div>
+<script src="https://vouch.munadil.com/api/embed-reviews?productId=YOUR_PRODUCT_ID"></script>`;
 
-export const demoFeedbackUrl =
+export const demoReviewUrl =
   "https://vouch.munadil.com/cm0w1ywfi0000avxg97mkple4";
 
 export const platforms = [
