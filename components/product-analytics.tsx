@@ -1,9 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { Bar, BarChart, XAxis } from "recharts";
 import StatsBar from "./stats-bar";
 import { RatingSummary } from "./product-overview";
 import { buildDailySeries, ranges } from "@/lib/analytics";
+import {
+  type ChartConfig,
+  ChartContainer,
+} from "./evilcharts/ui/recharts-chart";
+import {
+  ChartTooltip,
+  ChartTooltipContent,
+} from "./evilcharts/ui/recharts-tooltip";
 import {
   Select,
   SelectContent,
@@ -24,14 +33,10 @@ const formatDay = (date: string) =>
     timeZone: "UTC",
   });
 
-const plural = (count: number, word: string) =>
-  `${count} ${count === 1 ? word : `${word}s`}`;
-
-const tooltipPosition = (index: number, length: number) => {
-  if (index < length / 4) return "left-0";
-  if (index >= (length * 3) / 4) return "right-0";
-  return "left-1/2 -translate-x-1/2";
-};
+const chartConfig = {
+  views: { label: "Views", colors: { light: ["hsl(var(--primary) / 0.2)"] } },
+  responses: { label: "Responses", colors: { light: ["hsl(var(--primary))"] } },
+} satisfies ChartConfig;
 
 export default function ProductAnalytics({
   views,
@@ -41,36 +46,10 @@ export default function ProductAnalytics({
   feedbacks: { rating: number; createdAt: Date }[];
 }) {
   const [range, setRange] = useState(30);
-  const [active, setActive] = useState(-1);
 
   const series = buildDailySeries(range, views, feedbacks);
   const totalViews = series.reduce((sum, day) => sum + day.views, 0);
   const totalResponses = series.reduce((sum, day) => sum + day.responses, 0);
-  const max = Math.max(
-    1,
-    ...series.map((day) => Math.max(day.views, day.responses))
-  );
-
-  const height = (value: number) => `${(value / max) * 100}%`;
-  const focusable =
-    active >= 0 && active < series.length ? active : series.length - 1;
-
-  const moveFocus = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    const keys: Record<string, number> = {
-      ArrowLeft: focusable - 1,
-      ArrowRight: focusable + 1,
-      Home: 0,
-      End: series.length - 1,
-    };
-    const next = keys[event.key];
-
-    if (next === undefined) return;
-    event.preventDefault();
-
-    const index = Math.min(Math.max(next, 0), series.length - 1);
-    setActive(index);
-    (event.currentTarget.children[index] as HTMLElement).focus();
-  };
 
   return (
     <section
@@ -122,50 +101,41 @@ export default function ProductAnalytics({
           </p>
         ) : (
           <>
-            <div
-              role="list"
-              aria-label={`Daily views and responses, last ${range} days. Use arrow keys to move between days.`}
-              onKeyDown={moveFocus}
-              className="mt-6 flex h-32 items-end gap-px sm:gap-0.5"
+            <ChartContainer
+              config={chartConfig}
+              className="mt-6 aspect-auto h-32"
             >
-              {series.map((day, index) => (
-                <div
-                  key={day.date}
-                  role="listitem"
-                  tabIndex={index === focusable ? 0 : -1}
-                  aria-label={`${formatDay(day.date)}: ${plural(day.views, "view")}, ${plural(day.responses, "response")}`}
-                  onFocus={() => setActive(index)}
-                  className="group focus-visible:ring-ring relative h-full flex-1 rounded-t-sm bg-zinc-50 outline-none hover:bg-zinc-100 focus-visible:bg-zinc-100 focus-visible:ring-2"
-                >
-                  <span
-                    className="bg-primary/20 group-hover:bg-primary/30 group-focus-visible:bg-primary/30 absolute inset-x-0 bottom-0 rounded-t-sm"
-                    style={{ height: height(day.views) }}
-                  />
+              <BarChart
+                accessibilityLayer
+                data={series}
+                margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+              >
+                <XAxis dataKey="date" hide />
 
-                  <span
-                    className="bg-primary absolute inset-x-0 bottom-0 rounded-t-sm"
-                    style={{ height: height(day.responses) }}
-                  />
+                <XAxis dataKey="date" xAxisId="responses" hide />
 
-                  <span
-                    aria-hidden
-                    className={`pointer-events-none absolute bottom-full z-10 mb-2 hidden rounded-md bg-zinc-900 px-2.5 py-1.5 text-xs whitespace-nowrap text-white shadow-md group-hover:block group-focus-visible:block ${tooltipPosition(index, series.length)}`}
-                  >
-                    <span className="block font-medium">
-                      {formatDay(day.date)}
-                    </span>
+                <ChartTooltip
+                  content={
+                    <ChartTooltipContent
+                      labelFormatter={(date) => formatDay(String(date))}
+                    />
+                  }
+                />
 
-                    <span className="block text-zinc-300 tabular-nums">
-                      {plural(day.views, "view")}
-                    </span>
+                <Bar
+                  dataKey="views"
+                  fill="var(--color-views-0)"
+                  radius={[2, 2, 0, 0]}
+                />
 
-                    <span className="block text-zinc-300 tabular-nums">
-                      {plural(day.responses, "response")}
-                    </span>
-                  </span>
-                </div>
-              ))}
-            </div>
+                <Bar
+                  dataKey="responses"
+                  xAxisId="responses"
+                  fill="var(--color-responses-0)"
+                  radius={[2, 2, 0, 0]}
+                />
+              </BarChart>
+            </ChartContainer>
 
             <div className="mt-2 flex items-center justify-between gap-4 text-xs text-zinc-500">
               <span>{formatDay(series[0].date)}</span>

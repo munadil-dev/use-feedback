@@ -1,6 +1,6 @@
 <div align="center">
 
-# UseFeedback
+<img src="public/images/readme/banner.png" alt="useFeedback" width="100%" />
 
 **Collect customer feedback with a shareable link and show your best reviews on any website with one script tag.**
 
@@ -22,6 +22,7 @@ No hosting, no forms to build, no technical skills required.
 
 - **Shareable feedback forms**: create a product and get a public link where customers leave a message, a 1–5 star rating and an optional photo.
 - **Dashboard**: see every submission per product, favorite the best ones and delete spam.
+- **Analytics**: daily views, responses and conversion over 7, 30 or 90 days, plus an all-time rating breakdown.
 - **Embeddable widget**: paste two lines of HTML to show your favorited feedback on any site. It's plain JavaScript with no framework and no iframe, served from a CDN cache.
 - **Accessible by default**: a keyboard-operable star rating, inline form errors announced to screen readers, and widget cards with list semantics and text alternatives for ratings.
 - **Validated end to end**: the same Zod schema checks input in the browser and on the server.
