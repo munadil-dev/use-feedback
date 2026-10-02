@@ -48,7 +48,10 @@ export default function FeedbackCard({
       onFavoriteChange(isFavorite);
 
       if (err instanceof AxiosError) {
-        toast.error(err.response?.data.message);
+        toast.error(
+          err.response?.data?.message ??
+            "Could not update the favorite. Try again."
+        );
       } else {
         toast.error("An unexpected error occurred");
       }
@@ -70,6 +73,7 @@ export default function FeedbackCard({
             year: "numeric",
             month: "short",
             day: "numeric",
+            timeZone: "UTC",
           })}
         </time>
       </header>
@@ -136,14 +140,17 @@ function DeleteFeedbackAlert({ feedbackId }: { feedbackId: string }) {
 
       if (res.data.success) {
         toast.dismiss(toastId);
-        toast.error(res.data.message);
+        toast.success(res.data.message);
         router.refresh();
       }
     } catch (err) {
       toast.dismiss(toastId);
 
       if (err instanceof AxiosError) {
-        toast.error(err.response?.data.message);
+        toast.error(
+          err.response?.data?.message ??
+            "Could not delete the feedback. Try again."
+        );
       } else {
         toast.error("An unexpected error occurred");
       }

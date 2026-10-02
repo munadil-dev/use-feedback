@@ -182,7 +182,10 @@ function DeleteAlert({
       toast.dismiss(toastId);
 
       if (err instanceof AxiosError) {
-        toast.error(err.response?.data.message);
+        toast.error(
+          err.response?.data?.message ??
+            "Could not delete the product. Try again."
+        );
       } else {
         toast.error("An unexpected error occurred");
       }

@@ -67,12 +67,14 @@ export default function FeedbackForm({
   const [customerImage, setCustomerImage] = useState("");
   const [imageName, setImageName] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const clearError = (field: Field) =>
     setErrors((prev) => ({ ...prev, [field]: undefined }));
 
   const handleFeedbackSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     const feedback = {
       id: productDetails.id,
@@ -104,6 +106,7 @@ export default function FeedbackForm({
     }
 
     setErrors({});
+    setIsSubmitting(true);
     const toastId = toast.loading("Loading...");
 
     try {
@@ -113,16 +116,22 @@ export default function FeedbackForm({
         toast.dismiss(toastId);
         toast.success(res.data.message);
         router.push(`${productDetails.id}/submitted`);
+        return;
       }
     } catch (err) {
       toast.dismiss(toastId);
 
       if (err instanceof AxiosError) {
-        toast.error(err.response?.data.message);
+        toast.error(
+          err.response?.data?.message ??
+            "Could not send your feedback. Try again."
+        );
       } else {
         toast.error("An unexpected error occurred");
       }
     }
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -201,8 +210,12 @@ export default function FeedbackForm({
           </Label>
           <StarRating labelledBy="rating-label" />
 
-          <Button className="mt-6 h-11 w-full" type="submit">
-            Submit feedback
+          <Button
+            className="mt-6 h-11 w-full"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit feedback"}
           </Button>
         </form>
       </section>
