@@ -88,7 +88,10 @@ export default function ProductForm() {
       }
     } catch (err) {
       if (err instanceof AxiosError) {
-        toast.error(err.response?.data.message);
+        toast.error(
+          err.response?.data?.message ??
+            "Could not create the product. Try again."
+        );
       } else {
         toast.error("An unexpected error occurred");
       }
