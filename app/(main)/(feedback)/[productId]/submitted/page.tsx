@@ -19,7 +19,7 @@ export default function FeedbackSubmitted() {
             href={process.env.NEXT_PUBLIC_BASE_URL!}
             className="font-medium text-zinc-950 hover:underline"
           >
-            useFeedback
+            Vouch
           </Link>
         </p>
       </section>

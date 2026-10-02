@@ -14,7 +14,7 @@ export default function SignInComponent({ error }: { error?: string }) {
           className="font-instrument-serif w-fit text-xl font-medium text-zinc-950"
           href="/"
         >
-          useFeedback
+          Vouch
         </Link>
 
         <form
@@ -27,7 +27,7 @@ export default function SignInComponent({ error }: { error?: string }) {
           }}
         >
           <h1 className="text-4xl leading-[1.05] font-semibold tracking-[-0.04em] text-balance text-zinc-950">
-            Sign in to useFeedback
+            Sign in to Vouch
           </h1>
           <p className="mt-3 text-[15px] leading-6 text-zinc-600">
             Free to use. Pick up where you left off, or create your first

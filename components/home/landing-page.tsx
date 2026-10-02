@@ -303,10 +303,7 @@ function EmailMock() {
           </a>
         </div>
       </article>
-      <CopyLink
-        href={demoFeedbackUrl}
-        display="usefeedback.munadil.com/cm0w1y…"
-      />
+      <CopyLink href={demoFeedbackUrl} display="vouch.munadil.com/cm0w1y…" />
     </div>
   );
 }
@@ -341,7 +338,7 @@ function EmbedCode() {
       </EmbedLine>
       {"\n"}
       <EmbedLine tag="script" attr="src">
-        https://usefeedback.munadil.com/api/embed-feedbacks?productId=
+        https://vouch.munadil.com/api/embed-feedbacks?productId=
         <span className="rounded bg-white/10 px-1 text-white">
           YOUR_PRODUCT_ID
         </span>
@@ -410,7 +407,7 @@ function Features() {
             </span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-semibold text-zinc-950">
-                munadil-dev/use-feedback
+                munadil-dev/vouch
               </span>
               <span className="block text-sm text-zinc-500">
                 Star it, fork it, run it

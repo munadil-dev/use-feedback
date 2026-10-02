@@ -41,7 +41,7 @@ async function runWidget() {
 describe("GET /api/embed-feedbacks", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.stubEnv("NEXT_PUBLIC_BASE_URL", "https://usefeedback.munadil.com/");
+    vi.stubEnv("NEXT_PUBLIC_BASE_URL", "https://vouch.munadil.com/");
     mockFindMany.mockResolvedValue(feedbacks as never);
   });
 
@@ -97,7 +97,7 @@ describe("GET /api/embed-feedbacks", () => {
     expect(first).toHaveAttribute("src", "https://ucarecdn.com/jane.png");
     expect(second).toHaveAttribute(
       "src",
-      "https://usefeedback.munadil.com/user-icon.png"
+      "https://vouch.munadil.com/user-icon.png"
     );
   });
 

@@ -20,7 +20,7 @@ export default async function Navbar() {
             className="font-instrument-serif text-xl font-medium text-zinc-950"
             href="/"
           >
-            useFeedback
+            Vouch
           </Link>
 
           <div className="hidden items-center gap-6 text-sm sm:flex">
