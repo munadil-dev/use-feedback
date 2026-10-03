@@ -3,15 +3,14 @@ import { NextRequest } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "./route";
 import prisma from "@/lib/db";
+import { Prisma } from "@/prisma/generated/prisma/client";
 
 vi.mock("@/lib/db", () => ({
   default: {
-    product: { findUnique: vi.fn() },
     productView: { upsert: vi.fn() },
   },
 }));
 
-const mockFindUnique = vi.mocked(prisma.product.findUnique);
 const mockUpsert = vi.mocked(prisma.productView.upsert);
 
 function view() {
@@ -25,21 +24,25 @@ function view() {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  mockUpsert.mockResolvedValue({} as never);
 });
 
 describe("POST /api/product/[productId]/views", () => {
   it("returns 404 for an unknown product", async () => {
-    mockFindUnique.mockResolvedValue(null);
+    mockUpsert.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Missing product", {
+        code: "P2003",
+        clientVersion: "test",
+      })
+    );
 
     const res = await view();
 
     expect(res.status).toBe(404);
-    expect(mockUpsert).not.toHaveBeenCalled();
   });
 
   it("counts a view on today's row", async () => {
     vi.useFakeTimers({ now: new Date("2026-09-30T10:00:00Z") });
-    mockFindUnique.mockResolvedValue({ id: "product-1" } as never);
 
     const res = await view();
     vi.useRealTimers();
@@ -54,7 +57,7 @@ describe("POST /api/product/[productId]/views", () => {
   });
 
   it("returns 500 when the database call fails", async () => {
-    mockFindUnique.mockRejectedValue(new Error("connection lost"));
+    mockUpsert.mockRejectedValue(new Error("connection lost"));
     vi.spyOn(console, "error").mockImplementation(() => {});
 
     const res = await view();

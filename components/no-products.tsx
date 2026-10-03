@@ -27,7 +27,7 @@ export default function NoProducts({
 
       <p className="mt-2 max-w-sm text-[15px] leading-6 text-white/85">
         You get a review link to send to customers and a widget that shows the
-        replies you pick.
+        reviews you pick.
       </p>
 
       {children}

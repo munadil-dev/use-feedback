@@ -26,16 +26,18 @@ describe("newProductSchema", () => {
     expect(result.error?.issues[0].message).toBe(expectedMessage);
   });
 
-  it.each([
-    ["name", 101],
-    ["title", 151],
-    ["message", 501],
-  ])("rejects a %s longer than the limit", (field, length) => {
-    const result = newProductSchema.safeParse({
-      ...validProduct,
-      [field]: "a".repeat(length),
-    });
+  it("rejects fields longer than their limit", () => {
+    for (const [field, length] of [
+      ["name", 101],
+      ["title", 151],
+      ["message", 501],
+    ] as const) {
+      const result = newProductSchema.safeParse({
+        ...validProduct,
+        [field]: "a".repeat(length),
+      });
 
-    expect(result.success).toBe(false);
+      expect(result.success, field).toBe(false);
+    }
   });
 });

@@ -90,7 +90,7 @@ function Hero({ startHref }: { startHref: string }) {
             Collect testimonials. Show the ones you love.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-7 text-pretty text-zinc-700">
-            Send customers a link, favorite the best replies, and they appear on
+            Send customers a link, favorite the best reviews, and they appear on
             your website with two lines of HTML.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">

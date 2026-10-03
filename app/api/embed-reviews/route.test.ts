@@ -106,28 +106,12 @@ describe("GET /api/embed-reviews", () => {
     expect(cards[1].querySelectorAll("svg")).toHaveLength(2);
   });
 
-  it("falls back to the site's default avatar when there is no image", async () => {
-    const container = await runWidget();
-    const [first, second] = container.querySelectorAll("img");
-
-    expect(first).toHaveAttribute("src", "https://ucarecdn.com/jane.png");
-    expect(second).toHaveAttribute(
-      "src",
-      "https://vouch.munadil.com/user-icon.png"
-    );
-  });
-
-  it("exposes the cards as a labelled list", async () => {
+  it("exposes the cards as a labelled list with text ratings", async () => {
     await runWidget();
 
     const list = screen.getByRole("list", { name: "Customer reviews" });
 
     expect(within(list).getAllByRole("listitem")).toHaveLength(2);
-  });
-
-  it("describes each rating in text for screen readers", async () => {
-    await runWidget();
-
     expect(
       screen.getByRole("img", { name: "Rated 5 out of 5" })
     ).toBeInTheDocument();
@@ -136,9 +120,15 @@ describe("GET /api/embed-reviews", () => {
     ).toBeInTheDocument();
   });
 
-  it("lazy-loads decorative avatars with fixed dimensions", async () => {
+  it("lazy-loads decorative avatars, falling back to the default one", async () => {
     const container = await runWidget();
+    const [first, second] = container.querySelectorAll("img");
 
+    expect(first).toHaveAttribute("src", "https://ucarecdn.com/jane.png");
+    expect(second).toHaveAttribute(
+      "src",
+      "https://vouch.munadil.com/user-icon.png"
+    );
     container.querySelectorAll("img").forEach((img) => {
       expect(img).toHaveAttribute("alt", "");
       expect(img).toHaveAttribute("loading", "lazy");

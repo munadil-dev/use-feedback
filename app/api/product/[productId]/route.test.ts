@@ -48,21 +48,14 @@ beforeEach(() => {
 });
 
 describe("PATCH /api/product/[productId]", () => {
-  it("returns 401 when the user is not signed in", async () => {
-    mockAuth.mockResolvedValue(null);
+  it("returns 401 without a signed-in user id", async () => {
+    for (const session of [null, { user: {} }]) {
+      mockAuth.mockResolvedValue(session);
 
-    const res = await update(product);
+      const res = await update(product);
 
-    expect(res.status).toBe(401);
-    expect(mockUpdateMany).not.toHaveBeenCalled();
-  });
-
-  it("returns 401 when the session has no user id", async () => {
-    mockAuth.mockResolvedValue({ user: {} });
-
-    const res = await update(product);
-
-    expect(res.status).toBe(401);
+      expect(res.status, JSON.stringify(session)).toBe(401);
+    }
     expect(mockUpdateMany).not.toHaveBeenCalled();
   });
 
@@ -122,21 +115,14 @@ describe("PATCH /api/product/[productId]", () => {
 });
 
 describe("DELETE /api/product/[productId]", () => {
-  it("returns 401 when the user is not signed in", async () => {
-    mockAuth.mockResolvedValue(null);
+  it("returns 401 without a signed-in user id", async () => {
+    for (const session of [null, { user: {} }]) {
+      mockAuth.mockResolvedValue(session);
 
-    const res = await remove();
+      const res = await remove();
 
-    expect(res.status).toBe(401);
-    expect(mockDeleteMany).not.toHaveBeenCalled();
-  });
-
-  it("returns 401 when the session has no user id", async () => {
-    mockAuth.mockResolvedValue({ user: {} });
-
-    const res = await remove();
-
-    expect(res.status).toBe(401);
+      expect(res.status, JSON.stringify(session)).toBe(401);
+    }
     expect(mockDeleteMany).not.toHaveBeenCalled();
   });
 

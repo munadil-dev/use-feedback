@@ -110,15 +110,10 @@ describe("ReviewForm", () => {
     expect(screen.getByText(productDetails.message)).toBeInTheDocument();
   });
 
-  it("labels the star rating with the visible Rating label", () => {
+  it("labels the fields and marks which are required", () => {
     renderForm();
 
     expect(screen.getByRole("group", { name: "Rating" })).toBeInTheDocument();
-  });
-
-  it("marks the text fields as required and the photo as optional", () => {
-    renderForm();
-
     for (const name of ["Message", "Your name", "Your email"]) {
       expect(screen.getByRole("textbox", { name })).toBeRequired();
     }

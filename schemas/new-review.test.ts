@@ -63,57 +63,66 @@ describe("newReviewSchema", () => {
     expect(result.error?.issues[0].message).toBe("Invalid email address");
   });
 
-  it("rejects a missing rating", () => {
-    const { rating: _rating, ...withoutRating } = validReview;
+  it("accepts whole ratings from 1 to 5 only", () => {
+    for (const rating of [1, 5]) {
+      expect(
+        newReviewSchema.safeParse({ ...validReview, rating }).success,
+        `rating ${rating}`
+      ).toBe(true);
+    }
 
-    expect(newReviewSchema.safeParse(withoutRating).success).toBe(false);
+    for (const rating of [0, 6, 2.5, undefined]) {
+      expect(
+        newReviewSchema.safeParse({ ...validReview, rating }).success,
+        `rating ${rating}`
+      ).toBe(false);
+    }
   });
 
-  it.each([0, 6, 2.5])("rejects a rating of %s", (rating) => {
-    const result = newReviewSchema.safeParse({ ...validReview, rating });
-
-    expect(result.success).toBe(false);
+  it("accepts no photo or an Uploadcare photo", () => {
+    for (const customerImage of [
+      "",
+      `https://ucarecdn.com/${fileId}/`,
+      `https://ifkueqi105.ucarecd.net/${fileId}/-/preview/`,
+    ]) {
+      expect(
+        newReviewSchema.safeParse({ ...validReview, customerImage }).success,
+        customerImage
+      ).toBe(true);
+    }
   });
 
-  it.each([1, 5])("accepts a rating of %s", (rating) => {
-    expect(newReviewSchema.safeParse({ ...validReview, rating }).success).toBe(
-      true
-    );
+  it("rejects photo links that are not Uploadcare files", () => {
+    for (const customerImage of [
+      "https://evil.example.com/tracker.png",
+      `http://ucarecdn.com/${fileId}/`,
+      `https://ucarecdn.com.evil.example/${fileId}/`,
+      "https://ucarecdn.com/not-a-file/",
+      `https://ucarecdn.com/x/${fileId}/`,
+      "javascript:alert(1)",
+    ]) {
+      const result = newReviewSchema.safeParse({
+        ...validReview,
+        customerImage,
+      });
+
+      expect(result.error?.issues[0].message, customerImage).toBe(
+        "Upload the photo again"
+      );
+    }
   });
 
-  it.each([
-    "",
-    `https://ucarecdn.com/${fileId}/`,
-    `https://ifkueqi105.ucarecd.net/${fileId}/-/preview/`,
-  ])("accepts an Uploadcare photo of %j", (customerImage) => {
-    expect(
-      newReviewSchema.safeParse({ ...validReview, customerImage }).success
-    ).toBe(true);
-  });
+  it("rejects a message or name longer than the limit", () => {
+    for (const [field, length] of [
+      ["message", 1001],
+      ["customerName", 101],
+    ] as const) {
+      const result = newReviewSchema.safeParse({
+        ...validReview,
+        [field]: "a".repeat(length),
+      });
 
-  it.each([
-    "https://evil.example.com/tracker.png",
-    `http://ucarecdn.com/${fileId}/`,
-    `https://ucarecdn.com.evil.example/${fileId}/`,
-    "https://ucarecdn.com/not-a-file/",
-    `https://ucarecdn.com/x/${fileId}/`,
-    "javascript:alert(1)",
-  ])("rejects a photo URL of %j", (customerImage) => {
-    const result = newReviewSchema.safeParse({ ...validReview, customerImage });
-
-    expect(result.success).toBe(false);
-    expect(result.error?.issues[0].message).toBe("Upload the photo again");
-  });
-
-  it.each([
-    ["message", 1001],
-    ["customerName", 101],
-  ])("rejects a %s longer than the limit", (field, length) => {
-    const result = newReviewSchema.safeParse({
-      ...validReview,
-      [field]: "a".repeat(length),
-    });
-
-    expect(result.success).toBe(false);
+      expect(result.success, field).toBe(false);
+    }
   });
 });

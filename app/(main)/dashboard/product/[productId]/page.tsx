@@ -79,8 +79,8 @@ export default async function Product({
 
           <p className="mt-1.5 text-[15px] text-zinc-600">
             {hasReview
-              ? "Favorite the replies you want on your site."
-              : "Share your link to collect the first reply."}
+              ? "Favorite the reviews you want on your site."
+              : "Share your link to collect the first review."}
           </p>
         </div>
 

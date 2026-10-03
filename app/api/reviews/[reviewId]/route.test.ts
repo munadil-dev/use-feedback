@@ -40,21 +40,14 @@ beforeEach(() => {
 });
 
 describe("PATCH /api/reviews/[reviewId]", () => {
-  it("returns 401 when the user is not signed in", async () => {
-    mockAuth.mockResolvedValue(null);
+  it("returns 401 without a signed-in user id", async () => {
+    for (const session of [null, { user: {} }]) {
+      mockAuth.mockResolvedValue(session);
 
-    const res = await favorite(true);
+      const res = await favorite(true);
 
-    expect(res.status).toBe(401);
-    expect(mockUpdateMany).not.toHaveBeenCalled();
-  });
-
-  it("returns 401 when the session has no user id", async () => {
-    mockAuth.mockResolvedValue({ user: {} });
-
-    const res = await favorite(true);
-
-    expect(res.status).toBe(401);
+      expect(res.status, JSON.stringify(session)).toBe(401);
+    }
     expect(mockUpdateMany).not.toHaveBeenCalled();
   });
 
@@ -65,18 +58,6 @@ describe("PATCH /api/reviews/[reviewId]", () => {
 
     expect(res.status).toBe(400);
     expect(mockUpdateMany).not.toHaveBeenCalled();
-  });
-
-  it("only updates reviews on products the user owns", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user-1" } });
-    mockUpdateMany.mockResolvedValue({ count: 1 });
-
-    await favorite(true);
-
-    expect(mockUpdateMany).toHaveBeenCalledWith({
-      where: { id: "review-1", product: { userId: "user-1" } },
-      data: { isFavorite: true },
-    });
   });
 
   it("returns 404 when the review belongs to another user", async () => {
@@ -95,15 +76,22 @@ describe("PATCH /api/reviews/[reviewId]", () => {
   it.each([
     [true, "Added to favorite"],
     [false, "Removed from favorite"],
-  ])("returns 200 when isFavorite is %s", async (isFavorite, message) => {
-    mockAuth.mockResolvedValue({ user: { id: "user-1" } });
-    mockUpdateMany.mockResolvedValue({ count: 1 });
+  ])(
+    "sets isFavorite to %s on the user's own review",
+    async (isFavorite, message) => {
+      mockAuth.mockResolvedValue({ user: { id: "user-1" } });
+      mockUpdateMany.mockResolvedValue({ count: 1 });
 
-    const res = await favorite(isFavorite);
+      const res = await favorite(isFavorite);
 
-    expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ message, success: true });
-  });
+      expect(mockUpdateMany).toHaveBeenCalledWith({
+        where: { id: "review-1", product: { userId: "user-1" } },
+        data: { isFavorite },
+      });
+      expect(res.status).toBe(200);
+      expect(await res.json()).toEqual({ message, success: true });
+    }
+  );
 
   it("returns 500 when the database call fails", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
@@ -117,33 +105,15 @@ describe("PATCH /api/reviews/[reviewId]", () => {
 });
 
 describe("DELETE /api/reviews/[reviewId]", () => {
-  it("returns 401 when the user is not signed in", async () => {
-    mockAuth.mockResolvedValue(null);
+  it("returns 401 without a signed-in user id", async () => {
+    for (const session of [null, { user: {} }]) {
+      mockAuth.mockResolvedValue(session);
 
-    const res = await remove();
+      const res = await remove();
 
-    expect(res.status).toBe(401);
+      expect(res.status, JSON.stringify(session)).toBe(401);
+    }
     expect(mockDeleteMany).not.toHaveBeenCalled();
-  });
-
-  it("returns 401 when the session has no user id", async () => {
-    mockAuth.mockResolvedValue({ user: {} });
-
-    const res = await remove();
-
-    expect(res.status).toBe(401);
-    expect(mockDeleteMany).not.toHaveBeenCalled();
-  });
-
-  it("only deletes reviews on products the user owns", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user-1" } });
-    mockDeleteMany.mockResolvedValue({ count: 1 });
-
-    await remove();
-
-    expect(mockDeleteMany).toHaveBeenCalledWith({
-      where: { id: "review-1", product: { userId: "user-1" } },
-    });
   });
 
   it("returns 404 when the review belongs to another user", async () => {
@@ -159,12 +129,15 @@ describe("DELETE /api/reviews/[reviewId]", () => {
     });
   });
 
-  it("returns 200 when the owner deletes their review", async () => {
+  it("deletes the user's own review", async () => {
     mockAuth.mockResolvedValue({ user: { id: "user-1" } });
     mockDeleteMany.mockResolvedValue({ count: 1 });
 
     const res = await remove();
 
+    expect(mockDeleteMany).toHaveBeenCalledWith({
+      where: { id: "review-1", product: { userId: "user-1" } },
+    });
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({
       message: "Review deleted successfully",

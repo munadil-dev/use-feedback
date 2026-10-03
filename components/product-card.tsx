@@ -137,7 +137,7 @@ export default function ProductCard({
       <p className="mt-4 line-clamp-2 flex-1 text-sm leading-6 text-zinc-600">
         {latestMessage
           ? `“${latestMessage}”`
-          : "No replies yet. Share your link to get the first one."}
+          : "No reviews yet. Share your link to get the first one."}
       </p>
 
       <footer className="mt-5 flex items-center justify-between border-t border-zinc-100 pt-3 text-xs text-zinc-500 tabular-nums">
