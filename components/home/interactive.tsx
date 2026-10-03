@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useEffect, useRef, useState } from "react";
 import { Check, Copy, Heart, Star } from "lucide-react";
 import { AnimatePresence, MotionConfig } from "motion/react";
@@ -31,7 +32,9 @@ export function CopyButton({
     try {
       await navigator.clipboard.writeText(value);
       setCopied(true);
-    } catch {}
+    } catch {
+      toast.error("Could not copy. Select and copy it manually.");
+    }
   };
 
   return (
