@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { newReviewSchema } from "./new-review";
 
+const fileId = "0f7c2b5e-1d3a-4c8b-9e6f-2a4b6c8d0e1f";
+
 const validReview = {
   id: "product-1",
   message: "Great product!",
@@ -81,8 +83,8 @@ describe("newReviewSchema", () => {
 
   it.each([
     "",
-    "https://ucarecdn.com/uuid/",
-    "https://ifkueqi105.ucarecd.net/uuid/-/preview/",
+    `https://ucarecdn.com/${fileId}/`,
+    `https://ifkueqi105.ucarecd.net/${fileId}/-/preview/`,
   ])("accepts an Uploadcare photo of %j", (customerImage) => {
     expect(
       newReviewSchema.safeParse({ ...validReview, customerImage }).success
@@ -91,8 +93,10 @@ describe("newReviewSchema", () => {
 
   it.each([
     "https://evil.example.com/tracker.png",
-    "http://ucarecdn.com/uuid/",
-    "https://ucarecdn.com.evil.example/uuid/",
+    `http://ucarecdn.com/${fileId}/`,
+    `https://ucarecdn.com.evil.example/${fileId}/`,
+    "https://ucarecdn.com/not-a-file/",
+    `https://ucarecdn.com/x/${fileId}/`,
     "javascript:alert(1)",
   ])("rejects a photo URL of %j", (customerImage) => {
     const result = newReviewSchema.safeParse({ ...validReview, customerImage });

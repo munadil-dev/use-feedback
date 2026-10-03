@@ -121,7 +121,8 @@ describe("POST /api/reviews", () => {
   });
 
   it("keeps the uploaded photo once the review is saved", async () => {
-    const customerImage = "https://ifkueqi105.ucarecd.net/file-id/";
+    const customerImage =
+      "https://ifkueqi105.ucarecd.net/0f7c2b5e-1d3a-4c8b-9e6f-2a4b6c8d0e1f/";
     mockCreate.mockResolvedValue({} as never);
 
     const res = await POST(createRequest({ ...validReview, customerImage }));
@@ -141,7 +142,8 @@ describe("POST /api/reviews", () => {
     await POST(
       createRequest({
         ...validReview,
-        customerImage: "https://ifkueqi105.ucarecd.net/file-id/",
+        customerImage:
+          "https://ifkueqi105.ucarecd.net/0f7c2b5e-1d3a-4c8b-9e6f-2a4b6c8d0e1f/",
       })
     );
 

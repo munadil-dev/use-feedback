@@ -1,11 +1,17 @@
 import { z } from "zod";
+import { UPLOADCARE_FILE_ID } from "@/lib/constant/uploadcare.constant";
 
 // Uploadcare serves each project from <prefix>.ucarecd.net (ucarecdn.com for older projects).
-const uploadcareImage = z.url({
-  protocol: /^https$/,
-  hostname: /^([a-z0-9]+\.ucarecd\.net|ucarecdn\.com)$/,
-  error: "Upload the photo again",
-});
+const uploadcareImage = z
+  .url({
+    protocol: /^https$/,
+    hostname: /^([a-z0-9]+\.ucarecd\.net|ucarecdn\.com)$/,
+    error: "Upload the photo again",
+  })
+  .refine(
+    (url) => UPLOADCARE_FILE_ID.test(new URL(url).pathname.split("/")[1]),
+    "Upload the photo again"
+  );
 
 export const newReviewSchema = z.object({
   id: z.string("Product is required").min(1, "Product is required"),

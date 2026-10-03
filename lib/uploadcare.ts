@@ -1,6 +1,7 @@
-import { UPLOADCARE_PUBLIC_KEY } from "@/lib/constant/uploadcare.constant";
-
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import {
+  UPLOADCARE_FILE_ID,
+  UPLOADCARE_PUBLIC_KEY,
+} from "@/lib/constant/uploadcare.constant";
 
 // Uploads are temporary (store="false") until a review is saved, so photos
 // from abandoned or edited forms expire on their own after 24 hours.
@@ -8,7 +9,7 @@ export async function storeUploadcareFile(cdnUrl: string) {
   const secretKey = process.env.UPLOADCARE_SECRET_KEY;
   const uuid = new URL(cdnUrl).pathname.split("/")[1];
 
-  if (!secretKey || !UUID.test(uuid)) {
+  if (!secretKey || !UPLOADCARE_FILE_ID.test(uuid)) {
     console.error("Could not store review photo: ", cdnUrl);
     return;
   }
