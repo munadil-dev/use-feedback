@@ -3,15 +3,17 @@ import { NextRequest } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "./route";
 import prisma from "@/lib/db";
+import { storeUploadcareFile } from "@/lib/uploadcare";
+import { Prisma } from "@/prisma/generated/prisma/client";
 
 vi.mock("@/lib/db", () => ({
   default: {
-    product: { findUnique: vi.fn() },
     review: { create: vi.fn() },
   },
 }));
 
-const mockFindUnique = vi.mocked(prisma.product.findUnique);
+vi.mock("@/lib/uploadcare", () => ({ storeUploadcareFile: vi.fn() }));
+
 const mockCreate = vi.mocked(prisma.review.create);
 
 const validReview = {
@@ -45,7 +47,6 @@ describe("POST /api/reviews", () => {
       message: "Product is required",
       success: false,
     });
-    expect(mockFindUnique).not.toHaveBeenCalled();
     expect(mockCreate).not.toHaveBeenCalled();
   });
 
@@ -68,21 +69,27 @@ describe("POST /api/reviews", () => {
     expect(mockCreate).not.toHaveBeenCalled();
   });
 
-  it("returns 404 when the product does not exist", async () => {
-    mockFindUnique.mockResolvedValue(null);
+  it.each(["P2025", "P2003"])(
+    "returns 404 when the product does not exist (%s)",
+    async (code) => {
+      mockCreate.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError("Missing product", {
+          code,
+          clientVersion: "test",
+        })
+      );
 
-    const res = await POST(createRequest(validReview));
+      const res = await POST(createRequest(validReview));
 
-    expect(res.status).toBe(404);
-    expect(await res.json()).toEqual({
-      message: "Product not found",
-      success: false,
-    });
-    expect(mockCreate).not.toHaveBeenCalled();
-  });
+      expect(res.status).toBe(404);
+      expect(await res.json()).toEqual({
+        message: "Product not found",
+        success: false,
+      });
+    }
+  );
 
   it("creates the review for an existing product", async () => {
-    mockFindUnique.mockResolvedValue({ id: "product-1" } as never);
     mockCreate.mockResolvedValue({} as never);
 
     const res = await POST(createRequest(validReview));
@@ -106,10 +113,40 @@ describe("POST /api/reviews", () => {
 
   it("returns 500 when the database fails", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
-    mockFindUnique.mockRejectedValue(new Error("db down"));
+    mockCreate.mockRejectedValue(new Error("db down"));
 
     const res = await POST(createRequest(validReview));
 
     expect(res.status).toBe(500);
+  });
+
+  it("keeps the uploaded photo once the review is saved", async () => {
+    const customerImage =
+      "https://ifkueqi105.ucarecd.net/0f7c2b5e-1d3a-4c8b-9e6f-2a4b6c8d0e1f/";
+    mockCreate.mockResolvedValue({} as never);
+
+    const res = await POST(createRequest({ ...validReview, customerImage }));
+
+    expect(res.status).toBe(201);
+    expect(storeUploadcareFile).toHaveBeenCalledWith(customerImage);
+  });
+
+  it("does not touch Uploadcare without a photo or when saving fails", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    mockCreate.mockResolvedValueOnce({} as never);
+
+    await POST(createRequest(validReview));
+
+    mockCreate.mockRejectedValueOnce(new Error("db down"));
+
+    await POST(
+      createRequest({
+        ...validReview,
+        customerImage:
+          "https://ifkueqi105.ucarecd.net/0f7c2b5e-1d3a-4c8b-9e6f-2a4b6c8d0e1f/",
+      })
+    );
+
+    expect(storeUploadcareFile).not.toHaveBeenCalled();
   });
 });

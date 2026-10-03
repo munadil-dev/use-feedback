@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { newReviewSchema } from "./new-review";
 
+const fileId = "0f7c2b5e-1d3a-4c8b-9e6f-2a4b6c8d0e1f";
+
 const validReview = {
   id: "product-1",
   message: "Great product!",
@@ -77,5 +79,41 @@ describe("newReviewSchema", () => {
     expect(newReviewSchema.safeParse({ ...validReview, rating }).success).toBe(
       true
     );
+  });
+
+  it.each([
+    "",
+    `https://ucarecdn.com/${fileId}/`,
+    `https://ifkueqi105.ucarecd.net/${fileId}/-/preview/`,
+  ])("accepts an Uploadcare photo of %j", (customerImage) => {
+    expect(
+      newReviewSchema.safeParse({ ...validReview, customerImage }).success
+    ).toBe(true);
+  });
+
+  it.each([
+    "https://evil.example.com/tracker.png",
+    `http://ucarecdn.com/${fileId}/`,
+    `https://ucarecdn.com.evil.example/${fileId}/`,
+    "https://ucarecdn.com/not-a-file/",
+    `https://ucarecdn.com/x/${fileId}/`,
+    "javascript:alert(1)",
+  ])("rejects a photo URL of %j", (customerImage) => {
+    const result = newReviewSchema.safeParse({ ...validReview, customerImage });
+
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0].message).toBe("Upload the photo again");
+  });
+
+  it.each([
+    ["message", 1001],
+    ["customerName", 101],
+  ])("rejects a %s longer than the limit", (field, length) => {
+    const result = newReviewSchema.safeParse({
+      ...validReview,
+      [field]: "a".repeat(length),
+    });
+
+    expect(result.success).toBe(false);
   });
 });

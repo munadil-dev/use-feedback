@@ -20,15 +20,35 @@ export default async function Product({
     redirect("/auth/signin");
   }
 
-  const productDetails = await prisma.product.findFirst({
-    where: {
-      id: productId,
-    },
+  const user = await prisma.product.findUnique({
+    where: { id: productId },
+    select: { userId: true },
+  });
+
+  if (!user) {
+    notFound();
+  }
+
+  if (session.user.id !== user.userId) {
+    redirect("/");
+  }
+
+  const productDetails = await prisma.product.findUnique({
+    where: { id: productId },
     select: {
-      userId: true,
       name: true,
       reviews: {
         orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          message: true,
+          customerName: true,
+          customerEmail: true,
+          customerImage: true,
+          rating: true,
+          isFavorite: true,
+          createdAt: true,
+        },
       },
       views: {
         where: {
@@ -41,10 +61,6 @@ export default async function Product({
 
   if (!productDetails) {
     notFound();
-  }
-
-  if (session.user.id != productDetails.userId) {
-    redirect("/");
   }
 
   const productReviewURL = `${process.env.NEXT_PUBLIC_BASE_URL}${productId}`;

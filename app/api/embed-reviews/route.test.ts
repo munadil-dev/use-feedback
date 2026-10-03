@@ -69,14 +69,30 @@ describe("GET /api/embed-reviews", () => {
     );
   });
 
-  it("only fetches favorite reviews for the product", async () => {
+  it("fetches the newest 50 favorite reviews for the product", async () => {
     await GET(embedRequest());
 
     expect(mockFindMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { productId: "product-1", isFavorite: true },
+        orderBy: { createdAt: "desc" },
+        take: 50,
       })
     );
+  });
+
+  it("returns an uncached script that logs an error when the database fails", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    mockFindMany.mockRejectedValue(new Error("db down"));
+
+    const res = await GET(embedRequest());
+
+    expect(res.status).toBe(500);
+    expect(res.headers.get("Content-Type")).toBe(
+      "application/javascript; charset=utf-8"
+    );
+    expect(res.headers.get("Cache-Control")).toBe("no-store");
+    expect(await res.text()).toContain("Vouch: could not load reviews.");
   });
 
   it("renders a card per review with its stars", async () => {

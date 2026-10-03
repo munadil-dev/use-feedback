@@ -13,8 +13,36 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ push }),
 }));
 
+const photoUrl =
+  "https://ifkueqi105.ucarecd.net/0f7c2b5e-1d3a-4c8b-9e6f-2a4b6c8d0e1f/";
+let uploadedUrl = photoUrl;
+
+// Stands in for the Uploadcare uploader, which next/dynamic loads in the browser.
 vi.mock("next/dynamic", () => ({
-  default: () => () => null,
+  default:
+    () =>
+    ({
+      onFileUploadSuccess,
+      onFileRemoved,
+    }: {
+      onFileUploadSuccess: (e: { cdnUrl: string; name: string }) => void;
+      onFileRemoved: () => void;
+    }) => (
+      <>
+        <button
+          type="button"
+          onClick={() =>
+            onFileUploadSuccess({ cdnUrl: uploadedUrl, name: "jane.png" })
+          }
+        >
+          Fake upload
+        </button>
+
+        <button type="button" onClick={onFileRemoved}>
+          Fake remove
+        </button>
+      </>
+    ),
 }));
 
 vi.mock("sonner", () => ({
@@ -67,6 +95,10 @@ async function fillAndSubmit() {
 describe("ReviewForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    uploadedUrl = photoUrl;
+    vi.mocked(axios.post).mockResolvedValue({
+      data: { success: true, message: "Review submitted" },
+    });
   });
 
   it("shows the product title and message", () => {
@@ -94,9 +126,6 @@ describe("ReviewForm", () => {
   });
 
   it("submits the entered values with the selected rating", async () => {
-    vi.mocked(axios.post).mockResolvedValue({
-      data: { success: true, message: "Review submitted" },
-    });
     renderForm();
 
     await fillAndSubmit();
@@ -191,5 +220,43 @@ describe("ReviewForm", () => {
 
     expect(toast.error).toHaveBeenCalledWith("An unexpected error occurred");
     expect(push).not.toHaveBeenCalled();
+  });
+
+  it("submits the uploaded photo", async () => {
+    renderForm();
+
+    await userEvent.click(screen.getByRole("button", { name: "Fake upload" }));
+    await fillAndSubmit();
+
+    expect(screen.getByText("jane.png")).toBeInTheDocument();
+    expect(axios.post).toHaveBeenCalledWith(
+      "/api/reviews",
+      expect.objectContaining({ customerImage: photoUrl })
+    );
+  });
+
+  it("drops the photo once the user removes it", async () => {
+    renderForm();
+
+    await userEvent.click(screen.getByRole("button", { name: "Fake upload" }));
+    await userEvent.click(screen.getByRole("button", { name: "Fake remove" }));
+    await fillAndSubmit();
+
+    expect(screen.queryByText("jane.png")).not.toBeInTheDocument();
+    expect(axios.post).toHaveBeenCalledWith(
+      "/api/reviews",
+      expect.objectContaining({ customerImage: "" })
+    );
+  });
+
+  it("shows a toast when the photo link is not from Uploadcare", async () => {
+    uploadedUrl = "https://evil.example.com/jane.png";
+    renderForm();
+
+    await userEvent.click(screen.getByRole("button", { name: "Fake upload" }));
+    await fillAndSubmit();
+
+    expect(toast.error).toHaveBeenCalledWith("Upload the photo again");
+    expect(axios.post).not.toHaveBeenCalled();
   });
 });

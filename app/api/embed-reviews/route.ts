@@ -12,18 +12,38 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const reviews = await prisma.review.findMany({
-    where: {
-      productId,
-      isFavorite: true,
-    },
-    select: {
-      message: true,
-      customerName: true,
-      customerImage: true,
-      rating: true,
-    },
-  });
+  let reviews;
+
+  try {
+    reviews = await prisma.review.findMany({
+      where: {
+        productId,
+        isFavorite: true,
+      },
+      select: {
+        message: true,
+        customerName: true,
+        customerImage: true,
+        rating: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    });
+  } catch (error) {
+    console.error("Error while loading embed reviews: ", error);
+
+    return new NextResponse(
+      'console.error("Vouch: could not load reviews.");',
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/javascript; charset=utf-8",
+          "Cache-Control": "no-store",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
+  }
 
   const script = `
     ;(function() {
