@@ -89,14 +89,15 @@ Only reviews you mark as a favorite are shown. Responses are cached for up to 2 
    cp .env.example .env.local
    ```
 
-   | Variable               | Description                                                                    |
-   | ---------------------- | ------------------------------------------------------------------------------ |
-   | `AUTH_SECRET`          | Random secret for Auth.js. Generate one with `openssl rand -base64 32`.        |
-   | `AUTH_GOOGLE_ID`       | Google OAuth client ID.                                                        |
-   | `AUTH_GOOGLE_SECRET`   | Google OAuth client secret.                                                    |
-   | `DATABASE_URL`         | Postgres connection string used by the app (a pooled URL works).               |
-   | `DIRECT_URL`           | Direct (non-pooled) Postgres connection string, used by Prisma for migrations. |
-   | `NEXT_PUBLIC_BASE_URL` | Public URL of the app, with a trailing slash, e.g. `http://localhost:3000/`.   |
+   | Variable                | Description                                                                    |
+   | ----------------------- | ------------------------------------------------------------------------------ |
+   | `AUTH_SECRET`           | Random secret for Auth.js. Generate one with `openssl rand -base64 32`.        |
+   | `AUTH_GOOGLE_ID`        | Google OAuth client ID.                                                        |
+   | `AUTH_GOOGLE_SECRET`    | Google OAuth client secret.                                                    |
+   | `DATABASE_URL`          | Postgres connection string used by the app (a pooled URL works).               |
+   | `DIRECT_URL`            | Direct (non-pooled) Postgres connection string, used by Prisma for migrations. |
+   | `NEXT_PUBLIC_BASE_URL`  | Public URL of the app, with a trailing slash, e.g. `http://localhost:3000/`.   |
+   | `UPLOADCARE_SECRET_KEY` | Uploadcare secret key, used to keep review photos once a review is saved.      |
 
 3. **Install dependencies**
 

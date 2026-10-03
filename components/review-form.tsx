@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import StarRating from "@/components/star-rating";
 import { ratingAtom } from "@/store/atoms/rating";
 import { newReviewSchema } from "@/schemas/new-review";
+import { UPLOADCARE_PUBLIC_KEY } from "@/lib/constant/uploadcare.constant";
 
 import "@uploadcare/react-uploader/core.css";
 const FileUploaderRegular = dynamic(
@@ -109,6 +110,8 @@ export default function ReviewForm({
       );
       if (firstInvalid) {
         document.getElementById(fieldIds[firstInvalid])?.focus();
+      } else {
+        toast.error(result.error.issues[0].message);
       }
       return;
     }
@@ -208,7 +211,8 @@ export default function ReviewForm({
             <span className="font-normal text-zinc-500">(optional)</span>
           </Label>
           <FileUploaderRegular
-            pubkey="bcfc6ab51fbdad37a21b"
+            pubkey={UPLOADCARE_PUBLIC_KEY}
+            store={false}
             maxLocalFileSizeBytes={10000000}
             multiple={false}
             imgOnly={true}
@@ -219,6 +223,10 @@ export default function ReviewForm({
             onFileUploadSuccess={(e) => {
               setCustomerImage(e.cdnUrl);
               setImageName(e.name);
+            }}
+            onFileRemoved={() => {
+              setCustomerImage("");
+              setImageName("");
             }}
           />
           <span className="text-sm text-zinc-600">{imageName}</span>
