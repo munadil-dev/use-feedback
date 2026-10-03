@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { Check, ChevronDown, Copy, ExternalLink, Star } from "lucide-react";
 import CodeComponent from "./code";
@@ -21,7 +22,9 @@ export function ProductActions({ url }: { url: string }) {
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
-    } catch {}
+    } catch {
+      toast.error("Could not copy. Select and copy it manually.");
+    }
   };
 
   return (

@@ -48,7 +48,7 @@ Copy the snippet from your product page in the dashboard and paste it where the 
 <script src="https://vouch.munadil.com/api/embed-reviews?productId=YOUR_PRODUCT_ID"></script>
 ```
 
-Only reviews you mark as a favorite are shown. Responses are cached for up to 2 minutes, so a newly favorited review appears shortly after.
+Only reviews you mark as a favorite are shown. The CDN caches responses for 2 minutes, then refreshes them in the background, so a newly favorited review can take a visit or two after that to appear.
 
 ## Tech stack
 
@@ -123,17 +123,19 @@ Only reviews you mark as a favorite are shown. Responses are cached for up to 2 
 
 ## Scripts
 
-| Command              | Description                                  |
-| -------------------- | -------------------------------------------- |
-| `pnpm dev`           | Start the development server                 |
-| `pnpm build`         | Generate the Prisma client and build the app |
-| `pnpm start`         | Run the production build                     |
-| `pnpm test`          | Run the test suite once                      |
-| `pnpm test:watch`    | Run tests in watch mode                      |
-| `pnpm format`        | Format the codebase with Prettier            |
-| `pnpm format:check`  | Check formatting (runs in CI)                |
-| `pnpm migrate:dev`   | Create and apply database migrations         |
-| `pnpm prisma:studio` | Open Prisma Studio to browse the database    |
+| Command                | Description                                         |
+| ---------------------- | --------------------------------------------------- |
+| `pnpm dev`             | Start the development server                        |
+| `pnpm build`           | Generate the Prisma client and build the app        |
+| `pnpm start`           | Run the production build                            |
+| `pnpm test`            | Run the test suite once                             |
+| `pnpm test:watch`      | Run tests in watch mode                             |
+| `pnpm format`          | Format the codebase with Prettier                   |
+| `pnpm format:check`    | Check formatting (runs in CI)                       |
+| `pnpm migrate:dev`     | Create and apply database migrations                |
+| `pnpm db:push`         | Push the schema to the database without a migration |
+| `pnpm prisma:generate` | Regenerate the Prisma client                        |
+| `pnpm prisma:studio`   | Open Prisma Studio to browse the database           |
 
 ## Project structure
 
@@ -146,6 +148,7 @@ app/
   api/                      Route handlers (reviews, products, embed widget, docs search)
   docs/                     Documentation site (Fumadocs)
 components/                 UI components (shadcn/ui in components/ui)
+icons/                      Brand icons (Google, GitHub, X)
 content/docs/               Documentation pages in MDX
 lib/                        Auth, database client, docs source, utilities
 prisma/                     Schema and migrations
@@ -161,7 +164,7 @@ Tests sit next to the code they cover (`*.test.ts` / `*.test.tsx`) and run with 
 pnpm test
 ```
 
-They cover the Zod schemas, the review form and star rating (including keyboard and screen reader behaviour), the API routes (ownership checks, status codes) and the embed widget, including XSS safety.
+They cover the Zod schemas, the review form and star rating (including keyboard and screen reader behaviour), the review list filters, the API routes (ownership checks, status codes), the analytics helpers, storing Uploadcare photos and the embed widget, including XSS safety.
 
 ## Contributing
 
