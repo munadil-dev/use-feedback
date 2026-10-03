@@ -31,21 +31,14 @@ describe("POST /api/product", () => {
     vi.clearAllMocks();
   });
 
-  it("returns 401 when the user is not signed in", async () => {
-    mockAuth.mockResolvedValue(null);
+  it("returns 401 without a signed-in user id", async () => {
+    for (const session of [null, { user: {} }]) {
+      mockAuth.mockResolvedValue(session);
 
-    const res = await POST(createRequest(product));
+      const res = await POST(createRequest(product));
 
-    expect(res.status).toBe(401);
-    expect(mockCreate).not.toHaveBeenCalled();
-  });
-
-  it("returns 401 when the session has no user id", async () => {
-    mockAuth.mockResolvedValue({ user: {} });
-
-    const res = await POST(createRequest(product));
-
-    expect(res.status).toBe(401);
+      expect(res.status, JSON.stringify(session)).toBe(401);
+    }
     expect(mockCreate).not.toHaveBeenCalled();
   });
 

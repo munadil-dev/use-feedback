@@ -43,17 +43,13 @@ describe("StarRating", () => {
     expect(star("Rate 1 star")).toHaveAttribute("aria-pressed", "false");
   });
 
-  it("raises the rating when a higher star is clicked", async () => {
+  it("raises and lowers the rating when a star is clicked", async () => {
     const store = renderWithStore(3);
 
     await userEvent.click(star("Rate 5 stars"));
 
     expect(store.get(ratingAtom)).toBe(5);
     expect(star("Rate 5 stars")).toHaveAttribute("aria-pressed", "true");
-  });
-
-  it("lowers the rating when a lower star is clicked", async () => {
-    const store = renderWithStore(5);
 
     await userEvent.click(star("Rate 1 star"));
 
