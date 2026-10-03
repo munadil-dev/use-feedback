@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: ["/", "/api/embed-reviews"],
       disallow: ["/dashboard", "/api/", "/auth/"],
     },
-    sitemap: `${baseUrl}sitemap.xml`,
+    sitemap: new URL("/sitemap.xml", baseUrl).href,
   };
 }
