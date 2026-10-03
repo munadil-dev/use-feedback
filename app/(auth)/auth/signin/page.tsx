@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import SignInComponent from "@/components/sign-in";
+
+export const metadata: Metadata = {
+  title: "Sign in",
+};
 
 export default async function SignIn({
   searchParams,

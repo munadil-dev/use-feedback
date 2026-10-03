@@ -78,7 +78,7 @@ function Showcase() {
         className="-z-10 object-cover"
       />
       <figcaption className="mx-auto mb-10 max-w-sm text-center text-2xl leading-tight font-semibold tracking-[-0.03em] text-balance text-white drop-shadow-sm">
-        Ask once. Show the best replies on your site.
+        Ask once. Show the best reviews on your site.
       </figcaption>
       <SignInStory />
     </figure>

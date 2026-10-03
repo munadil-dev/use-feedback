@@ -1,5 +1,11 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import SuccessIcon from "@/components/success-icon";
+
+export const metadata: Metadata = {
+  title: "Review sent",
+  robots: { index: false },
+};
 
 export default function ReviewSubmitted() {
   return (

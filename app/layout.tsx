@@ -13,10 +13,22 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
 });
 
+const description =
+  "Collect testimonials with one link and show the best ones on your site.";
+
 export const metadata: Metadata = {
-  title: "Vouch",
-  description:
-    "Collect testimonials with one link and show the best ones on your site.",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000/"
+  ),
+  title: { default: "Vouch: testimonials in one link", template: "%s | Vouch" },
+  description,
+  openGraph: {
+    type: "website",
+    siteName: "Vouch",
+    title: "Vouch: testimonials in one link",
+    description,
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({

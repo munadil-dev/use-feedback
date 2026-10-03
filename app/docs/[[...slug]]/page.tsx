@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import {
@@ -37,14 +37,22 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  props: PageProps<"/docs/[[...slug]]">
+  props: PageProps<"/docs/[[...slug]]">,
+  parent: ResolvingMetadata
 ): Promise<Metadata> {
   const params = await props.params;
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
   return {
-    title: `${page.data.title} | Vouch Docs`,
+    title: { absolute: `${page.data.title} | Vouch Docs` },
     description: page.data.description,
+    alternates: { canonical: page.url },
+    openGraph: {
+      title: `${page.data.title} | Vouch Docs`,
+      description: page.data.description,
+      url: page.url,
+      images: (await parent).openGraph?.images,
+    },
   };
 }
