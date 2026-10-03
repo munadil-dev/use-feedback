@@ -78,4 +78,38 @@ describe("newReviewSchema", () => {
       true
     );
   });
+
+  it.each([
+    "",
+    "https://ucarecdn.com/uuid/",
+    "https://ifkueqi105.ucarecd.net/uuid/-/preview/",
+  ])("accepts an Uploadcare photo of %j", (customerImage) => {
+    expect(
+      newReviewSchema.safeParse({ ...validReview, customerImage }).success
+    ).toBe(true);
+  });
+
+  it.each([
+    "https://evil.example.com/tracker.png",
+    "http://ucarecdn.com/uuid/",
+    "https://ucarecdn.com.evil.example/uuid/",
+    "javascript:alert(1)",
+  ])("rejects a photo URL of %j", (customerImage) => {
+    const result = newReviewSchema.safeParse({ ...validReview, customerImage });
+
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0].message).toBe("Upload the photo again");
+  });
+
+  it.each([
+    ["message", 1001],
+    ["customerName", 101],
+  ])("rejects a %s longer than the limit", (field, length) => {
+    const result = newReviewSchema.safeParse({
+      ...validReview,
+      [field]: "a".repeat(length),
+    });
+
+    expect(result.success).toBe(false);
+  });
 });
